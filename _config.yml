@@ -1,24 +1,25 @@
-title:              Danny's Blog
-email:              gryb809@gmail.com
-description:        A Blog Theme by Start Bootstrap
-author:             Start Bootstrap
-baseurl:            "/"
-url:                "https://dahyeong-yun.github.io/"
+permalink: /:year:month:day/:title
+url: #Your url here
+baseurl: /project
 
-# Social Profiles
-twitter_username:   SBootstrap
-github_username:    BlackrockDigital
-facebook_username:  StartBootstrap
-linkedin_username:
+# variables
+name: Your Site Name
+description: Your description here
+google_verification: null
 
-# Add your google-analytics ID here to activate google analytics
-google_analytics:   UA-100589097-3 # out your google-analytics code
 
-# Build settings
-markdown:           kramdown
-paginate:           5
-paginate_path:      "/posts/page:num/"
-plugins:
-  - jekyll-feed
-  - jekyll-paginate
-  - jekyll-sitemap ## Uncomment this line to silently generate a sitemaps.org compliant sitemap for your Jekyll site
+# File management
+include: [".htaccess"]
+exclude: ["README.md", "LICENSE"]
+
+# Sass
+sass:
+  style: :compressed
+  sass_dir: _sass
+
+# Markdown
+markdown: kramdown
+kramdown:
+  input: GFM
+  syntax_highlighter_opts:
+    disable : true
