@@ -1,10 +1,10 @@
 ---
-layout: default
+layout: article
 title: "'19년 9월 회고"
 tags: feedback
+aside:
+  toc: true
 ---
-# '19년 9월 회고
-
 - 9월 1일 이 후 9월 30일 까지 무엇이 달라졌나
 
 

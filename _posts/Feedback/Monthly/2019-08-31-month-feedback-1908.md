@@ -1,11 +1,13 @@
 ---
-layout: default
+layout: article
 title: "'19년 8월 회고"
 tags: feedback
+aside:
+  toc: true
 ---
-# '19년 8월 회고
-
 - 부제 - 7월 24일 입사 이후 8월 31일 까지 무엇이 달라졌나
+
+
 
 ## 1. 한 달간 공부한 것
 

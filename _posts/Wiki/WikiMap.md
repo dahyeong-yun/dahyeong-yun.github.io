@@ -1,3 +1,11 @@
+---
+layout: article
+title: "Wiki Front page."
+tags: wiki
+aside:
+  toc: true
+---
+
 # LIFE
 
 ## Career
