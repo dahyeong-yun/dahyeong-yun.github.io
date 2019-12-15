@@ -1,7 +1,7 @@
 ---
 layout: article
 title: "Oracle to MS SQL"
-tags: db mssql
+tags: db mssql wiki
 aside:
   toc: true
 ---

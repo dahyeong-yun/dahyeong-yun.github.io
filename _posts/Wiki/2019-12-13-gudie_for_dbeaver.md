@@ -1,7 +1,7 @@
 ---
 layout: article
 title: "Dbeaver 사용법"
-tags: tool dbeaver
+tags: tool dbeaver wiki
 aside:
   toc: true
 ---
