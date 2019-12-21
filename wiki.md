@@ -1,7 +1,11 @@
 ---
 layout: article
-titles: "소개"
+titles: "Wiki Front Page"
 key: page-wiki
+aside:
+  toc: true
+sidebar:
+  nav: layouts
 ---
 
-개발 하는 사람
+위키
