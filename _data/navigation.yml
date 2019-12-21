@@ -73,3 +73,16 @@ header:
       fr-LU   : *FR
       # @end locale config
     url: /about.html
+
+wiki:
+  - title: Wiki
+    children:
+      - title:  Front
+        url:    /post/Wiki/WikiMap
+      - title:  Book
+        url:    /page/aside.html
+      - title:  PL
+        url:    /page/sidebar.html
+
+      - title:  CS
+        url:    /page/sidebar-aside.html
