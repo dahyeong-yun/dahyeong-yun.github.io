@@ -78,7 +78,7 @@ wiki:
   - title: Wiki
     children:
       - title:  Front
-        url:    /post/Wiki/wikiMap.html
+        url:    /2019/12/15/wikiFront
       - title:  Book
         url:    /post/Wiki/Book/bookList.html
       - title:  PL
