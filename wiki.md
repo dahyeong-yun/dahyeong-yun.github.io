@@ -5,7 +5,7 @@ key: page-wiki
 aside:
   toc: true
 sidebar:
-  nav: layouts
+  nav: wiki
 ---
 
 위키

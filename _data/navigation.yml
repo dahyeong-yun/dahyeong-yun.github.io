@@ -78,11 +78,12 @@ wiki:
   - title: Wiki
     children:
       - title:  Front
-        url:    /post/Wiki/WikiMap
+        url:    /post/Wiki/wikiMap.html
       - title:  Book
-        url:    /page/aside.html
+        url:    /post/Wiki/Book/bookList.html
       - title:  PL
         url:    /page/sidebar.html
-
       - title:  CS
+        url:    /page/sidebar-aside.html
+      - title:  Terms
         url:    /page/sidebar-aside.html
