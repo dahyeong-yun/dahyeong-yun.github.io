@@ -1,21 +1,21 @@
 header:
   - titles:
       # @start locale config
-      en      : &EN       Archive
+      en      : &EN       TIL
       en-GB   : *EN
       en-US   : *EN
       en-CA   : *EN
       en-AU   : *EN
-      zh-Hans : &ZH_HANS  归档
+      zh-Hans : &ZH_HANS  
       zh      : *ZH_HANS
       zh-CN   : *ZH_HANS
       zh-SG   : *ZH_HANS
-      zh-Hant : &ZH_HANT  歸檔
+      zh-Hant : &ZH_HANT  
       zh-TW   : *ZH_HANT
       zh-HK   : *ZH_HANT
-      ko      : &KO       아카이브
+      ko      : &KO       TIL
       ko-KR   : *KO
-      fr      : &FR       Archives
+      fr      : &FR       
       fr-BE   : *FR
       fr-CA   : *FR
       fr-CH   : *FR
@@ -26,7 +26,7 @@ header:
 
   - titles:
       # @start locale config
-      en      : &EN       Wiki
+      en      : &EN       posts
       en-GB   : *EN
       en-US   : *EN
       en-CA   : *EN
@@ -47,7 +47,7 @@ header:
       fr-FR   : *FR
       fr-LU   : *FR
       # @end locale config
-    url: /wiki.html
+    url: /posts.html
 
   - titles:
       # @start locale config
@@ -73,17 +73,3 @@ header:
       fr-LU   : *FR
       # @end locale config
     url: /about.html
-
-wiki:
-  - title: Wiki
-    children:
-      - title:  Front
-        url:    /2019/12/15/wikiFront
-      - title:  Book
-        url:    /post/Wiki/Book/bookList.html
-      - title:  PL
-        url:    /page/sidebar.html
-      - title:  CS
-        url:    /page/sidebar-aside.html
-      - title:  Terms
-        url:    /page/sidebar-aside.html
