@@ -1,22 +1,10 @@
 ---
 layout: article
 title: "Java Syntax"
-tags: java wiki syntax
+tags: java wiki syntax PL
 aside:
   toc: true
 ---
-
-
-
-/*
-
-@history
-
-date - discription
-
-2019-12-20 : 최초 작성
-
-*/
 
 
 
