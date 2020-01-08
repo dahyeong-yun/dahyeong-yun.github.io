@@ -6,10 +6,6 @@ aside:
   toc: true
 ---
 
-
-
-
-
 ## Functionally
 
 - Table에서 역으로 DDL을 추출하기
