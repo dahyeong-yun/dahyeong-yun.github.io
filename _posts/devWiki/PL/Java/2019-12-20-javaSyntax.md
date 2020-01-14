@@ -1,6 +1,6 @@
 ---
 layout: article
-title: "Java Syntax"
+title: "Java Description"
 tags: java wiki syntax PL
 aside:
   toc: true
@@ -8,9 +8,45 @@ aside:
 
 
 
-## 0 Generics
+## 0. 들어가며
 
-### 0.1 <?>
+### 0.1 대상 독자의 기대 수준
+
+- 국비 학원 수료한 정도
+- 비전공자
+- Java 언어로 Hello world 정도는 할 줄암
+- Java 언어로 별찍기 정도는 할 줄암
+
+
+
+### 0.2 학습 후의 독자 분의 예상 능력치
+
+- [ ] Java 언어 Concept에 대한 이해
+  - [ ] 프로그래밍 언어 상의 맥락(은 다른 포스트에서 다룰 것)
+  - [ ] Java의 버젼
+- [ ] Java 문법에 대한 이해
+- [ ] Java 프로그래밍에 대한 이해
+- [ ] Java GUI mini 프로젝트 완성
+
+
+
+## 1. Java
+
+- Java는 프로그래밍 언어
+
+- Compile 언어
+
+- [James Gosling](https://www.linkedin.com/in/jamesgosling/)이 만든 언어
+
+- > Write once, run everywhere!
+
+
+
+## 2. Java Syntax
+
+### 2.8. Generics
+
+#### 2.8.1 <?>
 
 - [stackoverflow](https://stackoverflow.com/questions/11392380/generics-what-does-actually-mean)
 
