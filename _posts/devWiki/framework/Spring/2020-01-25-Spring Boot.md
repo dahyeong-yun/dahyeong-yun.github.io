@@ -151,7 +151,7 @@ aside:
 
 ### 22.3 Fluent builder API
 
-- 만약 `ApplicationContext`의 위계 구조를 빌드해야할 필요성이 있거나, fluent bulider API를 선호할 경우 `SpringApplicationBuilder`를 사용할 수 있음.
+- 만약 `ApplicationContext`의 위계 구조를 빌드해야할 필요성이 있거나, fluent bulider API를 선호할 경우 `SpringApplicationBuilder`를 사용할 수 있다.
 
 - 예를 들어 다음과 같은 코드 작성이 가능
 
@@ -163,12 +163,15 @@ aside:
         .run(args);
     ```
 
-  - 제약사항이 있음.
+  - `ApplicationContext` 위계를 생성함에 있어 제약사항이 있다. 예를 들어 웹 요소를 조합할 경우, 부모와 자식 요소가 모두 동일한 `Environment`를 사용해야 한다.
 
 #### [postIt]
 
-- https://dzone.com/articles/java-fluent-api-design
-- https://dzone.com/articles/fluent-builder-pattern
+- 이런 식으로 작성 했을 경우, 가독성이 증가한다는 이점이 있음
+
+- [플루언트 인터페이스(Fluent Interface) - 위키백과](https://ko.wikipedia.org/wiki/플루언트_인터페이스)
+- [Design a Fluent API in Java - DZone](https://dzone.com/articles/java-fluent-api-design)
+- [Introduction to the Fluent Builder Pattern - DZone](https://dzone.com/articles/fluent-builder-pattern)
 
 ### 22.4 Application events and listeners
 
@@ -178,11 +181,19 @@ aside:
 
 ### 22.5 웹 환경
 
+- `SpringApplication`은 사용자를 대신하여 `ApplicationContext`를 생성한다.
+
+- > 스프링에서는 IoC를 담당하는 컨테이너를 빈 팩토리 또는 애플리케이션 컨텍스트라고 부르기도 한다.
+  >
+  > \- 51p 토비의 스프링 3.1 Vol. 2 스프링의 기술과 선택
+
 - [ ] 이걸 쓸 일이 뭐가 있을까?
 
 ### 22.6 CommandLineRunner 사용하기
 
+- 생략
 
+  
 
 ### 22.7 Application 종료
 
@@ -199,11 +210,16 @@ aside:
 
 - [ ] https://4urdev.tistory.com/73
 
-  
+
+
 
 ## 23. Externalized Configuration(외부 설정)
 
+
+
 ### 23.1 command line으로 속성(property)에 접근하기
+
+- 생략
 
 ### 23.2 Application의 속성 파일들
 
@@ -217,9 +233,30 @@ aside:
 
 ### 23.4 속성의 Placehoders
 
+- 이전에 정의한 값을 다시 사용할 수 있다. 이를 테면 아래와 같다.
+
+  - ```properties
+    app.name=MyApp
+    app.description=${app.name} is a Spring Boot Application
+    ```
+
 ### 23.5 YAML 사용하기
 
 #### 23.5.1 Loading YAML
+
+- YAMLdocument 예시
+
+  - ```yaml
+    environments:
+        dev:
+            url: http://dev.bar.com
+            name: Developer Setup
+        prod:
+            url: http://foo.bar.com
+            name: My Cool App
+    ```
+
+  - 
 
 #### 23.5.2
 
@@ -280,7 +317,26 @@ aside:
 
 ### 25.1 로그 형식
 
+- 스프링 부트의 기본 로그 출력 형식은 아래와 같다.
+
+  ```
+  2020-01-27 23:23:59.054  INFO 19452 --- [  restartedMain] com.example.demo.DemoApplication         : Starting DemoApplication on DESKTOP-U88PD9F with PID 19452 (C:\Users\gryb8\IdeaProjects\demoManven\target\classes started by gryb8 in C:\Users\gryb8\IdeaProjects\demoManven)
+  2020-01-27 23:23:59.057  INFO 19452 --- [  restartedMain] com.example.demo.DemoApplication         : No active profile set, falling back to default profiles: default
+  2020-01-27 23:23:59.093  INFO 19452 --- [  restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+  ...
+  ```
+
+- 위의 로그에 포함된 정보는 다음과 같다:
+  - 날짜와 시간 - 밀리세컨드ms 단위로 정확하고 쉽게 정렬가능
+  - 로그레벨 - ```ERROR```, ```WARN```, ```INFO```, ````DEBUG``` 그리고 ```TRACE```
+  - 프로세스 ID
+  - ```---``` - 실제 로그메시지가 출력되는 부분을 나누려는 구분자
+  - Logger name - 소스 클래스 네임(자주 줄어든다).
+  - 로그 메시지
+
 ### 25.2 콘솔 출력
+
+- 기본적인 로그 설정은 각각의 메세지를 콘솔에 출력하는 것이다.
 
 ### 25.3 로그 파일 출력
 
@@ -288,7 +344,7 @@ aside:
 
 ### 25.4 로그 레벨
 
-- 
+- `LEVEL`에는 `TRACE`, `DEBUG`, `INFO`, `WARN`, `ERROR`, `FATA`, `OFF` 중에서 선택하면 로그 레벨은 모든 지원가능한 로깅 시스템에 적용
 
   ```properties
   logging.level.org.springframework.web : DEBUG
