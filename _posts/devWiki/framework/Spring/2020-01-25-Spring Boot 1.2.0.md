@@ -488,6 +488,8 @@ https://meetup.toast.com/posts/149
 
 ## 30. Messaging 
 
+### 30.1 JMS
 
+- `javax.jms.ConnectionFactory`
 
 ## 31. Sending email
