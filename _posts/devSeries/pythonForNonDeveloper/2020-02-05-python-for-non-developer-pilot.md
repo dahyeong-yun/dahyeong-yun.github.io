@@ -11,7 +11,7 @@ aside:
 ## 1. 프로그래밍의 양상
 
 - 아빠의 교육 영상
-  - https://www.youtube.com/watch?v=Ct-lOOUqmyY
+  - <https://www.youtube.com/watch?v=Ct-lOOUqmyY>
 - 나사와 못, 자동차 조립
 - 되게 하는 것과 이해하는 것
   - 되게 하는 것 : 받아들이기
@@ -29,12 +29,12 @@ aside:
 ## 3. 개발 환경 구성
 
 - 아나콘다
-  - Windows : https://www.anaconda.com/distribution/#windows
-  - Macs : https://www.anaconda.com/distribution/#macos
+  - Windows : <https://www.anaconda.com/distribution/#windows>
+  - Macs : <https://www.anaconda.com/distribution/#macos>
 - 라이브러리
   - selenium
 - 유틸리티
-  - https://chromedriver.chromium.org/getting-started
+  - <https://chromedriver.chromium.org/getting-started>
 - 우리가 뭐 쓰는지는 알아야
   - 파이썬과 아나콘다
     - [아나콘다](https://ko.wikipedia.org/wiki/아나콘다_(파이썬_배포판))
@@ -89,4 +89,4 @@ aside:
 ## 7. 참고사항
 
 - 파이썬 문법
-  - 점프 투 파이썬 : https://wikidocs.net/book/1
+  - 점프 투 파이썬 : <https://wikidocs.net/book/1>
