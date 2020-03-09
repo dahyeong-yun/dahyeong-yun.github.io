@@ -31,15 +31,17 @@ aside:
 - 아나콘다
   - Windows : <https://www.anaconda.com/distribution/#windows>
   - Macs : <https://www.anaconda.com/distribution/#macos>
-- 라이브러리
-  - selenium
+- 라이브러리 다운로드
+  - selenium -> navigator로 
 - 유틸리티
   - <https://chromedriver.chromium.org/getting-started>
 - 우리가 뭐 쓰는지는 알아야
   - 파이썬과 아나콘다
     - [아나콘다](https://ko.wikipedia.org/wiki/아나콘다_(파이썬_배포판))
-    - [파이썬](https://ko.wikipedia.org/wiki/파이썬)
-
+    - [ ] [파이썬](https://ko.wikipedia.org/wiki/파이썬)
+- 주피터 노트북
+    - [ ] 기본 경로 변경하기
+  
 - 코드를 돌려보자
 
 
