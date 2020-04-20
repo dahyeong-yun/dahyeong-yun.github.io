@@ -1,0 +1,58 @@
+---
+layout: article
+title: "spring Note (1) IoC와 DI"
+tags: spring springboot
+aside:
+toc: true
+---
+
+
+
+## 1. Intro
+
+- `@Configuraion` 어노테이션이 익숙치 않은데, boot에서 자주 사용하게 되는 것 같아 개념적으로 정리해보고자 한다.
+
+  
+
+## 2. About this
+
+### 2.1 Spring의 설정 방법
+
+- spring에서 기본적인 설정은 web.xml에서 이루어진다.
+  - 이때, filter, servlet 등의 설정을 거치고,
+  - config에서는 spring에서 어떠한 설정 파일들을 바라볼지 결정할 수 있다.
+  - (추가로 spring에서 HTTP 프로토콜에서 request와 response가 주고 받는 과정은 아래와 같다.)
+- 이 contextParam을 xml에서 설정하는 대신 각 클래스에 `@Configuration`어노테이션을 선언해줄 경우 같은 방식의 작동 결과를 볼 수 있다.
+  - xml에서와 동일하게 각 @Configuration 클래스가 필요한 Bean을 주입한다.
+
+
+
+### 2.2 IoC와 DI
+
+- 이런 설정 방식이 IoC와 DI에 무슨 연관이 있는 걸까.
+
+#### 2.2.1 IoC(Inversion of Control)
+
+- IoC는 우리말로 제어의 역전이라고 해석할 수 있다. 무슨 제어가 어떻게 역전이 된다는 것일까.
+  - 보통 클래스의 인스턴스를 생성하기 위해서는 new 연산자를 사용한다. 이때 구현한 인스턴스의 클래스에서 생성방식이 변경되게 되면 어떻게 되는가? 그에 맞추어 구현부가 있는 클래스의 constructor를 변경해 주어야 한다.
+  -  결국 A가 B에 변경에 항상 발맞추어 따라가야하는 것이다. 이를 A가 B에 의존하고 있다고 한다.
+
+#### 2.2.2 DI(Dependency Injection)
+
+- 의존성에 대한 이야기를 하고 있었다. DI는 의존성을 주입한다는 말이다. 
+
+
+
+### 2.3 Exercise
+
+- 
+
+
+
+## 3. Epilogue
+
+3.1 더 생각해 볼 것들
+
+- 생성자 주입, setter 주입
+- [팩토리 패턴](https://jusungpark.tistory.com/14) - 
+
