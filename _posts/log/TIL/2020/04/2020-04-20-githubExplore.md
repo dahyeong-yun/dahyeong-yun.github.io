@@ -8,10 +8,6 @@ aside:
 
 
 
-
-
-
-
 ## Github Explore
 
 - github를 단순히 소스 공유(혹은 저장) 용도로만 사용했는데, Explore 메뉴를 한번 들어가보니 신세계가 펼쳐져 있다.
@@ -23,4 +19,3 @@ aside:
 
 - 이메일로 트렌딩을 주기적으로 받을 수도 있다. 아직 메일을 받아보지는 못했다.
   - https://github.com/explore/email
-
