@@ -1,7 +1,7 @@
 ---
 layout: article
 title: "spring Note (1) IoC와 DI"
-tags: spring springboot
+tags: spring springboot ioc di
 aside:
 toc: true
 ---
@@ -45,8 +45,6 @@ toc: true
 
 ### 2.3 Exercise
 
-- 
-
 
 
 ## 3. Epilogue
@@ -54,5 +52,5 @@ toc: true
 3.1 더 생각해 볼 것들
 
 - 생성자 주입, setter 주입
-- [팩토리 패턴](https://jusungpark.tistory.com/14) - 
+- [팩토리 패턴](https://jusungpark.tistory.com/14)
 
