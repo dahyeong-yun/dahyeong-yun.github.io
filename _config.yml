@@ -16,12 +16,12 @@
 
 ## => Site Settings
 ##############################
-text_skin: orange
+text_skin: dark
 highlight_theme: tomorrow-night
 url     : # the base hostname & protocol for your site e.g. https://www.someone.com
 baseurl : # does not include hostname
 title   : dahyeong-yun's log
-description: 정리용도의 개인 블로그입니다.
+description: 정리 용도의 개인 블로그
 
 
 ## => Language and Timezone
@@ -77,7 +77,7 @@ license: CC-BY-NC-4.0 # "CC-BY-4.0", "CC-BY-SA-4.0", "CC-BY-NC-4.0", "CC-BY-ND-4
 
 ## TOC
 toc:
-  selectors: # "h1,h2,h3" (default)
+  selectors: "h1,h2,h3,h4,h5"
 
 
 ## => Markdown Enhancements
