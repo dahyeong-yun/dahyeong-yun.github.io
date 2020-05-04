@@ -1,7 +1,8 @@
 ---
 layout: article
 titles: "Welcome"
-key: page-wiki
+aside:
+  toc: true
 ---
 
 
