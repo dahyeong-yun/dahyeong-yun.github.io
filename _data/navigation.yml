@@ -70,7 +70,7 @@ header:
       fr-FR   : *FR
       fr-LU   : *FR
       # @end locale config
-    url: /gudie.html
+    url: /guide.html
 # wiki:
 #   - title: Wiki
 #     children:
