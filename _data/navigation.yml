@@ -49,7 +49,7 @@ header:
     url: /about.html
   - titles:
       # @start locale config
-      en      : &EN       Wiki
+      en      : &EN       Gudie
       en-GB   : *EN
       en-US   : *EN
       en-CA   : *EN
@@ -61,7 +61,7 @@ header:
       zh-Hant : &ZH_HANT  
       zh-TW   : *ZH_HANT
       zh-HK   : *ZH_HANT
-      ko      : &KO       위키
+      ko      : &KO       가이드
       ko-KR   : *KO
       fr      : &KO       
       fr-BE   : *FR
@@ -70,7 +70,7 @@ header:
       fr-FR   : *FR
       fr-LU   : *FR
       # @end locale config
-    url: /wiki.html
+    url: /gudie.html
 # wiki:
 #   - title: Wiki
 #     children:
