@@ -1,7 +1,7 @@
 ---
 layout: article
 title: "2020년도 계획"
-tags: feedback
+tags: plan
 aside:
   toc: true
 ---
@@ -33,8 +33,12 @@ aside:
 ### 2.1 Online
 
 - wiki는 단순 저장용
-- githun는 소스 저장
-  - 블로그는 TIL, 요약, 감상 위주
+  - 05/08 추가
+    - 위키는 단어의 뜻을 저장 하는 용도
+- github는 소스 저장
+  - jekyll 블로그는 TIL, 요약, 감상 위주
+  - 05/08 추가
+    - jekyll은 해당 단어에 대한 뜻 이상의 용례에 대한 설명
 - facebook
 
 
