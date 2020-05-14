@@ -1,7 +1,7 @@
 ---
 layout: article
-title: "Java Description"
-tags: java wiki syntax PL
+title: "Java Syntax"
+tags: java wiki syntax
 aside:
   toc: true
 ---
