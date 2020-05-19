@@ -1,7 +1,9 @@
 ---
 layout: article
 title: "소개"
-key: page-about
+tags: resume about
+aside:
+  toc: true
 ---
 
 
