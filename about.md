@@ -1,6 +1,6 @@
 ---
 layout: article
-titles: "소개"
+title: "소개"
 key: page-about
 ---
 
