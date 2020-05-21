@@ -12,6 +12,8 @@ aside:
 
 ## What
 
+- 어떤 것을 개발하는 데에 관심이 있는가?
+
 ### Domain
 
 - Finance
