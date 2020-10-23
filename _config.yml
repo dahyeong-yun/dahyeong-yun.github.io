@@ -29,12 +29,15 @@ url: "" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: 
 github_username:  dahyeoung-yun
 
-paginate: 5
+
+paginate: 10
 
 format-date : "%F"
 # Build settings
 # theme: minima
 plugins:
+  - jekyll  
+  - jekyll-feed
   - jekyll-paginate
 
 # Exclude from processing.
@@ -63,6 +66,3 @@ navigation:
     url : /category
   - name : tag
     url : /tag
-
-  
-

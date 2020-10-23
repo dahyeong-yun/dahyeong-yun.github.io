@@ -1,18 +1,34 @@
 ---
 layout : default
+paginator:
+    enabled: true
+    per_page: 5
 ---
 
 <!-- 포스팅 전체 리스트 -->
 {{ content }}
 
-{% if site.posts.size > 0 %}
 <div>
     <ul>
-    {% for post in site.posts %}
+    {% for post in paginator.posts %}
         <li>
         {{ post.date | date : site.format-date }} <a href="{{ post.url | relative_url }}">{{ post.title | downcase }}</a>
         </li>
     {% endfor %}
     </ul>
 </div>
-{% endif %}
+
+<!-- Pagination links -->
+<div class="pagination">
+    {% if paginator.previous_page %}
+      <a href="{{ paginator.previous_page_path }}" class="previous">Previous</a>
+    {% else %}
+      <span class="previous">Previous</span>
+    {% endif %}
+    <span class="page_number ">Page: {{ paginator.page }} of {{ paginator.total_pages }}</span>
+    {% if paginator.next_page %}
+      <a href="{{ paginator.next_page_path }}" class="next">Next</a>
+    {% else %}
+      <span class="next ">Next</span>
+    {% endif %}
+  </div>
