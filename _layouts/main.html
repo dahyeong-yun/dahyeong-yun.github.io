@@ -1,0 +1,18 @@
+---
+layout : default
+---
+
+<!-- 포스팅 전체 리스트 -->
+{{ content }}
+
+{% if site.posts.size > 0 %}
+<div>
+    <ul>
+    {% for post in site.posts %}
+        <li>
+        {{ post.date | date : site.format-date }} <a href="{{ post.url | relative_url }}">{{ post.title | downcase }}</a>
+        </li>
+    {% endfor %}
+    </ul>
+</div>
+{% endif %}
