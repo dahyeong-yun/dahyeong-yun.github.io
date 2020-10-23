@@ -1,5 +1,13 @@
 ---
-layout : dafault
+layout : default
 ---
 
-{{ site.tags }}
+{% for tag in site.tags %}
+    <h1>{{ tag[0] }}</h1>
+    
+    <ul>
+    {% for post in tag[1] %}
+        <li>{{ post.title }}</li>
+    {% endfor %}
+    </ul>    
+{% endfor %}

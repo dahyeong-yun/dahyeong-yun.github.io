@@ -62,6 +62,8 @@ plugins:
 navigation:
   - name : about
     url : /wiki/about
+  - name : diary
+    url : /diary
   - name : category
     url : /category
   - name : tag
