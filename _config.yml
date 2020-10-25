@@ -59,6 +59,11 @@ plugins:
 #   - vendor/cache/
 #   - vendor/gems/
 #   - vendor/ruby/
+
+sass:
+  style: compact # possible values: nested expanded compact compressed
+  sass_dir : _sass
+
 navigation:
   - name : about
     url : /wiki/about
