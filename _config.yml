@@ -29,8 +29,8 @@ url: "" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: 
 github_username:  dahyeoung-yun
 
-
-paginate: 10
+paginate: 25
+paginate_path: "/page:num/"
 
 format-date : "%F"
 # Build settings
@@ -65,9 +65,13 @@ sass:
   sass_dir : _sass
 
 navigation:
-  - name : about
-    url : /wiki/about
-  - name : diary
+  - name : resume
+    url : /resume
+  - name : wiki
+    url : /wiki
+  - name : posts
+    url : /posts
+  - name : diary(끄적거리는 용도)
     url : /diary
   - name : category
     url : /category

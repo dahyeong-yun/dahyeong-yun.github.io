@@ -1,7 +1,12 @@
-<nav>
-    <ul class="top-nav">
+<nav class="inline">
+    
+    <h1 class="title inline">
+        <a href="/">{{ site.title }}</a>
+    </h1> 
+
+    <ul class="top-nav inline">
         {% for menu in site.navigation %}
-        <li><a href="{{ menu.url }}">{{ menu.name }}</a></li>
+        <li class="menu inline"><a href="{{ menu.url }}">{{ menu.name }}</a></li>
         {% endfor %}
     </ul>
 </nav>

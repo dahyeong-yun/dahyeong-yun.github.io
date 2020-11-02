@@ -1,10 +1,15 @@
 ---
 layout : default
+pagination: 
+  enabled: true
 ---
 
-<!-- 포스팅 전체 리스트 -->
+    <!-- - 최신 게시물
+    - 연락처
+    - 카운트 -->
+
 {{ content }}
-{{ site.time | date : "%F" }}
+
 
 <div>
     <ul>
@@ -16,6 +21,7 @@ layout : default
     </ul>
 </div>
 
+{% if paginator.total_pages > 1 %}
 <!-- Pagination links -->
 <div class="pagination">
     {% if paginator.previous_page %}
@@ -32,3 +38,4 @@ layout : default
       <span class="next ">Next</span>
     {% endif %}
   </div>
+{% endif %}
