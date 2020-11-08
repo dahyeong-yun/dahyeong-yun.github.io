@@ -1,4 +1,7 @@
 source "https://rubygems.org"
 
-# gem "github-pages", group: :jekyll_plugins
-gemspec
+gem "jekyll"
+gem "jekyll-feed"
+gem "jekyll-paginate"
+gem "wdm", ">= 0.1.0"
+

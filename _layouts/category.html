@@ -1,0 +1,13 @@
+---
+layout : default
+---
+
+{% for category in site.categories %}
+    <h1>{{ category[0] }}</h1>
+    
+    <ul>
+    {% for post in category[1] %}
+        <li>{{ post.title }}</li>
+    {% endfor %}
+    </ul>    
+{% endfor %}

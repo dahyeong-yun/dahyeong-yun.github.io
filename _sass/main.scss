@@ -1,0 +1,43 @@
+$backgroundColor: #ffffff;
+$bodyColor: #000000;
+
+body {
+  margin: 0;
+  padding: 0;
+  background: $backgroundColor;
+  color: $bodyColor;
+}
+
+a {
+  text-decoration: none;
+}
+
+.inline {
+  display: inline;
+}
+
+.wrapper {
+  max-width: 1200px;
+  margin : auto;
+  padding : 20px;
+}
+
+h1.title {
+  font-size : 20px;
+  list-style-type: none;
+}
+
+.top-nav {
+  margin : 0;
+  float: right;
+  list-style-type: none;
+}
+
+.top-nav li.menu {
+  padding : 0 10px;
+  font-size : 20px;
+}
+
+.site-content {
+  margin: 80px 0px;
+}
