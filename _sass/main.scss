@@ -12,6 +12,10 @@ a {
   text-decoration: none;
 }
 
+h1 {
+  font-size : 16px;
+}
+
 .inline {
   display: inline;
 }
@@ -22,9 +26,8 @@ a {
   padding : 20px;
 }
 
-h1.title {
+span.title {
   font-size : 20px;
-  list-style-type: none;
 }
 
 .top-nav {
