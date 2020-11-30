@@ -1,7 +1,8 @@
 ---
-layout: cheatsheet
+layout: post
 title: "위키 대문 페이지"
-permalink: /cheat/
+category : cheatsheet
+permalink: /cheatsheet
 ---
 
 

@@ -1,0 +1,52 @@
+---
+layout : default
+---
+
+<style>
+.categories {
+    display: flex;
+    list-style-type: none;
+}
+.tags {
+    display: list-item;
+    margin-top: 0.25rem;
+    margin-bottom: 0.25rem;
+    margin-right: 0.25rem;
+    padding: 0.45rem 0.6333333333rem;
+    color: #fff;
+    background-color: rgba(34, 98, 203, 0.4);
+    border-radius: 6rem;
+    font-weight: 700;
+    cursor : pointer;
+}
+</style>
+
+<div class="category-tags">
+    <ul class="categories">
+        <!-- li 전체보기 -->
+        {% for category in site.categories %}
+        <li class="tags" data-tag="{{ category[0] }}">
+            {{ category[0] }} 
+            <!-- TODO 포스트 별 갯 수 -->
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+
+<div class="category-posts">
+{% for category in site.categories %}
+    <div class="{{ category[0] }}">
+        <h1>{{ category[0] }}</h1>
+        
+        <ul>
+        {% for post in category[1] %}
+            <li>{{ post.title }}</li>
+        {% endfor %}
+        </ul>
+    </div>    
+{% endfor %}
+</div>
+
+<script>
+
+</script>
