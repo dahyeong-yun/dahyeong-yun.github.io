@@ -65,15 +65,13 @@ sass:
   sass_dir : _sass
 
 navigation:
-  - name : resume
-    url : /resume
-  - name : wiki
-    url : /wiki
-  - name : posts
-    url : /posts
-  - name : diary(끄적거리는 용도)
-    url : /diary
-  - name : category
-    url : /category
-  - name : tag
-    url : /tag
+  - name : about
+    url : /about
+  - name : blog
+    url : /blog
+  - name : cheatsheet
+    url : /cheatsheet
+  - name : devlog
+    url : /devlog
+  - name : everyweek
+    url : /everyweek
