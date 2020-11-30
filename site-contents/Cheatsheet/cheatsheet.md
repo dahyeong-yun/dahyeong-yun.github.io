@@ -1,5 +1,5 @@
 ---
-layout: wiki
+layout: cheatsheet
 title: "위키 대문 페이지"
 permalink: /cheat/
 ---
@@ -30,11 +30,3 @@ permalink: /cheat/
 - 베이퍼웨어
 - [JSX](https://ko.reactjs.org/docs/introducing-jsx.html)
 - SSR : 서버 사이드 렌더링
-
-
-
-## 맥락별
-
-- 내가 되고싶은 개발자란?
-- SI/SM 1년
-- 운영 노하우
