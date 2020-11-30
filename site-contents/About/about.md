@@ -1,7 +1,7 @@
 ---
 layout: default
 title: "이력서"
-permalink: /resume/
+permalink: /about/
 ---
 
 나는 어떤 개발자인가. 어떤 개발자이고 싶은가.
