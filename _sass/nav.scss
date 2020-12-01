@@ -1,0 +1,26 @@
+span.title {
+    width: 20%;
+    font-size : 20px;
+}
+
+.site-navi {
+    width: 80%;
+}
+
+.navi-menus {
+    display: flex;
+    justify-content: flex-end;
+    align-content: space-around;
+    margin : 0;
+    list-style-type: none;
+}
+
+.menu {
+    display: list-item;
+    //text-transform: uppercase;
+    //font-family:'menlo', monospace;
+    letter-spacing: 0.25px;
+    color: #101010;
+    padding : 0 10px;
+    font-size : 20px;
+}

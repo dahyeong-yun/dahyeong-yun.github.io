@@ -1,21 +1,41 @@
 <!DOCTYPE html>
 <html lang="ko">
-    
+<head>
     {% include head.html %}
+<link rel="stylesheet" href="{{ '/assets/css/navigation.css' | relative_url }}">
+<style>
+header {
+  display: flex;
+}
 
+.site-header {
+  width: 100%;
+  border-bottom: 1px solid #f5f5f5;
+}
+
+.contents-area {
+  max-width: 1200px;
+  margin : auto;
+  padding : 20px;
+}
+</style>
+</head>
 <body>
   <div class="wrapper">
 
-    <header>
-      <span class="title inline">
-        <a href="/">{{ site.title }}</a>
-      </span> 
-      {% include nav.html %}
-    </header>
-    
+    <div class="site-header">
+      <header class="contents-area">
+        <span class="title">
+          <a href="/">{{ site.title }}</a>
+        </span> 
+        {% include nav.html %}
+      </header>
+    </div>
 
     <div class="site-content">
-    {{ content }}
+      <main class="contents-area">
+      {{ content }}
+      </main>
     </div>
 
     {% include footer.html %}

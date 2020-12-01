@@ -1,8 +1,9 @@
-<nav class="inline">
-
-    <ul class="top-nav inline">
+<nav class="site-navi">
+    <ul class="navi-menus">
         {% for menu in site.navigation %}
-        <li class="menu inline"><a href="{{ menu.url }}">{{ menu.name }}</a></li>
+        <li class="menu">
+            <a href="{{ menu.url }}">{{ menu.name }}</a>
+        </li>
         {% endfor %}
     </ul>
 </nav>
