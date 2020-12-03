@@ -9,6 +9,7 @@ body {
 }
 
 a {
+  color: #101010;
   text-decoration: none;
 }
 
@@ -20,27 +21,7 @@ h1 {
   display: inline;
 }
 
-.wrapper {
-  max-width: 1200px;
-  margin : auto;
-  padding : 20px;
-}
 
-span.title {
-  font-size : 20px;
-}
 
-.top-nav {
-  margin : 0;
-  float: right;
-  list-style-type: none;
-}
 
-.top-nav li.menu {
-  padding : 0 10px;
-  font-size : 20px;
-}
 
-.site-content {
-  margin: 80px 0px;
-}
