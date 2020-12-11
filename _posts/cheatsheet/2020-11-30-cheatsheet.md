@@ -44,6 +44,14 @@ permalink: /cheatsheet
 - Python
 - Javascript
 
+
+
+### Framework
+
+- Spring
+
+  
+
 ### Terms
 
 - 베이퍼웨어 : 출시된다는 소문만 무성하고 출시 되지 않은 소프트웨어
@@ -55,3 +63,13 @@ permalink: /cheatsheet
 ### Recipe
 
 - 체크박스 체크 여부 판단
+
+
+
+# reference for wiki template
+
+- https://gyoogle.dev/blog/
+- https://overapi.com/javascript
+- https://developer.mozilla.org/en-US/docs/Web/JavaScript
+
+- https://devhints.io/
