@@ -3,3 +3,9 @@ _site
 .jekyll-cache
 .jekyll-metadata
 vendor
+
+*.pptx
+
+
+# 특정 파일
+assets/icon.png
