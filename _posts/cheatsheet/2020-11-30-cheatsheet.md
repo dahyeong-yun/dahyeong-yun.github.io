@@ -73,3 +73,6 @@ permalink: /cheatsheet
 - https://developer.mozilla.org/en-US/docs/Web/JavaScript
 
 - https://devhints.io/
+
+- http://ko.dannys.wikidok.net/Wiki
+
