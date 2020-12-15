@@ -41,8 +41,11 @@ permalink: /cheatsheet
 ### PL(Programming Language)
 
 - Java
+  - 버전별 문법
 - Python
+  - 버전별 문법
 - Javascript
+  - 버전별 문법
 
 
 
@@ -50,7 +53,14 @@ permalink: /cheatsheet
 
 - Spring
 
-  
+
+
+
+### Library
+
+- jQuery
+
+
 
 ### Terms
 
@@ -75,4 +85,3 @@ permalink: /cheatsheet
 - https://devhints.io/
 
 - http://ko.dannys.wikidok.net/Wiki
-
