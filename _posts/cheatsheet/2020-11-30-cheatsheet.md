@@ -16,7 +16,9 @@ permalink: /cheatsheet
 
 # Contents
 
-- 웹 애플리케이션
+- 애플리케이션
+  - 흔히 말하는 앱(App)은 애플리케이션(Application)의 줄임말이다. 흔히 스마트폰의 애플리케이션을 지칭하는 말로 쓰이지만, 비단 스마트폰 애플리케이션 뿐만 아니라 웹 사이트 또한 애플리케이션(웹 애플리케이션)이다.
+  - 
 
 - HTML
 
@@ -41,8 +43,11 @@ permalink: /cheatsheet
 ### PL(Programming Language)
 
 - Java
+  - 버전별 문법
 - Python
+  - 버전별 문법
 - Javascript
+  - 버전별 문법
 
 
 
@@ -50,7 +55,14 @@ permalink: /cheatsheet
 
 - Spring
 
-  
+
+
+
+### Library
+
+- jQuery
+
+
 
 ### Terms
 
@@ -75,4 +87,3 @@ permalink: /cheatsheet
 - https://devhints.io/
 
 - http://ko.dannys.wikidok.net/Wiki
-
