@@ -67,11 +67,7 @@ sass:
 navigation:
   - name : about
     url : /about
-  - name : blog
-    url : /posts
-  - name : cheatsheet
-    url : /cheatsheet
-  - name : devlog
-    url : /devlog
-  - name : everyweek
-    url : /til
+  - name : category
+    url : /category
+  - name : tag
+    url : /tag

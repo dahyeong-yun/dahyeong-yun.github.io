@@ -2,6 +2,7 @@
 layout: post
 title: "cover letter"
 category : about
+permalink: /about
 ---
 
 
