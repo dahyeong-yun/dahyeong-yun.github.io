@@ -30,62 +30,6 @@ en-CA:
 en-AU:
   <<: *EN
 
-## => Simplified Chinese
-########################
-zh-Hans: &ZH_HANS
-  SUBSCRIBE               : "订阅"
-  READMORE                : "阅读更多"
-  SEARCH                  : "搜索"
-  CANCEL                  : "取消"
-  VIEWS                   : "阅读"
-  LAST_UPDATED            : "更新于"
-  PREVIOUS                : "上篇"
-  NEXT                    : "下篇"
-  ARTICLE_DATE_FORMAT     : "%Y年 %m月%d日"
-  ARTICLE_LIST_DATE_FORMAT: "%m月%d日"
-  STATISTICS              : "共计 [POST_COUNT] 篇文章，[PAGE_COUNT] 页。"
-  LICENSE_ANNOUNCE        : "本文遵守 [LICENSE] 许可协议。"
-  POST_ON_GITHUB          : "在 Github 上修改"
-  FOLLOW_ME               : "在 [NAME] 上关注我。"
-  FOLLOW_US               : "在 [NAME] 上关注我们。"
-  EMAIL_ME                : "给我发邮件。"
-  EMAIL_US                : "给我们发邮件。"
-  COPYRIGHT_DATES         : "2021"
-
-zh:
-  <<: *ZH_HANS
-zh-CN:
-  <<: *ZH_HANS
-zh-SG:
-  <<: *ZH_HANS
-
-## => Traditional Chinese
-########################
-zh-Hant: &ZH_HANT
-  SUBSCRIBE               : "訂閱"
-  READMORE                : "閱讀更多"
-  SEARCH                  : "搜索"
-  CANCEL                  : "取消"
-  VIEWS                   : "閱讀"
-  LAST_UPDATED            : "更新於"
-  PREVIOUS                : "上篇"
-  NEXT                    : "下篇"
-  ARTICLE_DATE_FORMAT     : "%Y年 %m月%d日"
-  ARTICLE_LIST_DATE_FORMAT: "%m月%d日"
-  STATISTICS              : "共計 [POST_COUNT] 篇文章，[PAGE_COUNT] 頁。"
-  LICENSE_ANNOUNCE        : "本文遵守 [LICENSE] 許可協議。"
-  POST_ON_GITHUB          : "在 Github 上修改"
-  FOLLOW_ME               : "在 [NAME] 上關注我。"
-  FOLLOW_US               : "在 [NAME] 上關注我們。"
-  EMAIL_ME                : "給我發郵件。"
-  EMAIL_US                : "給我們發郵件。"
-  COPYRIGHT_DATES         : "2021"
-
-zh-TW:
-  <<: *ZH_HANT
-zh-HK:
-  <<: *ZH_HANT
-
 ## => Korean
 ########################
 ko: &KO
@@ -110,38 +54,3 @@ ko: &KO
 
 ko-KR:
   <<: *KO
-
-## => French
-########################
-fr: &FR
-  SUBSCRIBE               : "S'abonner"
-  READMORE                : "Plus"
-  SEARCH                  : "Recherche"
-  CANCEL                  : "Annuler"
-  VIEWS                   : "vues"
-  LAST_UPDATED            : "Dernière modification"
-  PREVIOUS                : "PRÉCÉDENT"
-  NEXT                    : "SUIVANT"
-  ARTICLE_DATE_FORMAT     : "%d %b, %Y"
-  ARTICLE_LIST_DATE_FORMAT: "%d %b"
-  STATISTICS              : "[POST_COUNT] articles, [PAGE_COUNT] pages."
-  LICENSE_ANNOUNCE        : "Ce travail est sous licence [LICENSE]."
-  POST_ON_GITHUB          : "Modifier sur Github"
-  FOLLOW_ME               : "Suivez-moi sur [NAME]."
-  FOLLOW_US               : "Suivez-nous sur [NAME]."
-  EMAIL_ME                : "Envoyez-moi un courriel."
-  EMAIL_US                : "Envoyez-nous un courriel"
-  COPYRIGHT_DATES         : "2021"
-  DONATE                  : "Faites un don de [NAME]."
-
-fr-BE:
-  <<: *FR
-fr-CA:
-  <<: *FR
-fr-CH:
-  <<: *FR
-fr-FR:
-  <<: *FR
-fr-LU:
-  <<: *FR
-# @end locale config
