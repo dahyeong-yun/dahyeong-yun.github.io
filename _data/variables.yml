@@ -50,13 +50,3 @@ sources:
       css: 'https://cdn.bootcss.com/gitalk/1.2.2/gitalk.min.css'
     mathjax: 'https://cdn.bootcss.com/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML'
     mermaid: 'https://cdn.bootcss.com/mermaid/8.0.0-rc.8/mermaid.min.js'
-  unpkg:
-    font_awesome: 'https://use.fontawesome.com/releases/v5.15.1/css/all.css'
-    jquery: 'https://unpkg.com/jquery@3.3.1/dist/jquery.min.js'
-    leancloud_js_sdk: '//cdn.jsdelivr.net/npm/leancloud-storage@3.13.2/dist/av-min.js'
-    chart: 'https://unpkg.com/chart.js@2.7.2/dist/Chart.min.js'
-    gitalk:
-      js: 'https://unpkg.com/gitalk@1.2.2/dist/gitalk.min.js'
-      css: 'https://unpkg.com/gitalk@1.2.2/dist/gitalk.css'
-    mathjax: 'https://unpkg.com/mathjax@2.7.4/unpacked/MathJax.js?config=TeX-MML-AM_CHTML'
-    mermaid: 'https://unpkg.com/mermaid@8.0.0-rc.8/dist/mermaid.min.js'
