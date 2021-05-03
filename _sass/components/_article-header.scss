@@ -10,6 +10,12 @@
   h1 {
     word-wrap: break-word;
   }
+  span.__title {
+    display: inline;
+    word-wrap: break-word;
+    font-size: 3.8rem;
+    color: dimgray;
+  }
   .split-space {
     @include user-select(none);
   }
