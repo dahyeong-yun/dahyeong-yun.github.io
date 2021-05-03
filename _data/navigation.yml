@@ -1,0 +1,13 @@
+# 상단 메뉴 목록
+header:
+  - titles:
+      # @start locale config
+      en      : &EN       Archive
+      ko      : &KO       아카이브
+    url: /archive.html
+  - titles:
+      # @start locale config
+      en      : &EN       About
+      ko      : &KO       소개
+      # @end locale config
+    url: /about.html

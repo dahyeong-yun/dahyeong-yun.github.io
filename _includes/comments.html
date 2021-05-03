@@ -1,0 +1,5 @@
+{%- if jekyll.environment != 'development' -%}
+  {%- if site.comments.provider == 'gitalk' -%}
+    {%- include comments-providers/gitalk.html -%}
+  {%- endif -%}
+{%- endif -%}
