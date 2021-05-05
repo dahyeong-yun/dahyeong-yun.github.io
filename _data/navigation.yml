@@ -2,12 +2,18 @@
 header:
   - titles:
       # @start locale config
-      en      : &EN       Archive
-      ko      : &KO       아카이브
+      en      : &EN       archive
+      ko      : &KO       archive
     url: /archive.html
   - titles:
       # @start locale config
-      en      : &EN       About
-      ko      : &KO       소개
+      en      : &EN       wiki
+      ko      : &KO       wiki
+      # @end locale config
+    url: /wiki/welcome.html
+  - titles:
+      # @start locale config
+      en      : &EN       about
+      ko      : &KO       about
       # @end locale config
     url: /about.html
