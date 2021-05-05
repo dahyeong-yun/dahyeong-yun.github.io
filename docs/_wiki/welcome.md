@@ -2,6 +2,8 @@
 title: "Welcome"
 ---
 
+- 위키
+
 # Category
 
 ## Log 기록
@@ -24,9 +26,7 @@ title: "Welcome"
 
 - 롯데백화점 flr
 - 신세계백화점 웹/앱 통합 운영
-
 - [롯데 편집샵 단품관리 체계 개선](https://www.notion.so/9336c90df18148b9b04a440d851af702)
-
 
 
 ## Tech 기술
@@ -152,8 +152,5 @@ title: "Welcome"
 - https://gyoogle.dev/blog/
 - https://overapi.com/javascript
 - https://developer.mozilla.org/en-US/docs/Web/JavaScript
-
 - https://devhints.io/
-
 - http://ko.dannys.wikidok.net/Wiki
-
