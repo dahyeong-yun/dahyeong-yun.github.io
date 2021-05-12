@@ -61,6 +61,7 @@ title: "Welcome"
 
 - WSL
 - AWS EC2
+- [git](/wiki/tech/devops/git.html)
 
 ### tools
 
