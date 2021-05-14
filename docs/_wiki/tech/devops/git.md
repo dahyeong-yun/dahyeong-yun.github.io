@@ -28,3 +28,5 @@ title : git
 ### cheetsheet
 
 - https://www.atlassian.com/git/tutorials/atlassian-git-cheatsheet
+
+- https://www.notion.so/Git-Cheat-Sheet-5e6d3c66f4ac426c826f5ff5f14fcc63
