@@ -158,6 +158,22 @@ title: "Welcome"
 - 웹 문서
   - http://tcpschool.com/webbasic/component
 
+- 멘토
+
+  - 창천향로 님
+
+  - 이종립(기계인간) 님
+
+  - 박재성 님
+
+    
+
+- 기술 블로그
+
+  - 우아한 형제들
+  - Naver D2
+  - [LINE](https://engineering.linecorp.com/ko/)
+
 
 
 # reference

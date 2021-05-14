@@ -11,11 +11,6 @@ title : git
 # 역사
 
 
-
-
-
-
-
 # 참고
 
 ### git 기본 문서
@@ -29,7 +24,9 @@ title : git
 - github merge 3가지
   - https://evan-moon.github.io/2019/08/30/commit-history-merge-strategy/
 
+
 ### cheetsheet
 
 - https://www.atlassian.com/git/tutorials/atlassian-git-cheatsheet
 
+- https://www.notion.so/Git-Cheat-Sheet-5e6d3c66f4ac426c826f5ff5f14fcc63
