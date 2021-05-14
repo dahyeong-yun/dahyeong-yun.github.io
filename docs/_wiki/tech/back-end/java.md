@@ -1,5 +1,5 @@
 ---
-title: "java"개
+title: "java"
 ---
 
 
@@ -25,12 +25,12 @@ title: "java"개
 - JDK 1.0 1996년 1월 출시
 - Java SE 8 2014년 3월 출시
 - Java SE 11 2018년 9월 출시
+- 
 
 ### 참고
 
 - https://en.wikipedia.org/wiki/Java_version_history
 - https://www.oracle.com/java/technologies/javase/jdk-relnotes-index.html
-- 
 
 # Usage
 
@@ -60,3 +60,5 @@ title: "java"개
 
 
 ## docs
+
+- https://docs.oracle.com/javase/tutorial/java/javaOO/methodreferences.html
