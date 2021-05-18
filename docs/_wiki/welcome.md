@@ -44,10 +44,13 @@ title: "Welcome"
 ### back-end
 
 - java
-  - [ ] Java Stream, Lamda
+
+  - Java 8
+
   - lombok
     - [ ]  lombok은 어떻게 어노테이션을 달아두는 것 만으로 코드를 생성하는가
       - https://free-strings.blogspot.com/2015/12/lombok.html
+  - JUnit5
   - Spring
     - core
     - Spring Boot
