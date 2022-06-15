@@ -1,217 +1,105 @@
-<div align="center">
+<!-- AUTO-GENERATED-CONTENT:START (STARTER) -->
+<p align="center">
+  <a href="https://www.gatsbyjs.com">
+    <img alt="Gatsby" src="https://www.gatsbyjs.com/Gatsby-Monogram.svg" width="60" />
+  </a>
+</p>
+<h1 align="center">
+  Gatsby's default starter
+</h1>
 
-  <img src="./assets/gatsby-starter-bee.png" width="360px" />
+Kick off your project with this default boilerplate. This starter ships with the main Gatsby configuration files you might need to get up and running blazing fast with the blazing fast app generator for React.
 
-</div>
+_Have another more specific idea? You may want to check out our vibrant collection of [official and community-created starters](https://www.gatsbyjs.com/docs/gatsby-starters/)._
 
-[![Build Status](https://travis-ci.org/JaeYeopHan/gatsby-starter-bee.svg?branch=master)](https://travis-ci.org/JaeYeopHan/gatsby-starter-bee) [![Greenkeeper badge](https://badges.greenkeeper.io/JaeYeopHan/gatsby-starter-bee.svg)](https://greenkeeper.io/)
-[![Total alerts](https://img.shields.io/lgtm/alerts/g/JaeYeopHan/gatsby-starter-bee.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/JaeYeopHan/gatsby-starter-bee/alerts/)
-[![Lighthouse score: 100/100](https://lighthouse-badge.appspot.com/?score=100)](https://github.com/ebidel/lighthouse-badge)
-[![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/dwyl/esta/issues)
-[![Netlify Status](https://api.netlify.com/api/v1/badges/4b1962ce-6206-4d8f-9516-63be92294198/deploy-status)](https://app.netlify.com/sites/gatsby-starter-bee/deploys)
+## 🚀 Quick start
 
-<a href="https://twitter.com/JbeeLjyhanll">
-<img alt="Twitter: JbeeLjyhanll" src="https://img.shields.io/twitter/follow/JbeeLjyhanll.svg?style=social" target="_blank" />
-</a>
+1.  **Create a Gatsby site.**
 
-![screenshot](./assets/screenshot.png)
+    Use the Gatsby CLI ([install instructions](https://www.gatsbyjs.com/docs/tutorial/part-0/#gatsby-cli)) to create a new site, specifying the default starter.
 
-In this template...
+    ```shell
+    # create a new Gatsby site using the default starter
+    gatsby new my-default-starter https://github.com/gatsbyjs/gatsby-starter-default
+    ```
 
-- 💄 Fira Code 폰트로 코드 하이라이팅 기능
-- 😄 Emoji 지원
-- 🗣 Twitter, Facebook 등 SNS 공유 지원
-- 💬 Disqus, utterances 댓글 기능 지원
-- ☕ 'Buy me a coffee' 라는 후원 기능
-- 🧙 포스트 작성을 위한 CLI 도구 지원
-- 🤖 GA 지원
-- ⭐ 여러 UX요소 추가
-- ⚙ 별도 설정 파일을 통한 블로그 세부 사항 설정 지원
+1.  **Start developing.**
 
-> [이 블로그 템플릿에 대한 정보](https://www.gatsbyjs.org/starters/JaeYeopHan/gatsby-starter-bee/)
+    Navigate into your new site’s directory and start it up.
 
-## Demo
+    ```shell
+    cd my-default-starter/
+    gatsby develop
+    ```
 
-- [기본 테마 적용 템플릿 화면](https://gatsby-starter-bee.netlify.com/)
+1.  **Open the source code and start editing!**
 
-<details>
-  <summary>Use case</summary>
-  <p>
-    <img src="./assets/demos.png" alt="demo-image">
-    <ul>
-      <li>JBEE.io: https://jbee.io</li>
-      <li>Rinae's devlog: https://rinae.dev/</li>
-      <li>Seungdols Company: https://seungdols.dev/</li>
-      <li>Kooku's log: https://kooku.netlify.com/</li>
-      <li>SOSOLOG: https://so-so.dev/</li>
-      <li>delivan.dev: https://delivan.dev/</li>
-      <li>Jungin's blog: https://jungin.netlify.com/</li>
-      <li>Zero's blog: https://awesomezero.com/</li>
-      <li>Jonathan's blog: https://www.learningsomethingnew.com/</li>
-      <li>@deveely-log: https://deveely-log.netlify.com/</li>
-      <li>Hanul's blog: https://hanul-dev.netlify.com/</li>
-      <li>Hoons Blog: https://hoons-up.netlify.com/</li>
-      <li>JWN.cool: https://jwn.cool</li>
-      <li>ugaemi's dev note: https://ugaemi.github.io</li>
-      <li>Minsu's Dev Log: https://alstn2468.github.io/</li>
-      <li>Yungi's Dev Blog: https://yungis.dev/</li>
-      <li>< Taenylog />: https://taeny.dev/</li>
-      <li>brouk's devlog: https://brouk-devlog.netlify.com/</li>
-      <li>CoodingPenguin's Repository: https://cooding-penguin.netlify.com/</li>
-      <li>DevRappers.dev: https://devrappers.dev/</li>
-      <li>Let's doodle: https://duduling-blog.netlify.app/</li>
-      <li>Hong_Devlog: https://hong-dev.github.io/</li>
-      <li>samsara-ku's devlog: https://samsara-ku.dev/</li>
-      <li>muse.kim: https://muse.kim/</li>
-      <li>Juunone's devlog: https://juunone.netlify.app/</li>
-      <li>cereme.dev: https://cereme.dev</li>
-      <li>taekki.dev: https://taekki.dev</li>
-      <li>kkh913's Developer Blog: https://kkh913.github.io</li>
-      <li>jeeneee's devlog: https://jeeneee.dev</li>
-      <li>KSP Blog: https://ksp.now.sh</li>
-      <li>bobs log: https://undefine.me</li>
-      <li>Jane's PS Blog: https://janeljs.github.io</li>
-      <li>hedrinker's devlog: https://hexdrinker.dev</li>
-    </ul>
-  </p>
-</details>
+    Your site is now running at `http://localhost:8000`!
 
-> 이 템플릿을 사용하여 블로그를 만들었다면 위 '사용한 블로그' 리스트에 추가해주세요! PR을 통해 등록해주시면 됩니다!
+    _Note: You'll also see a second link: _`http://localhost:8000/___graphql`_. This is a tool you can use to experiment with querying your data. Learn more about using this tool in the [Gatsby Tutorial](https://www.gatsbyjs.com/docs/tutorial/part-4/#use-graphiql-to-explore-the-data-layer-and-write-graphql-queries)._
 
-## 😎 Quick Start
+    Open the `my-default-starter` directory in your code editor of choice and edit `src/pages/index.js`. Save your changes and the browser will update in real time!
 
-### 1. Gatsby 프로젝트를 시작
+## 🚀 Quick start (Gatsby Cloud)
 
-```sh
-# 이 블로그 스타터를 사용하여 gatsby 프로젝트를 시작할 수 있습니다.
-npx gatsby new my-blog-starter https://github.com/JaeYeopHan/gatsby-starter-bee
-```
+Deploy this starter with one click on [Gatsby Cloud](https://www.gatsbyjs.com/cloud/):
 
-> 만약 `npx`를 사용하고 있지 않는다면, [Gatsby Getting Started](https://www.gatsbyjs.org/docs/quick-start) 글을 참고하거나 아래 커맨드를 실행해주세요.
+[<img src="https://www.gatsbyjs.com/deploynow.svg" alt="Deploy to Gatsby Cloud">](https://www.gatsbyjs.com/dashboard/deploynow?url=https://github.com/gatsbyjs/gatsby-starter-default)
 
-```sh
-npm install -g gatsby-cli
-gatsby new my-blog-starter https://github.com/JaeYeopHan/gatsby-starter-bee
-```
+## 🧐 What's inside?
 
-### 2. 이제 로컬에서 확인하실 수 있습니다
+A quick look at the top-level files and directories you'll see in a Gatsby project.
 
-```sh
-cd my-blog-starter/
-npm start
-# 브라우저에서 localhost:8000로 접근합니다.
-```
+    .
+    ├── node_modules
+    ├── src
+    ├── .gitignore
+    ├── .prettierrc
+    ├── gatsby-browser.js
+    ├── gatsby-config.js
+    ├── gatsby-node.js
+    ├── gatsby-ssr.js
+    ├── LICENSE
+    ├── package-lock.json
+    ├── package.json
+    └── README.md
 
-### 3. 포스팅을 추가하세요
+1.  **`/node_modules`**: This directory contains all of the modules of code that your project depends on (npm packages) are automatically installed.
 
-다음 두 곳에서 포스팅을 추가할 수 있습니다.
+2.  **`/src`**: This directory will contain all of the code related to what you will see on the front-end of your site (what you see in the browser) such as your site header or a page template. `src` is a convention for “source code”.
 
-- 블로그 포스팅은 `content/blog` 디렉토리에 추가해주세요.
-- 웹에 올려둘 이력서는 `content/__about` 디렉토리에 추가해주세요.
+3.  **`.gitignore`**: This file tells git which files it should not track / not maintain a version history for.
 
-> 몇 가지의 메타데이터와 마크다운 문법으로 포스팅을 작성할 수 있습니다.
+4.  **`.prettierrc`**: This is a configuration file for [Prettier](https://prettier.io/). Prettier is a tool to help keep the formatting of your code consistent.
 
-#### 새로운 포스트를 작성할 때 커맨드라인을 통해 할 수 있습니다
+5.  **`gatsby-browser.js`**: This file is where Gatsby expects to find any usage of the [Gatsby browser APIs](https://www.gatsbyjs.com/docs/reference/config-files/gatsby-browser/) (if any). These allow customization/extension of default Gatsby settings affecting the browser.
 
-![cli-tool-example](assets/cli-tool-example.gif)
+6.  **`gatsby-config.js`**: This is the main configuration file for a Gatsby site. This is where you can specify information about your site (metadata) like the site title and description, which Gatsby plugins you’d like to include, etc. (Check out the [config docs](https://www.gatsbyjs.com/docs/reference/config-files/gatsby-config/) for more detail).
 
-```sh
-npm run post
-```
+7.  **`gatsby-node.js`**: This file is where Gatsby expects to find any usage of the [Gatsby Node APIs](https://www.gatsbyjs.com/docs/reference/config-files/gatsby-node/) (if any). These allow customization/extension of default Gatsby settings affecting pieces of the site build process.
 
-위 커맨드를 입력하면 새로운 포스트가 생성됩니다.
+8.  **`gatsby-ssr.js`**: This file is where Gatsby expects to find any usage of the [Gatsby server-side rendering APIs](https://www.gatsbyjs.com/docs/reference/config-files/gatsby-ssr/) (if any). These allow customization of default Gatsby settings affecting server-side rendering.
 
-👉 **gatsby-post-gen** CLI 도구를 사용합니다. (https://github.com/JaeYeopHan/gatsby-post-gen)
+9.  **`LICENSE`**: This Gatsby starter is licensed under the 0BSD license. This means that you can see this file as a placeholder and replace it with your own license.
 
-### 4. 메타데이터 수정
+10. **`package-lock.json`** (See `package.json` below, first). This is an automatically generated file based on the exact versions of your npm dependencies that were installed for your project. **(You won’t change this file directly).**
 
-`/gatsby-meta-config.js` 파일에서 블로그를 설정하는 여러 요소를 수정할 수 있습니다.
+11. **`package.json`**: A manifest file for Node.js projects, which includes things like metadata (the project’s name, author, etc). This manifest is how npm knows which packages to install for your project.
 
-### 5. [Netlify](https://netlify.com)로 배포
+12. **`README.md`**: A text file containing useful reference information about your project.
 
-[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/JaeYeopHab/gatsby-starter-bee)
+## 🎓 Learning Gatsby
 
-:bulb: github pages를 통해 배포하고 싶다면 아래 npm script를 `package.json`에 추가해주세요.
+Looking for more guidance? Full documentation for Gatsby lives [on the website](https://www.gatsbyjs.com/). Here are some places to start:
 
-```json
-"scripts": {
-    "deploy": "gatsby build && gh-pages -d public -b master -r 'git@github.com:${your github id}/${github page name}.github.io.git'"
-}
-```
+- **For most developers, we recommend starting with our [in-depth tutorial for creating a site with Gatsby](https://www.gatsbyjs.com/tutorial/).** It starts with zero assumptions about your level of ability and walks through every step of the process.
 
-> `gh-pages` 모듈이 필요할 경우 설치가 필요합니다.
+- **To dive straight into code samples, head [to our documentation](https://www.gatsbyjs.com/docs/).** In particular, check out the _Guides_, _API Reference_, and _Advanced Tutorials_ sections in the sidebar.
 
-## 🧐 입맛에 맞게 바꾸기
+## 💫 Deploy
 
-### ⚙ 설정
+[Build, Deploy, and Host On The Only Cloud Built For Gatsby](https://www.gatsbyjs.com/products/cloud/)
 
-```sh
-/root
-├── gatsby-browser.js // font, polyfill, onClientRender ...
-├── gatsby-config.js // Gatsby config
-├── gatsby-meta-config.js // Template meta config
-└── gatsby-node.js // Gatsby Node config
-```
+Gatsby Cloud is an end-to-end cloud platform specifically built for the Gatsby framework that combines a modern developer experience with an optimized, global edge network.
 
-### ⛑ 구조
-
-```sh
-src
-├── components // Just component with styling
-├── layout // home, post layout
-├── pages // routing except post: /(home), /about
-├── styles
-│   ├── code.scss
-│   ├── dark-theme.scss
-│   ├── light-theme.scss
-│   └── variables.scss
-└── templates
-    ├── blog-post.js
-    └── home.js
-```
-
-### 🎨 스타일
-
-`src/styles` 디렉토리에서 CSS 속성들을 수정할 수 있습니다.
-
-```sh
-src/styles
-├── code.scss
-├── dark-theme.scss
-├── light-theme.scss
-└── variables.scss
-```
-
-### 🍭 꿀팁
-
-- 프로필 사진! (replace file in `/content/assets/profile.png`)
-- 파비콘 이미지! (replace file in `/content/assets/felog.png`)
-- 헤더의 그라데이션! (\$theme-gradient `/styles/variables.scss`)
-- Utterances를 위한 repository를 설정해주세요! (`/gatsby-meta-config.js`의 repository 주소를 교체해주세요.)
-  - ⚠️ 이 가이드(https://utteranc.es/)를 꼭 확인해주세요.
-
-## ☕ 마음에 드셨나요?
-
-<a href="https://www.buymeacoffee.com/jbee" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/purple_img.png" alt="Buy Me A Coffee" style="height: auto !important;width: auto !important;" ></a>
-
-## 🤔 만약에...
-
-만약 현재 미디엄에서 블로그를 운영중이시라면 마이그레이션을 고려해보세요! [medium-to-own-blog](https://github.com/mathieudutour/medium-to-own-blog)!
-
-## :bug: 버그제보
-
-[Issue](https://github.com/JaeYeopHan/gatsby-starter-bee/issues)
-
-## 🎁 기여하기
-
-[Contributing guide](./CONTRIBUTING.md)
-
-## LICENSE
-
-[MIT](./LICENSE)
-
-<div align="center">
-
-<sub><sup>Project by <a href="https://github.com/JaeYeopHan">@Jbee</a></sup></sub><small>✌</small>
-
-</div>
+<!-- AUTO-GENERATED-CONTENT:END -->
