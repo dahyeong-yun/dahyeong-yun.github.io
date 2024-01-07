@@ -15,8 +15,8 @@
     "start": "gatsby develop",
     "serve": "gatsby serve",
     "clean": "gatsby clean",
-    "predepoly": "npm run build",
-    "depoly": "gh-pages -d build"
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "dependencies": {
     "@lekoarts/gatsby-theme-minimal-blog": "^6.2.1",
