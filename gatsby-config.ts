@@ -95,8 +95,8 @@ const config: GatsbyConfig = {
         feeds: [
           {
             serialize: ({
-              query: { site, allPost },
-            }: {
+                          query: {site, allPost},
+                        }: {
               query: { allPost: IAllPost; site: { siteMetadata: ISiteMetadata } }
             }) =>
               allPost.nodes.map((post) => {
@@ -126,6 +126,13 @@ const config: GatsbyConfig = {
             title: `Minimal Blog - @lekoarts/gatsby-theme-minimal-blog`,
           },
         ],
+      },
+    },
+    {
+      resolve: "gatsby-plugin-google-tagmanager",
+      options: {
+        id: "GTM-PZRN9ZQC",
+        includeInDevelopment: true,
       },
     },
     // You can remove this plugin if you don't need it
