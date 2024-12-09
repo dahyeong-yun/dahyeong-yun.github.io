@@ -2,7 +2,7 @@ import * as React from "react"
 import { graphql, PageProps } from "gatsby"
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card"
 import { Link } from "gatsby"
-import Layout from "../components/layout"  // 이전: "../components/layout"
+import Layout from "../components/layout"
 
 interface TagPageData {
   allMdx: {
@@ -34,7 +34,7 @@ const TagPage: React.FC<PageProps<TagPageData, TagPageContext>> = ({ data, pageC
               <CardHeader>
                 <CardTitle>
                   <Link
-                    to={`/${post.frontmatter.slug}`}
+                    to={post.frontmatter.slug} // 수정된 부분: 앞의 슬래시(/) 제거
                     className="hover:text-primary transition-colors"
                   >
                     {post.frontmatter.title}
