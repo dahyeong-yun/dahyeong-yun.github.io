@@ -8,7 +8,7 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
-    <div className="min-h-screen overflow-x-hidden"> {/* overflow-x-hidden 추가 */}
+    <div className="min-h-screen">
       <Navigation
         navigation={siteConfig.navigation}
         externalLinks={siteConfig.externalLinks}

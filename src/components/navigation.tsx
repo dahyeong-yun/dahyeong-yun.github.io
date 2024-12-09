@@ -1,4 +1,3 @@
-// src/components/navigation.tsx
 import * as React from "react"
 import { Link, useStaticQuery, graphql } from "gatsby"
 import { NavigationItem, ExternalLink } from "../config/siteConfig"
@@ -28,15 +27,8 @@ const Navigation: React.FC<NavigationProps> = ({
     }
   `)
 
-  // prevent automatic scroll on navigation
-  React.useEffect(() => {
-    if (typeof window !== 'undefined') {
-      window.scrollTo(0, 0)
-    }
-  }, [])
-
   return (
-    <nav className="fixed top-0 left-0 right-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 z-50 border-b">
+    <nav className="fixed top-0 left-0 right-0 bg-background border-b z-50">
       <div className="flex justify-between items-center max-w-screen-xl mx-auto px-4 h-14">
         <Link
           to="/"
