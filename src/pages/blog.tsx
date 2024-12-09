@@ -40,7 +40,7 @@ const BlogPage: React.FC<PageProps<BlogPageData>> = ({ data }) => {
               <CardHeader>
                 <CardTitle>
                   <Link
-                    to={`/${post.frontmatter.slug}`}
+                    to={post.frontmatter.slug} // '/'를 제거
                     className="hover:text-primary transition-colors"
                   >
                     {post.frontmatter.title}

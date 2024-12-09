@@ -1,4 +1,4 @@
-import type { GatsbyConfig, PluginRef } from "gatsby"
+import type {GatsbyConfig, PluginRef} from "gatsby"
 import path from "path"
 import "dotenv/config"
 
@@ -90,7 +90,7 @@ const config: GatsbyConfig = {
                   excerpt: post.excerpt,
                   url,
                   guid: url,
-                  custom_elements: [{ "content:encoded": content }],
+                  custom_elements: [{"content:encoded": content}],
                 }
               }),
             query: `{

@@ -1,10 +1,10 @@
 import * as React from "react"
 import { graphql, PageProps } from "gatsby"
 import { MDXProvider } from "@mdx-js/react"
-import type { DetailedHTMLProps, HTMLAttributes } from 'react'
 import Layout from "../components/layout"
 import PostHeader from "../components/PostHeader"
-import CodeBlock from "@/components/CodeBlock"
+import TableOfContents from "@/components/TableOfContents"
+import { MDXComponents } from "@/components/mdx/MDXComponents"
 
 interface PostQueryData {
   mdx: {
@@ -17,67 +17,90 @@ interface PostQueryData {
   }
 }
 
-const components = {
-  p: (props: DetailedHTMLProps<HTMLAttributes<HTMLParagraphElement>, HTMLParagraphElement>) => (
-    <p {...props} style={{ margin: '2rem 0' }} className="leading-7" />
-  ),
-  blockquote: (props: DetailedHTMLProps<HTMLAttributes<HTMLQuoteElement>, HTMLQuoteElement>) => (
-    <blockquote {...props} style={{ margin: '2rem 0' }} className="pl-4 border-l-4 border-gray-300 italic" />
-  ),
-  h1: (props: DetailedHTMLProps<HTMLAttributes<HTMLHeadingElement>, HTMLHeadingElement>) => (
-    <h1 {...props} style={{ margin: '3rem 0 1.5rem' }} className="text-3xl font-bold" />
-  ),
-  h2: (props: DetailedHTMLProps<HTMLAttributes<HTMLHeadingElement>, HTMLHeadingElement>) => (
-    <h2 {...props} style={{ margin: '2.5rem 0 1.25rem' }} className="text-2xl font-bold" />
-  ),
-  h3: (props: DetailedHTMLProps<HTMLAttributes<HTMLHeadingElement>, HTMLHeadingElement>) => (
-    <h3 {...props} style={{ margin: '2rem 0 1rem' }} className="text-xl font-bold" />
-  ),
-  ul: (props: DetailedHTMLProps<HTMLAttributes<HTMLUListElement>, HTMLUListElement>) => (
-    <ul {...props} style={{ margin: '1.5rem 0' }} className="list-disc pl-6" />
-  ),
-  ol: (props: DetailedHTMLProps<HTMLAttributes<HTMLOListElement>, HTMLOListElement>) => (
-    <ol {...props} style={{ margin: '1.5rem 0' }} className="list-decimal pl-6" />
-  ),
-  li: (props: DetailedHTMLProps<HTMLAttributes<HTMLLIElement>, HTMLLIElement>) => (
-    <li {...props} style={{ margin: '0.5rem 0' }} />
-  ),
-  code: ({ className, children, ...props }: DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement> & { className?: string }) => {
-    const isInline = !className;
-    return (
-      <CodeBlock className={className} inline={isInline}>
-        {children as string}
-      </CodeBlock>
-    );
-  }
+interface Heading {
+  id: string
+  text: string
+  level: number
 }
 
 const Post: React.FC<PageProps<PostQueryData>> = ({ data, children }) => {
-  const { frontmatter } = data.mdx
-  const { title, date, tags } = frontmatter
+  const { frontmatter } = data.mdx;
+  const { title, date, tags } = frontmatter;
+  const [headings, setHeadings] = React.useState<Heading[]>([]);
+  const contentRef = React.useRef<HTMLDivElement>(null);
+
+  React.useEffect(() => {
+    const updateHeadings = () => {
+      if (!contentRef.current) return;
+
+      const elements = Array.from(contentRef.current.querySelectorAll('h1, h2, h3, h4, h5, h6'));
+      const newHeadings = elements.map((el, index) => {
+        const text = el.textContent || '';
+        // ID가 없거나 '-'인 경우 새로운 ID 생성
+        let id = el.id;
+        if (!id || id === '-') {
+          id = `heading-${index + 1}-${text.toLowerCase()
+            .replace(/[^a-z0-9]+/g, '-')
+            .replace(/(^-|-$)/g, '')}`;
+          el.id = id;
+        }
+
+        return {
+          id,
+          text,
+          level: parseInt(el.tagName.substring(1), 10)
+        };
+      }).filter(heading => heading.text);
+
+      if (JSON.stringify(newHeadings) !== JSON.stringify(headings)) {
+        setHeadings(newHeadings);
+      }
+    };
+
+    // 초기 실행
+    const timer = setTimeout(updateHeadings, 500);
+
+    // MutationObserver 설정
+    const observer = new MutationObserver(() => {
+      updateHeadings();
+    });
+
+    if (contentRef.current) {
+      observer.observe(contentRef.current, {
+        childList: true,
+        subtree: true,
+        characterData: true,
+        attributes: true,
+      });
+    }
+
+    return () => {
+      clearTimeout(timer);
+      observer.disconnect();
+    };
+  }, [children]);
 
   return (
     <Layout>
-      <div className="w-full px-4 sm:px-6 lg:px-8">
+      <div className="relative w-full px-4 sm:px-6 lg:px-8">
+        {headings.length > 0 && <TableOfContents headings={headings} />}
         <article className="w-full py-8 sm:py-12 md:py-16">
           <PostHeader title={title} date={date} tags={tags} />
-          <MDXProvider components={components}>
-            <div className="prose dark:prose-invert
-              prose-sm sm:prose-base md:prose-lg
-              w-full
-              prose-headings:tracking-tight
-              prose-p:leading-relaxed
-              prose-pre:overflow-x-auto">
+          <MDXProvider components={MDXComponents}>
+            <div
+              ref={contentRef}
+              className="prose dark:prose-invert prose-sm sm:prose-base md:prose-lg w-full prose-headings:tracking-tight prose-p:leading-relaxed prose-pre:overflow-x-auto"
+            >
               {children}
             </div>
           </MDXProvider>
         </article>
       </div>
     </Layout>
-  )
-}
+  );
+};
 
-export default Post
+export default Post;
 
 export const query = graphql`
   query PostQuery($id: String!) {
@@ -90,4 +113,4 @@ export const query = graphql`
       }
     }
   }
-`
+`;
