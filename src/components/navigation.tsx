@@ -1,15 +1,23 @@
+// src/components/navigation.tsx
 import * as React from "react"
 import { Link, useStaticQuery, graphql } from "gatsby"
-import { NavigationItem, ExternalLink } from "../config/navigation"
-import { NavigationMenu, NavigationMenuList, NavigationMenuItem } from "@/components/ui/navigation-menu"
+import { NavigationItem, ExternalLink } from "../config/siteConfig"
+import {
+  NavigationMenu,
+  NavigationMenuList,
+  NavigationMenuItem
+} from "@/components/ui/navigation-menu"
 import { ModeToggle } from "./mode-toggle"
 
 interface NavigationProps {
-  navigation: NavigationItem[]
-  externalLinks: ExternalLink[]
+  navigation?: NavigationItem[]
+  externalLinks?: ExternalLink[]
 }
 
-const Navigation: React.FC<NavigationProps> = ({ navigation, externalLinks }) => {
+const Navigation: React.FC<NavigationProps> = ({
+                                                 navigation = [],
+                                                 externalLinks = []
+                                               }) => {
   const data = useStaticQuery(graphql`
     query {
       site {
@@ -34,7 +42,10 @@ const Navigation: React.FC<NavigationProps> = ({ navigation, externalLinks }) =>
           <NavigationMenuList className="space-x-6">
             {navigation.map((item) => (
               <NavigationMenuItem key={item.slug}>
-                <Link to={item.slug} className="text-sm font-medium hover:text-gray-600 transition-colors">
+                <Link
+                  to={item.slug}
+                  className="text-sm font-medium hover:text-gray-600 transition-colors"
+                >
                   {item.title}
                 </Link>
               </NavigationMenuItem>
@@ -50,7 +61,7 @@ const Navigation: React.FC<NavigationProps> = ({ navigation, externalLinks }) =>
                   {link.name}
                 </a>
               </NavigationMenuItem>
-            ))}
+              ))}
           </NavigationMenuList>
         </NavigationMenu>
         <ModeToggle />
