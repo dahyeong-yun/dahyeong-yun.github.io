@@ -12,36 +12,43 @@ interface CodeBlockProps {
 }
 
 const CodeBlock: React.FC<CodeBlockProps> = ({ children, className, inline = false }) => {
-  // className이 language-java 같은 형식으로 옴
-  const language = className ? className.replace('language-', '') : '';
+  // className이 없거나 language- 접두사가 없는 경우 'text'를 기본값으로 사용
+  const language = className ? className.replace('language-', '') : 'text';
 
   // 인라인 코드인 경우 (백틱 하나로 감싼 경우)
   if (inline) {
     return (
-      <code className="px-1.5 py-0.5 rounded-md bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 font-mono text-sm">
+      <code className="px-1.5 py-0.5 rounded-md bg-muted text-muted-foreground font-mono text-sm border">
         {children}
       </code>
     );
   }
 
   return (
-    <div className="relative group">
-      {language && (
-        <div className="absolute right-4 top-4 text-xs text-gray-400 dark:text-gray-500 font-mono uppercase">
+    <div className="relative group not-prose">
+      {language !== 'text' && (
+        <div className="absolute right-4 top-4 text-xs text-muted-foreground font-mono uppercase">
           {language}
         </div>
       )}
-      <SyntaxHighlighter
-        language={language}
-        style={darkTheme}
-        className="!bg-gray-900 !rounded-lg !mt-4 !mb-4"
-        customStyle={{
-          padding: '1.5rem',
-          fontSize: '0.875rem',
-        }}
-      >
-        {children}
-      </SyntaxHighlighter>
+      <div className="rounded-lg overflow-hidden">
+        <SyntaxHighlighter
+          language={language}
+          style={darkTheme}
+          customStyle={{
+            margin: '0',
+            padding: '1.5rem',
+            fontSize: '0.875rem',
+            backgroundColor: 'hsl(var(--muted))',
+          }}
+          PreTag="div"
+          codeTagProps={{
+            className: "font-mono text-muted-foreground"
+          }}
+        >
+          {children}
+        </SyntaxHighlighter>
+      </div>
     </div>
   );
 };
