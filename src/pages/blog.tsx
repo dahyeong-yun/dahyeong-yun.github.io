@@ -10,12 +10,10 @@ interface BlogPost {
     title: string
     date: string
     tags: string[]
+    slug: string  // slug 추가
   }
   excerpt: string
   id: string
-  internal: {
-    contentFilePath: string
-  }
 }
 
 interface BlogPageData {
@@ -40,7 +38,7 @@ const BlogPage: React.FC<PageProps<BlogPageData>> = ({ data }) => {
             <CardHeader>
               <CardTitle>
                 <Link
-                  to={`/blog/${post.internal.contentFilePath.split('/').slice(-1)[0].replace('.mdx', '')}`}
+                  to={post.frontmatter.slug}  // slug를 사용하여 링크 생성
                   className="hover:text-blue-600 transition-colors"
                 >
                   {post.frontmatter.title}
@@ -109,12 +107,10 @@ export const query = graphql`
           title
           date(formatString: "YYYY-MM-DD")
           tags
+          slug
         }
         excerpt
         id
-        internal {
-          contentFilePath
-        }
       }
       totalCount
     }
