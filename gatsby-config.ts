@@ -7,13 +7,7 @@ const shouldAnalyseBundle = process.env.ANALYSE_BUNDLE
 const config: GatsbyConfig = {
   siteMetadata: {
     siteTitle: `Polymorlog`,
-    siteTitleAlt: `Polymorlog`,
-    siteHeadline: `Polymorlog`,
-    siteUrl: `https://dahyeong-yun.github.io/`,
-    siteDescription: `Polymorlog`,
-    siteImage: `/banner.jpg`,
     siteLanguage: `ko`,
-    author: `@polymorph1216`,
   },
   trailingSlash: `always`,
   plugins: [
