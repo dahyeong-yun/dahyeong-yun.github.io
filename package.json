@@ -19,7 +19,8 @@
     "deploy": "gh-pages -d public"
   },
   "dependencies": {
-    "@lekoarts/gatsby-theme-minimal-blog": "^6.2.1",
+    "ajv": "^8.17.1",
+    "ajv-keywords": "^5.1.0",
     "gatsby": "^5.12.12",
     "gatsby-plugin-feed": "^5.12.3",
     "gatsby-plugin-google-tagmanager": "^5.14.0",

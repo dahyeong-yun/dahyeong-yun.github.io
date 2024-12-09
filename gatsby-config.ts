@@ -20,32 +20,6 @@ const config: GatsbyConfig = {
   trailingSlash: `always`,
   plugins: [
     {
-      resolve: `@lekoarts/gatsby-theme-minimal-blog`,
-      // See the theme's README for all available options
-      options: {
-        navigation: [
-          {
-            title: `Blog`,
-            slug: `/blog`,
-          },
-          {
-            title: `About`,
-            slug: `/about`,
-          },
-        ],
-        externalLinks: [
-          // {
-          //   name: `Twitter`,
-          //   url: `https://twitter.com/lekoarts_de`,
-          // },
-          // {
-          //   name: `Homepage`,
-          //   url: `https://www.lekoarts.de?utm_source=minimal-blog&utm_medium=Starter`,
-          // },
-        ],
-      },
-    },
-    {
       resolve: `gatsby-plugin-sitemap`,
       options: {
         output: `/`,
