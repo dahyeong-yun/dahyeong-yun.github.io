@@ -32,6 +32,12 @@ const createHeadingComponent = (level: 1 | 2 | 3 | 4 | 5 | 6) => {
   };
 };
 
+interface ImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
+  src: string;
+  alt?: string;
+  title?: string;
+}
+
 export const MDXComponents = {
   h1: createHeadingComponent(1),
   h2: createHeadingComponent(2),
@@ -39,21 +45,49 @@ export const MDXComponents = {
   h4: createHeadingComponent(4),
   h5: createHeadingComponent(5),
   h6: createHeadingComponent(6),
+
   p: (props: DetailedHTMLProps<HTMLAttributes<HTMLParagraphElement>, HTMLParagraphElement>) => (
     <p {...props} className="leading-7 my-6" />
   ),
+
   blockquote: (props: DetailedHTMLProps<HTMLAttributes<HTMLQuoteElement>, HTMLQuoteElement>) => (
     <blockquote {...props} className="pl-4 border-l-4 border-gray-300 italic my-6" />
   ),
+
   ul: (props: DetailedHTMLProps<HTMLAttributes<HTMLUListElement>, HTMLUListElement>) => (
     <ul {...props} className="list-disc pl-6 my-6" />
   ),
+
   ol: (props: DetailedHTMLProps<HTMLAttributes<HTMLOListElement>, HTMLOListElement>) => (
     <ol {...props} className="list-decimal pl-6 my-6" />
   ),
+
   li: (props: DetailedHTMLProps<HTMLAttributes<HTMLLIElement>, HTMLLIElement>) => (
     <li {...props} className="my-2" />
   ),
+
+  img: ({ src, alt, title, ...rest }: ImageProps) => {
+    if (!src) return null;
+
+    return (
+      <figure className="my-8">
+        <img
+          src={src}
+          alt={alt || ''}
+          title={title}
+          {...rest}
+          className="rounded-lg overflow-hidden max-w-full h-auto mx-auto"
+          loading="lazy"
+        />
+        {title && (
+          <figcaption className="text-center text-sm text-muted-foreground mt-2">
+            {title}
+          </figcaption>
+        )}
+      </figure>
+    );
+  },
+
   code: ({ className, children, ...props }: DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement> & { className?: string }) => {
     const isInline = !className;
     return (

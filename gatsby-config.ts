@@ -11,21 +11,56 @@ const config: GatsbyConfig = {
   },
   trailingSlash: `always`,
   plugins: [
+    `gatsby-plugin-image`,
+    `gatsby-plugin-sharp`,
+    `gatsby-transformer-sharp`,
     {
       resolve: `gatsby-source-filesystem`,
       options: {
-        name: `posts`,
-        path: path.resolve(`content/posts`),
+        name: `content`,
+        path: path.resolve(`content`),
       },
     },
     {
-      resolve: `gatsby-source-filesystem`,
+      resolve: `gatsby-plugin-mdx`,
       options: {
-        name: `pages`,
-        path: path.resolve(`content/pages`),
+        mdxOptions: {
+          gatsbyRemarkPlugins: [
+            {
+              resolve: `gatsby-remark-images`,
+              options: {
+                maxWidth: 1200,
+                quality: 90,
+                linkImagesToOriginal: false,
+                withWebp: true,
+                showCaptions: ['title'],
+                markdownCaptions: true,
+                // 상대 경로 이미지를 처리하기 위한 설정
+                backgroundColor: 'transparent',
+                disableBgImageOnAlpha: true,
+                disableBgImage: true,
+              },
+            },
+          ],
+        },
+        gatsbyRemarkPlugins: [
+          {
+            resolve: `gatsby-remark-images`,
+            options: {
+              maxWidth: 1200,
+              quality: 90,
+              linkImagesToOriginal: false,
+              withWebp: true,
+              showCaptions: ['title'],
+              markdownCaptions: true,
+              backgroundColor: 'transparent',
+              disableBgImageOnAlpha: true,
+              disableBgImage: true,
+            },
+          },
+        ],
       },
     },
-    `gatsby-plugin-mdx`,
     {
       resolve: `gatsby-plugin-sitemap`,
       options: {
@@ -40,9 +75,6 @@ const config: GatsbyConfig = {
         description: `Polymorlog`,
         start_url: `/`,
         background_color: `#fff`,
-        // This will impact how browsers show your PWA/website
-        // https://css-tricks.com/meta-theme-color-and-trickery/
-        // theme_color: `#6B46C1`,
         display: `standalone`,
         icons: [
           {
@@ -76,7 +108,7 @@ const config: GatsbyConfig = {
         feeds: [
           {
             serialize: ({
-                          query: {site, allPost},
+                          query: { site, allPost },
                         }: {
               query: { allPost: IAllPost; site: { siteMetadata: ISiteMetadata } }
             }) =>
@@ -116,7 +148,6 @@ const config: GatsbyConfig = {
         includeInDevelopment: true,
       },
     },
-    // You can remove this plugin if you don't need it
     shouldAnalyseBundle && {
       resolve: `gatsby-plugin-webpack-statoscope`,
       options: {
