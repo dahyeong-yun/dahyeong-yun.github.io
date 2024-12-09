@@ -2,6 +2,7 @@ import * as React from "react"
 import { graphql, PageProps } from "gatsby"
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card"
 import { Link } from "gatsby"
+import Layout from "../components/layout"  // 이전: "../components/layout"
 
 interface TagPageData {
   allMdx: {
@@ -24,48 +25,50 @@ interface TagPageContext {
 
 const TagPage: React.FC<PageProps<TagPageData, TagPageContext>> = ({ data, pageContext }) => {
   return (
-    <main className="container mx-auto p-4">
-      <h1 className="text-3xl font-bold mb-8">Posts tagged with "{pageContext.tag}"</h1>
-      <div className="grid gap-6">
-        {data.allMdx.nodes.map((post) => (
-          <Card key={post.id}>
-            <CardHeader>
-              <CardTitle>
-                <Link
-                  to={`/${post.frontmatter.slug}`}
-                  className="hover:text-primary transition-colors"
-                >
-                  {post.frontmatter.title}
-                </Link>
-              </CardTitle>
-              <CardDescription>
-                {post.frontmatter.date}
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="mb-4">
-                <p>{post.excerpt}</p>
-              </div>
-              <div className="flex flex-wrap gap-2">
-                {post.frontmatter.tags?.map((tag) => (
+    <Layout>
+      <main className="container mx-auto p-4">
+        <h1 className="text-3xl font-bold mb-8">Posts tagged with "{pageContext.tag}"</h1>
+        <div className="grid gap-6">
+          {data.allMdx.nodes.map((post) => (
+            <Card key={post.id}>
+              <CardHeader>
+                <CardTitle>
                   <Link
-                    key={tag}
-                    to={`/tags/${tag}`}
-                    className={`text-sm px-3 py-1.5 rounded-lg transition-colors ${
-                      tag === pageContext.tag
-                        ? "bg-primary text-primary-foreground"
-                        : "bg-secondary hover:bg-secondary/80"
-                    }`}
+                    to={`/${post.frontmatter.slug}`}
+                    className="hover:text-primary transition-colors"
                   >
-                    {tag}
+                    {post.frontmatter.title}
                   </Link>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
-    </main>
+                </CardTitle>
+                <CardDescription>
+                  {post.frontmatter.date}
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="mb-4">
+                  <p>{post.excerpt}</p>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {post.frontmatter.tags?.map((tag) => (
+                    <Link
+                      key={tag}
+                      to={`/tags/${tag}`}
+                      className={`text-sm px-3 py-1.5 rounded-lg transition-colors ${
+                        tag === pageContext.tag
+                          ? "bg-primary text-primary-foreground"
+                          : "bg-secondary hover:bg-secondary/80"
+                      }`}
+                    >
+                      {tag}
+                    </Link>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </main>
+    </Layout>
   )
 }
 
