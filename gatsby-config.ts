@@ -1,4 +1,5 @@
 import type { GatsbyConfig, PluginRef } from "gatsby"
+import path from "path"
 import "dotenv/config"
 
 const shouldAnalyseBundle = process.env.ANALYSE_BUNDLE
@@ -16,6 +17,14 @@ const config: GatsbyConfig = {
   },
   trailingSlash: `always`,
   plugins: [
+    {
+      resolve: `gatsby-source-filesystem`,
+      options: {
+        name: `content`,
+        path: path.resolve(`content`),
+      },
+    },
+    `gatsby-plugin-mdx`,
     {
       resolve: `gatsby-plugin-sitemap`,
       options: {
