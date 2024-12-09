@@ -10,7 +10,7 @@ interface BlogPost {
     title: string
     date: string
     tags: string[]
-    slug: string  // slug 추가
+    slug: string
   }
   excerpt: string
   id: string
@@ -38,8 +38,8 @@ const BlogPage: React.FC<PageProps<BlogPageData>> = ({ data }) => {
             <CardHeader>
               <CardTitle>
                 <Link
-                  to={post.frontmatter.slug}  // slug를 사용하여 링크 생성
-                  className="hover:text-blue-600 transition-colors"
+                  to={post.frontmatter.slug}
+                  className="hover:text-primary transition-colors"
                 >
                   {post.frontmatter.title}
                 </Link>
@@ -53,11 +53,15 @@ const BlogPage: React.FC<PageProps<BlogPageData>> = ({ data }) => {
                 <p>{post.excerpt}</p>
               </div>
               {post.frontmatter.tags && (
-                <div className="flex gap-2">
+                <div className="flex flex-wrap gap-2">
                   {post.frontmatter.tags.map((tag) => (
-                    <span key={tag} className="text-sm bg-muted px-2 py-1 rounded">
+                    <Link
+                      key={tag}
+                      to={`/tags/${tag}`}
+                      className="text-sm bg-secondary hover:bg-secondary/80 px-3 py-1.5 rounded-lg transition-colors"
+                    >
                       {tag}
-                    </span>
+                    </Link>
                   ))}
                 </div>
               )}

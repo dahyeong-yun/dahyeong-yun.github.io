@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'gatsby';
 
 const TAG_COLORS = [
   { bg: "bg-red-50 dark:bg-red-950", text: "text-red-600 dark:text-red-300", border: "border-red-200 dark:border-red-800" },
@@ -9,7 +10,11 @@ const TAG_COLORS = [
   { bg: "bg-pink-50 dark:bg-pink-950", text: "text-pink-600 dark:text-pink-300", border: "border-pink-200 dark:border-pink-800" },
 ];
 
-const Tag = ({ children }: { children: React.ReactNode }) => {
+interface TagProps {
+  children: React.ReactNode;
+}
+
+const Tag = ({ children }: TagProps) => {
   const colorIndex = React.useMemo(() => {
     if (typeof children !== 'string') return 0;
     return Array.from(children).reduce((acc, char) => acc + char.charCodeAt(0), 0) % TAG_COLORS.length;
@@ -18,7 +23,8 @@ const Tag = ({ children }: { children: React.ReactNode }) => {
   const colorSet = TAG_COLORS[colorIndex];
 
   return (
-    <span
+    <Link
+      to={`/tags/${children}`}
       className={`
         inline-flex items-center px-2 py-1 text-xs
         sm:px-3 sm:py-1.5 sm:text-sm
@@ -28,7 +34,7 @@ const Tag = ({ children }: { children: React.ReactNode }) => {
       `}
     >
       {children}
-    </span>
+    </Link>
   );
 };
 

@@ -40,6 +40,48 @@ interface QueryResult {
 export const createPages: GatsbyNode["createPages"] = async ({ graphql, actions, reporter }) => {
   const { createPage } = actions
 
+  // 태그 페이지를 위한 별도의 쿼리 실행
+  const tagsResult = await graphql<{
+    allMdx: {
+      group: Array<{
+        fieldValue: string
+        totalCount: number
+      }>
+    }
+  }>(`
+    query {
+      allMdx {
+        group(field: { frontmatter: { tags: SELECT } }) {
+          fieldValue
+          totalCount
+        }
+      }
+    }
+  `)
+
+  if (tagsResult.errors) {
+    reporter.panicOnBuild('Error loading tags', tagsResult.errors)
+    return
+  }
+
+  // 태그별 페이지 생성
+  const tags = tagsResult.data?.allMdx.group || []
+
+  // 디버깅을 위한 로그
+  console.log('Found tags:', tags.map(tag => tag.fieldValue))
+
+  tags.forEach(({ fieldValue: tag }) => {
+    console.log(`Creating page for tag: ${tag}`)
+    createPage({
+      path: `/tags/${tag}`,
+      component: path.resolve("./src/templates/tags.tsx"),
+      context: {
+        tag: tag,
+      },
+    })
+  })
+
+  // 기존 페이지 생성을 위한 쿼리
   const result = await graphql<QueryResult>(`
     query {
       allMdx {
@@ -66,11 +108,12 @@ export const createPages: GatsbyNode["createPages"] = async ({ graphql, actions,
 
   if (result.errors) {
     reporter.panicOnBuild('Error loading MDX result', result.errors)
+    return
   }
 
   const nodes = result.data?.allMdx.nodes
 
-  // Create pages and posts
+  // 기존 페이지와 포스트 생성 로직
   nodes?.forEach(node => {
     const isPage = node.parent.sourceInstanceName === 'pages'
 
