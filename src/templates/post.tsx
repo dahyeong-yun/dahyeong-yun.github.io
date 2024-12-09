@@ -3,6 +3,7 @@ import { graphql, PageProps } from "gatsby"
 import { MDXProvider } from "@mdx-js/react"
 import Layout from "../components/layout"
 import PostHeader from "../components/PostHeader"
+import CodeBlock from "@/components/CodeBlock";
 
 interface PostQueryData {
   mdx: {
@@ -42,6 +43,13 @@ const components = {
   li: ({ children, ...props }: { children: React.ReactNode }) => (
     <li {...props} style={{ margin: '0.5rem 0' }}>{children}</li>
   ),
+  code: ({ children, className, inline }: { children: string; className?: string; inline?: boolean }) => {
+    return (
+      <CodeBlock className={className} inline={inline}>
+        {children}
+      </CodeBlock>
+    );
+  }
 }
 
 const Post: React.FC<PageProps<PostQueryData>> = ({ data, children }) => {

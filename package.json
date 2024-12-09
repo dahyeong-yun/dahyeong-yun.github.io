@@ -21,6 +21,7 @@
     "@mdx-js/react": "^3.1.0",
     "@radix-ui/react-navigation-menu": "^1.2.1",
     "@radix-ui/react-slot": "^1.1.0",
+    "@types/react-syntax-highlighter": "^15.5.13",
     "ajv": "^8.17.1",
     "ajv-keywords": "^5.1.0",
     "class-variance-authority": "^0.7.1",
@@ -37,6 +38,7 @@
     "lucide-react": "^0.468.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-syntax-highlighter": "^15.6.1",
     "tailwind-merge": "^2.5.5",
     "tailwindcss-animate": "^1.0.7"
   },
