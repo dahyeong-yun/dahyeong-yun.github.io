@@ -1,9 +1,10 @@
 import * as React from "react"
 import { graphql, PageProps } from "gatsby"
 import { MDXProvider } from "@mdx-js/react"
+import type { DetailedHTMLProps, HTMLAttributes } from 'react'
 import Layout from "../components/layout"
 import PostHeader from "../components/PostHeader"
-import CodeBlock from "@/components/CodeBlock";
+import CodeBlock from "@/components/CodeBlock"
 
 interface PostQueryData {
   mdx: {
@@ -17,36 +18,35 @@ interface PostQueryData {
 }
 
 const components = {
-  p: ({ children, ...props }: { children: React.ReactNode }) => (
-    <p {...props} style={{ margin: '2rem 0' }} className="leading-7">{children}</p>
+  p: (props: DetailedHTMLProps<HTMLAttributes<HTMLParagraphElement>, HTMLParagraphElement>) => (
+    <p {...props} style={{ margin: '2rem 0' }} className="leading-7" />
   ),
-  blockquote: ({ children, ...props }: { children: React.ReactNode }) => (
-    <blockquote {...props} style={{ margin: '2rem 0' }} className="pl-4 border-l-4 border-gray-300 italic">
-      {children}
-    </blockquote>
+  blockquote: (props: DetailedHTMLProps<HTMLAttributes<HTMLQuoteElement>, HTMLQuoteElement>) => (
+    <blockquote {...props} style={{ margin: '2rem 0' }} className="pl-4 border-l-4 border-gray-300 italic" />
   ),
-  h1: ({ children, ...props }: { children: React.ReactNode }) => (
-    <h1 {...props} style={{ margin: '3rem 0 1.5rem' }} className="text-3xl font-bold">{children}</h1>
+  h1: (props: DetailedHTMLProps<HTMLAttributes<HTMLHeadingElement>, HTMLHeadingElement>) => (
+    <h1 {...props} style={{ margin: '3rem 0 1.5rem' }} className="text-3xl font-bold" />
   ),
-  h2: ({ children, ...props }: { children: React.ReactNode }) => (
-    <h2 {...props} style={{ margin: '2.5rem 0 1.25rem' }} className="text-2xl font-bold">{children}</h2>
+  h2: (props: DetailedHTMLProps<HTMLAttributes<HTMLHeadingElement>, HTMLHeadingElement>) => (
+    <h2 {...props} style={{ margin: '2.5rem 0 1.25rem' }} className="text-2xl font-bold" />
   ),
-  h3: ({ children, ...props }: { children: React.ReactNode }) => (
-    <h3 {...props} style={{ margin: '2rem 0 1rem' }} className="text-xl font-bold">{children}</h3>
+  h3: (props: DetailedHTMLProps<HTMLAttributes<HTMLHeadingElement>, HTMLHeadingElement>) => (
+    <h3 {...props} style={{ margin: '2rem 0 1rem' }} className="text-xl font-bold" />
   ),
-  ul: ({ children, ...props }: { children: React.ReactNode }) => (
-    <ul {...props} style={{ margin: '1.5rem 0' }} className="list-disc pl-6">{children}</ul>
+  ul: (props: DetailedHTMLProps<HTMLAttributes<HTMLUListElement>, HTMLUListElement>) => (
+    <ul {...props} style={{ margin: '1.5rem 0' }} className="list-disc pl-6" />
   ),
-  ol: ({ children, ...props }: { children: React.ReactNode }) => (
-    <ol {...props} style={{ margin: '1.5rem 0' }} className="list-decimal pl-6">{children}</ol>
+  ol: (props: DetailedHTMLProps<HTMLAttributes<HTMLOListElement>, HTMLOListElement>) => (
+    <ol {...props} style={{ margin: '1.5rem 0' }} className="list-decimal pl-6" />
   ),
-  li: ({ children, ...props }: { children: React.ReactNode }) => (
-    <li {...props} style={{ margin: '0.5rem 0' }}>{children}</li>
+  li: (props: DetailedHTMLProps<HTMLAttributes<HTMLLIElement>, HTMLLIElement>) => (
+    <li {...props} style={{ margin: '0.5rem 0' }} />
   ),
-  code: ({ children, className, inline }: { children: string; className?: string; inline?: boolean }) => {
+  code: ({ className, children, ...props }: DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement> & { className?: string }) => {
+    const isInline = !className;
     return (
-      <CodeBlock className={className} inline={inline}>
-        {children}
+      <CodeBlock className={className} inline={isInline}>
+        {children as string}
       </CodeBlock>
     );
   }
