@@ -8,12 +8,12 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen overflow-x-hidden"> {/* overflow-x-hidden 추가 */}
       <Navigation
         navigation={siteConfig.navigation}
         externalLinks={siteConfig.externalLinks}
       />
-      <main className="pt-14"> {/* 네비게이션 높이만큼 상단 패딩 추가 */}
+      <main className="pt-14 max-w-screen-xl mx-auto w-full">
         {children}
       </main>
     </div>
