@@ -2,7 +2,7 @@ import React from 'react';
 import type { ComponentType } from 'react';
 import type { MDXComponents as MDXComponentsType } from 'mdx/types';
 import CodeBlock from "@/components/mdx/code-block";
-import { generateId } from './utils';
+import { generateId } from '../../lib/utils';
 
 // HTML 속성 타입들
 type HTMLAttributes<T> = React.DetailedHTMLProps<React.HTMLAttributes<T>, T>;
