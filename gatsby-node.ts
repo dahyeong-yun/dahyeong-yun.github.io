@@ -1,6 +1,22 @@
 import * as path from "path"
 import type { GatsbyNode } from "gatsby"
 
+export const createSchemaCustomization: GatsbyNode["createSchemaCustomization"] = ({ actions }) => {
+  const { createTypes } = actions
+
+  const typeDefs = `
+    type MdxFrontmatter {
+      title: String! @defaultValue(value: "Untitled")
+      date: Date! @dateformat @defaultValue(value: "2024-01-01")
+      slug: String!
+      tags: [String!] @defaultValue(value: [])
+      type: String! @defaultValue(value: "post")
+      banner: String @defaultValue(value: "/images/default-banner.jpg")
+    }
+  `
+  createTypes(typeDefs)
+}
+
 export const onCreateWebpackConfig: GatsbyNode["onCreateWebpackConfig"] = ({ actions }) => {
   actions.setWebpackConfig({
     resolve: {
