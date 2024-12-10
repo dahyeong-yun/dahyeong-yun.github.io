@@ -14,8 +14,10 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         navigation={siteConfig.navigation}
         externalLinks={siteConfig.externalLinks}
       />
-      <main className="pt-14 max-w-screen-xl mx-auto w-full flex-1">
-        {children}
+      <main className="flex-1 pt-14">
+        <div className="max-w-screen-xl mx-auto px-4">
+          {children}
+        </div>
       </main>
       <Footer />
     </div>
