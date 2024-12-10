@@ -1,7 +1,7 @@
 import * as React from "react"
 import Navigation from "./navigation"
-import Footer from "./Footer"
-import { siteConfig } from "../config/siteConfig"
+import Footer from "./footer"
+import { siteConfig } from "../../config/site-config"
 
 interface LayoutProps {
   children: React.ReactNode

@@ -1,12 +1,12 @@
 import * as React from "react"
 import { Link, useStaticQuery, graphql } from "gatsby"
-import { NavigationItem, ExternalLink } from "../config/siteConfig"
+import { NavigationItem, ExternalLink } from "../../config/site-config"
 import {
   NavigationMenu,
   NavigationMenuList,
   NavigationMenuItem
 } from "@/components/ui/navigation-menu"
-import { ModeToggle } from "./mode-toggle"
+import { ModeToggle } from "../post/mode-toggle"
 
 interface NavigationProps {
   navigation?: NavigationItem[]

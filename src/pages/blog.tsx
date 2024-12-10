@@ -2,7 +2,7 @@ import * as React from "react"
 import { graphql, Link, PageProps } from "gatsby"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import Layout from "../components/layout"
+import Layout from "../components/layout/layout"
 
 const ITEMS_PER_PAGE = 5
 

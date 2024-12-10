@@ -2,7 +2,7 @@ import * as React from "react"
 import { graphql, PageProps } from "gatsby"
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card"
 import { Link } from "gatsby"
-import Layout from "../components/layout"
+import Layout from "../components/layout/layout"
 
 interface TagPageData {
   allMdx: {

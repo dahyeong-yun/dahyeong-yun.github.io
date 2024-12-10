@@ -1,10 +1,10 @@
 import * as React from "react"
 import { graphql, PageProps } from "gatsby"
 import { MDXProvider } from "@mdx-js/react"
-import Layout from "../components/layout"
-import PostHeader from "../components/PostHeader"
-import TableOfContents from "@/components/TableOfContents"
-import { MDXComponents } from "@/components/mdx/MDXComponents"
+import Layout from "../components/layout/layout"
+import PostHeader from "../components/post/post-header"
+import TableOfContents from "@/components/post/table-of-contents"
+import { customMDXComponents } from '@/components/mdx/mdx-components'
 
 interface PostQueryData {
   mdx: {
@@ -86,7 +86,7 @@ const Post: React.FC<PageProps<PostQueryData>> = ({ data, children }) => {
         {headings.length > 0 && <TableOfContents headings={headings} />}
         <article className="w-full py-8 sm:py-12 md:py-16">
           <PostHeader title={title} date={date} tags={tags} />
-          <MDXProvider components={MDXComponents}>
+          <MDXProvider components={customMDXComponents}>
             <div
               ref={contentRef}
               className="prose dark:prose-invert prose-sm sm:prose-base md:prose-lg w-full prose-headings:tracking-tight prose-p:leading-relaxed prose-pre:overflow-x-auto"
