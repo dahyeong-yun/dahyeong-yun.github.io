@@ -36,7 +36,6 @@ const Post: React.FC<PageProps<PostQueryData>> = ({ data, children }) => {
       const elements = Array.from(contentRef.current.querySelectorAll('h1, h2, h3, h4, h5, h6'));
       const newHeadings = elements.map((el, index) => {
         const text = el.textContent || '';
-        // ID가 없거나 '-'인 경우 새로운 ID 생성
         let id = el.id;
         if (!id || id === '-') {
           id = `heading-${index + 1}-${text.toLowerCase()
@@ -52,15 +51,11 @@ const Post: React.FC<PageProps<PostQueryData>> = ({ data, children }) => {
         };
       }).filter(heading => heading.text);
 
-      if (JSON.stringify(newHeadings) !== JSON.stringify(headings)) {
-        setHeadings(newHeadings);
-      }
+      setHeadings(newHeadings);
     };
 
-    // 초기 실행
-    const timer = setTimeout(updateHeadings, 500);
+    setTimeout(updateHeadings, 100);
 
-    // MutationObserver 설정
     const observer = new MutationObserver(() => {
       updateHeadings();
     });
@@ -74,34 +69,51 @@ const Post: React.FC<PageProps<PostQueryData>> = ({ data, children }) => {
       });
     }
 
-    return () => {
-      clearTimeout(timer);
-      observer.disconnect();
-    };
+    return () => observer.disconnect();
   }, [children]);
+
+  const hasHeadings = headings && headings.length > 0;
 
   return (
     <Layout>
-      <div className="relative w-full px-4 sm:px-6 lg:px-8">
-        {headings.length > 0 && <TableOfContents headings={headings} />}
-        <article className="w-full py-8 sm:py-12 md:py-16">
-          <PostHeader title={title} date={date} tags={tags} />
-          <MDXProvider components={customMDXComponents}>
-            <div
-              ref={contentRef}
-              className="prose dark:prose-invert prose-sm sm:prose-base md:prose-lg w-full prose-headings:tracking-tight prose-p:leading-relaxed prose-pre:overflow-x-auto"
-            >
-              {children}
+      <div className="w-full max-w-screen-2xl mx-auto px-4">
+        <div className="flex flex-col lg:flex-row lg:gap-16 relative">
+          {/* Main Content */}
+          <article className="flex-1 py-8 lg:max-w-[calc(100%-20rem)]">
+            <div className="max-w-3xl">
+              <PostHeader title={title} date={date} tags={tags} />
+
+              {/* Mobile Table of Contents */}
+              <div className="block lg:hidden mb-8">
+                {hasHeadings && <TableOfContents headings={headings} />}
+              </div>
+
+              <MDXProvider components={customMDXComponents}>
+                <div
+                  ref={contentRef}
+                  className="prose dark:prose-invert prose-sm sm:prose-base md:prose-lg w-full prose-headings:scroll-mt-20 prose-headings:tracking-tight prose-p:leading-relaxed prose-pre:overflow-x-auto"
+                >
+                  {children}
+                </div>
+              </MDXProvider>
             </div>
-          </MDXProvider>
-        </article>
+          </article>
+
+          {/* Desktop Table of Contents */}
+          <aside className="hidden lg:flex w-72 shrink-0">
+            {hasHeadings && (
+              <div className="w-full sticky top-24">
+                <TableOfContents headings={headings} />
+              </div>
+            )}
+          </aside>
+        </div>
       </div>
     </Layout>
   );
 };
 
 export default Post;
-
 export const query = graphql`
   query PostQuery($id: String!) {
     mdx(id: { eq: $id }) {
