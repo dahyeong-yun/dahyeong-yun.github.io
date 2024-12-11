@@ -1,5 +1,7 @@
 import * as React from "react"
 import { useStaticQuery, graphql } from "gatsby"
+import { siteConfig } from "../../config/site-config"
+import SocialIcons from "../social/social-icons"
 
 const Footer: React.FC = () => {
   const data = useStaticQuery(graphql`
@@ -15,7 +17,10 @@ const Footer: React.FC = () => {
   return (
     <footer className="w-full py-6 mt-8 border-t">
       <div className="container mx-auto px-4">
-        <div className="flex flex-col items-center justify-center space-y-2 text-sm text-muted-foreground">
+        <div className="flex flex-col items-center justify-center space-y-4 text-sm text-muted-foreground">
+          {/* Social Icons */}
+          <SocialIcons links={siteConfig.social} />
+
           <p>
             © {new Date().getFullYear()} {data.site.siteMetadata.siteTitle}. All rights reserved.
           </p>

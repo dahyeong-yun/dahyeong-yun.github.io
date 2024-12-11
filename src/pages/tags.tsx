@@ -1,6 +1,6 @@
 import * as React from "react"
 import { graphql, Link, PageProps } from "gatsby"
-import Layout from "../../components/layout/layout"
+import Layout from "../components/layout/layout"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 
 interface TagsPageData {

@@ -1,6 +1,6 @@
 import * as React from "react"
 import { Link, useStaticQuery, graphql } from "gatsby"
-import { NavigationItem, ExternalLink } from "../../config/site-config"
+import { NavigationItem } from "../../config/site-config"
 import {
   NavigationMenu,
   NavigationMenuList,
@@ -9,13 +9,11 @@ import {
 import { ModeToggle } from "../post/mode-toggle"
 
 interface NavigationProps {
-  navigation?: NavigationItem[]
-  externalLinks?: ExternalLink[]
+  navigation: NavigationItem[]
 }
 
 const Navigation: React.FC<NavigationProps> = ({
-                                                 navigation = [],
-                                                 externalLinks = []
+                                                 navigation,
                                                }) => {
   const data = useStaticQuery(graphql`
     query {
@@ -48,18 +46,6 @@ const Navigation: React.FC<NavigationProps> = ({
                   >
                     {item.title}
                   </Link>
-                </NavigationMenuItem>
-              ))}
-              {externalLinks.map((link) => (
-                <NavigationMenuItem key={link.url}>
-                  <a
-                    href={link.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-sm font-medium hover:text-gray-600 transition-colors"
-                  >
-                    {link.name}
-                  </a>
                 </NavigationMenuItem>
               ))}
             </NavigationMenuList>
