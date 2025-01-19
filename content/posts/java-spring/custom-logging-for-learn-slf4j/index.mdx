@@ -6,50 +6,15 @@ slug: "/custom-logging-for-learn-slf4j"
 tags: ['slf4j', '로깅']
 ---
 
-부끄러운 말이지만 slf4j lombok 애노테이션을 습관처럼 쓰면서도 구체적인 내용에 대해 별로 고민해본 적이 없다. 이번에 서비스 모니터링과 알람을 고민하면서 로깅 라이브러리들을 살펴보는 와중에 SLF4J가 단순 인터페이스라는 것을 알았다[^1]. 자주 사용하는 Logback은 SLF4J를 구현한 구현체였던 것이다[^2]. ‘아 그럼 나도 학습할 겸 SLF4J를 구현한 구현체를 만들어 볼 수 있겠구나’라는 생각이 들었다. 특히 Logback에서 Spring Profile에 따라 분리하거나, 로그를 JSON 포맷으로 만드는 설정이 XML 형태인 것이 마음에 들지 않았다[^3]. 그래서 커스텀한 로깅 클래스를 만들며 공부해보기로 했다.
+부끄러운 말이지만 SLF4J lombok 애노테이션을 습관처럼 쓰면서도 구체적인 내용에 대해 별로 고민해본 적이 없다. 서비스 모니터링과 알람을 고민하면서 grafana와 loki 세팅을 하며 로깅 라이브러리들을 살펴보는 와중에 SLF4J가 인터페이스라는 것을 알았다. 자주 사용하는 Logback은 SLF4J를 구현한 구현체였던 것이다.
 
-## SLF4J의 등장 배경과 의미
-
-초기 자바 개발에서 로깅은 단순히 `System.out.println()`을 사용하는 것이 전부였다[^4]. 프로그램의 규모가 커지고 운영 환경이 다양해지면서 로깅에 대한 더 많은 요구사항이 생겼다[^5].
-
-2002년 JDK 1.4에서 `java.util.logging(JUL)`이 공식 로깅 API로 등장했지만[^6], 이미 시장에서는 1999년에 나온 Log4j가 더 풍부한 기능으로 널리 사용되고 있었다[^7]. 이후 Apache Commons Logging(JCL)도 등장하면서 자바 진영의 로깅은 다양화되었다[^8].
-
-### 로깅 라이브러리의 다양화와 문제점
-
-| 로깅 구현체 | 출시 연도 | 특징 |
-|------------|-----------|-------|
-| Log4j 1.x | 1999 | 최초의 널리 사용된 로깅 프레임워크 |
-| JUL | 2002 | Java 공식 로깅 API, 하지만 기능이 제한적 |
-| Commons Logging | 2002 | Spring Framework의 기본 로깅 시스템 |
-| Logback | 2006 | Log4j 제작자가 만든 새로운 구현체 |
-| Log4j 2 | 2014 | Log4j 1.x의 완전한 재작성 버전 |
-
-이렇게 다양한 로깅 라이브러리가 등장하면서 새로운 문제가 생겼다. Hibernate 같은 라이브러리가 Log4j에 의존하고, Spring은 Commons Logging을 사용하는 식으로 각자 다른 로깅 라이브러리를 사용하면서 프로젝트에 여러 로깅 프레임워크가 혼재하게 되었다[^13].
-
-### Facade 패턴을 통한 해결
-
-Facade 패턴은 복잡한 시스템을 간단한 인터페이스로 감싸는 디자인 패턴이다[^14]. 마치 건물의 정면(facade)처럼, 내부의 복잡한 구조를 감추고 깔끔한 외관을 제공한다.
-
-![Facade Pattern in SLF4J](https://slf4j.org/images/concrete-bindings.png)
-*출처: SLF4J 공식 문서*
-
-SLF4J는 이 패턴을 활용해서:
-1.	로깅을 위한 간단한 인터페이스를 제공하고
-2.	실제 로깅 작업은 선택된 구현체(Logback, Log4j 등)에 위임한다[^16].
-
-이를 통해:
-- 라이브러리 제작자는 특정 로깅 구현체에 의존하지 않고 SLF4J 인터페이스만 사용하면 된다[^17].
-- 라이브러리 사용자는 자신이 선호하는 로깅 구현체를 자유롭게 선택할 수 있다[^18].
-- 프로젝트의 로깅 구현체를 변경하더라도 코드를 수정할 필요가 없다[^19].
-
-실제로 Spring Framework는 5.0 버전부터 내부 로깅 구현을 Commons Logging에서 SLF4J로 변경했다[^20]. 이는 SLF4J가 업계 표준으로 자리 잡았음을 보여주는 좋은 예시다.
+ 이건 달리 보면 내가 SLF4J 의 인터페이스 형식을 이해하면 원하는 형태의 로그 적재나, 로깅 설정하면서 겪는 다양한 문제를 해결할 수 있는 실마리를 얻는 것이구나 하는 생각이 들었다. 또 grafana를 더 효과적으로 사용하기 위한 로그 라이브러리가 무엇인지 판단할 더 확실한 근거도 생길 것 같았다. 그래서 커스텀한 로깅 클래스를 만들면서 SLF4J의 구조적 이해와 직접 구현을 통해, 로깅 프레임워크의 교체 및 확장에 대한 아이디어를 얻어보기로 했다.
 
 
-## SLF4J 인터페이스 이해하기
+## SLF4J 인터페이스 구현하며 이해하기
 
-### Logger 인터페이스의 핵심 기능
-
-SLF4J의 핵심은 `org.slf4j.Logger` 인터페이스다[^21]. 보통 우리가 코드에서 흔히 사용하는 방식은 이렇다:
+### 핵심 인터페이스 Logger 구현
+SLF4J의 핵심은 `org.slf4j.Logger` 인터페이스다. 보통 우리가 코드에서 흔히 사용하는 방식은 이렇다:
 
 ```java
 import org.slf4j.Logger;
@@ -70,340 +35,125 @@ public class UserService {
 }
 ```
 
-Logger 인터페이스는 다섯 가지 로그 레벨을 제공한다[^22]:
+ 이때 이 Logger 인터페이스를 구현하면, 나만의 로깅 라이브러리가 생기는 것이다. 이 인터페이스가 이미 trace, debug, info, warn, error 라는 메서드 구현을 강제하고 있다. 우리가 흔하게 접하는 로깅 레벨이 바로 여기서 구분되게 되는 것이다.
 
-- TRACE: 가장 상세한 로깅 레벨
-- DEBUG: 개발 단계에서 유용한 디버깅 정보
-- INFO: 일반적인 정보성 메시지
-- WARN: 잠재적인 문제 상황
-- ERROR: 에러 상황
-
-### 로그 메시지 포매팅
-
-SLF4J는 다양한 방식의 메시지 포매팅을 지원한다[^23]:
+ 이번 구현에서는 `CustomLogger` 라는 인터페이스를 구현하여 로그를 `System.out`으로 출력하는 형태를 만들어 보았다. 세부적으로 살펴보면, 먼저 `Logger` 인터페이스를 구현한 `CustomLoggerAdapter`를 만들었고, 이 클래스는 `CustomLogger` 인터페이스를 의존한다. 그리고 `CustomLoggerImpl`은 이를 구현한 클래스로, 최종적으로 `System.out.printf`를 통해 로그 형식을 출력하고 있다.
 
 ```java
-// 1. 단순 문자열
-log.info("User login successful");
-
-// 2. 매개변수 치환 - 가장 권장되는 방식
-log.info("User {} logged in from IP {}", username, ipAddress);
-
-// 3. 예외 스택트레이스 포함
-try {
-    // some code
-} catch (Exception e) {
-    log.error("Failed to process request", e);
-}
-```
-
-
-매개변수 치환 방식({})을 사용하는 것이 문자열 연결(+)보다 권장되는 이유는[^24]:
-1.	실제 로깅이 필요할 때만 문자열이 생성되어 성능상 이점이 있다[^25].
-2.	코드가 더 읽기 쉽고 유지보수가 용이하다[^26].
-3.	null 값에 대해 안전하다[^27].
-
-### Marker 기능
-
-Marker는 로그 메시지에 메타데이터를 추가하는 방법이다[^28]:
-
-```java
-import org.slf4j.Marker;
-import org.slf4j.MarkerFactory;
-
-public class SecurityAuditService {
-    private static final Marker SECURITY_MARKER = MarkerFactory.getMarker("SECURITY");
-
-    public void audit(String action) {
-        log.info(SECURITY_MARKER, "Security action performed: {}", action);
-    }
-}
-```
-
-이렇게 마커를 사용하면 특정 종류의 로그만 필터링하거나 특별히 처리하는 것이 가능하다[^29].
-
-### MDC (Mapped Diagnostic Context)
-MDC는 로그 메시지에 문맥 정보를 추가하는 기능이다[^30]:
-
-```java
-import org.slf4j.MDC;
-
-public class WebRequestHandler {
-    public void handleRequest(String requestId, String userId) {
-        MDC.put("requestId", requestId);
-        MDC.put("userId", userId);
-        try {
-            log.info("Processing request");  // 로그에 requestId와 userId가 자동으로 포함됨
-            // 비즈니스 로직
-        } finally {
-            MDC.clear();  // MDC 정보 정리
-        }
-    }
-}
-```
-
-이러한 기능들은 실제 구현체(Logback, Log4j2 등)에서 어떻게 구현하느냐에 따라 다양한 방식으로 활용될 수 있다. SLF4J는 이런 기능들의 인터페이스만 정의하고, 실제 구현은 각 로깅 라이브러리에 맡기는 것이다.
-
-## 커스텀 로깅 구현체 만들기
-
-### 왜 커스텀 구현체가 필요한가?
-Logback은 훌륭한 구현체지만, 몇 가지 불편한 점이 있다[^31]:
-- XML 기반의 설정이 복잡하고 가독성이 떨어진다[^32].
-- Spring Profile별로 설정을 분리할 때 설정이 중복된다[^33].
-- JSON 포맷으로 로그를 출력하려면 별도의 인코더 설정이 필요하다[^34].
-
-이런 문제들을 해결하기 위해 Java 코드로 직접 제어할 수 있는 구현체를 만들어보자.
-
-### TDD로 시작하기
-먼저 gradle 설정으로 필요한 의존성을 추가한다:
-
-먼저 Gradle 설정으로 필요한 의존성을 추가한다[^35]:
-
-```groovy
-dependencies {
-    implementation 'org.slf4j:slf4j-api:2.0.9'
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.0'
-    testImplementation 'org.assertj:assertj-core:3.24.2'
-}
-```
-
-기본적인 로깅 기능에 대한 테스트부터 작성한다[^36]:
-
-```java
-@Test
-@DisplayName("로그 메시지가 지정된 형식으로 출력되어야 한다")
-void logFormatTest() {
-    // given
-    Logger logger = LoggerFactory.getLogger("TestLogger");
-    String message = "Test message";
-
-    // when
-    logger.info(message);
-
-    // then
-    assertThat(outputStream.toString())
-        .matches("\\[\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}\\] \\[INFO\\] \\[TestLogger\\] Test message\n");
-}
-```
-
-### 커스텀 로거 구현
-
-테스트를 통과시키기 위한 기본 로거를 구현한다[^37]:
-
-```java
-public class CustomLogger {
+// CustomLogger : Logger 인터페이스를 구현한 커스텀 로거
+public class CustomLoggerAdapter implements Logger {
+    private final CustomLogger logger;
     private final String name;
-    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-    public CustomLogger(String name) {
+    public CustomLoggerAdapter(String name) {
+        this.name = name;
+        this.logger = new CustomLoggerImpl(name);
+    }
+
+    @Override
+    public String getName() {
+        return this.name;
+    }
+
+    // Trace Level
+    @Override
+    public boolean isTraceEnabled() {
+        return true;
+    }
+
+    @Override
+    public void trace(String msg) {
+        logger.debug(msg); // trace를 debug로 매핑
+    }
+
+    // ...중략
+}
+
+// CustomLoggerImpl : CustomLogger 인터페이스 구현체
+public class CustomLoggerImpl implements CustomLogger {
+    private final String name;
+
+    public CustomLoggerImpl(String name) {
         this.name = name;
     }
 
-    public void info(String message) {
-        String now = LocalDateTime.now().format(formatter);
-        System.out.printf("[%s] [INFO] [%s] %s%n", now, name, message);
-    }
-}
-```
-
-## 커스텀 로깅 구현체 활용
-
-### JSON 포맷 로깅 구현
-
-기존 Logback에서는 JSON 포맷 로깅을 위해 logstash-logback-encoder와 같은 추가 라이브러리가 필요했다.[^38]. 우리의 커스텀 구현체에서는 이를 직접 구현해보자:
-
-```java
-public class JsonLogger extends CustomLogger {
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    /// ... 중략
 
     @Override
-    protected void log(LogLevel level, String message, Object... args) {
-        Map<String, Object> logData = new LinkedHashMap<>();
-        logData.put("timestamp", LocalDateTime.now().format(formatter));
-        logData.put("level", level);
-        logData.put("logger", getName());
-        logData.put("message", formatMessage(message, args));
-        logData.put("thread", Thread.currentThread().getName());
+    public void error(String message) {
+        log("ERROR", message);
+    }
 
-        // MDC 데이터 추가
-        Map<String, String> mdcData = MDC.getCopyOfContextMap();
-        if (mdcData != null) {
-            logData.put("context", mdcData);
-        }
-
-        try {
-            System.out.println(objectMapper.writeValueAsString(logData));
-        } catch (JsonProcessingException e) {
-            System.err.println("Failed to serialize log message to JSON");
-        }
+    private void log(String level, String message) {
+        System.out.printf("[%s] %s - %s: %s%n",
+                Thread.currentThread().getName(),
+                level,
+                name,
+                message
+        );
     }
 }
 ```
 
-이제 로그가 다음과 같은 JSON 형식으로 출력된다[^39]:
-```json
-{
-  "timestamp": "2025-01-19 14:30:22",
-  "level": "INFO",
-  "logger": "com.example.UserService",
-  "message": "User john.doe logged in",
-  "thread": "http-nio-8080-exec-1",
-  "context": {
-    "requestId": "abc123",
-    "userId": "john.doe"
-  }
-}
-```
-### Profile별 설정 분리
-Spring의 profile 처럼 환경별로 다른 로깅 설정을 적용할 수 있다:
+### SPI(Service Provider Interface)를 통한 연동 추가
+ 위의 구현만 있으면 로그가 동작할까? 아직은 아니다. SLF4J는 SPI(Service, Provider Interface)[^1]를 통한 로깅 라이브러리 연동을 지원한다. 이를 위해 `resource/META-INF/services` 디렉토리에 `org.slf4j.spi.SLF4JServiceProvider` 파일을 만들어야 한다. 파일 안에는 `SLF4JServiceProvider`의 구현체 경로를 적는다. 이 프로젝트에서는 `org.cbl.clog.CustomLoggerServiceProvider` 로 기입했다.
+
+ `SLF4JServiceProvider`은 SLF4J가 로깅 구현체를 동적으로 탐색하고 로깅 기능을 위임할 수 있도록 지원한다. 이를 통해 SLF4J는 특정 로깅 구현체에 의존하지 않고 유연한 방식으로 다양한 로깅 프레임워크와 연동할 수 있다.
+
+ `SLF4JServiceProvider`는 5개의 메서드를 구현하도록 하고 있다.
 
 ```java
-public class ProfileAwareLoggerFactory implements ILoggerFactory {
-    private final Map<String, LoggerConfig> profileConfigs = new HashMap<>();
-    private final String activeProfile;
+public interface SLF4JServiceProvider {
+    ILoggerFactory getLoggerFactory();
+    IMarkerFactory getMarkerFactory();
+    MDCAdapter getMDCAdapter();
+    String getRequestedApiVersion();
+    void initialize();
+}
+```
 
-    public ProfileAwareLoggerFactory() {
-        this.activeProfile = System.getProperty("logging.profile", "default");
+ `ILoggerFactory` 타입을 반환하는 `getLoggerFactory()`를 구현하면 이 구현체는 애플리케이션에서 로그를 남길 수 있도록 로거(Logger) 객체를 생성하고 제공하는 역할을 한다. 아래와 같은 팩토리를 반환하도록 했다.
 
-        // 개발 환경 설정
-        profileConfigs.put("dev", new LoggerConfig()
-            .setLogLevel(LogLevel.DEBUG)
-            .setFormat(LogFormat.PLAIN)
-            .setOutput(new ConsoleOutput()));
+```java
+// Logger logger = LoggerFactory.getLogger("MyLogger"); 할 떄 호출되는 것
 
-        // 운영 환경 설정
-        profileConfigs.put("prod", new LoggerConfig()
-            .setLogLevel(LogLevel.INFO)
-            .setFormat(LogFormat.JSON)
-            .setOutput(new FileOutput("/var/log/application.log")));
+public class CustomLoggerFactory implements ILoggerFactory {
+    private final ConcurrentMap<String, Logger> loggerMap;
+
+    public CustomLoggerFactory() {
+        this.loggerMap = new ConcurrentHashMap<>();
     }
 
     @Override
     public Logger getLogger(String name) {
-        LoggerConfig config = profileConfigs.getOrDefault(activeProfile,
-            profileConfigs.get("default"));
-        return new ConfigurableLogger(name, config);
+        // computeIfAbsent를 사용하여 스레드 안전하게 로거 생성
+        return loggerMap.computeIfAbsent(name, CustomLoggerAdapter::new);
     }
 }
 ```
 
-### 성능 고려사항
-로깅은 애플리케이션의 성능에 큰 영향을 미칠 수 있다. 다음과 같은 최적화를 적용했다:
+ 나머지는 특정 구현체를 만들지는 않았다. 특정 로깅 프레임워크가 로드되지 않으면, SLF4J는 `org.slf4j.helpers` 패키지에 있는 기본 구현체(예: `BasicMarkerFactory`, `BasicMDCAdapter`)를 자동으로 사용한다. `IMarkerFactory` 타입을 반환하는 `getMarkerFactory()`를 통해서는 로그에 태그를 추가하는 기능을 제공하며, `MDCAdapter` 타입을 반환하는 `getMDCAdapter()`는 로그에 컨텍스트(Context) 정보 추가하는 역할을 하는데 아직 많이 사용해보지 못했다.
 
-1. 메시지 포매팅 지연
-```java
-public void debug(String format, Object... args) {
-    if (!isDebugEnabled()) {
-        return;  // 조기 반환으로 불필요한 문자열 생성 방지
-    }
-    String message = formatMessage(format, args);
-    log(LogLevel.DEBUG, message);
-}
-```
 
-2. 비동기 로깅 지원
-```java
-public class AsyncLogger extends ConfigurableLogger {
-    private final ExecutorService executor =
-        Executors.newSingleThreadExecutor(new CustomThreadFactory("async-logger"));
 
-    @Override
-    protected void log(LogLevel level, String message) {
-        executor.submit(() -> super.log(level, message));
-    }
-}
-```
+## 결국 핵심은 추상화
+ 이 짧은 분석을 통해 로깅 라이브러리를 만들어 보면서, 거꾸로 SLF4J 스펙을 제공하는 라이브러리라면 그 구현체를 바꾸기 위해 코드 수정이 거의 필요하지 않음을 알았다. 물론 로깅 I/O 성능, 로그 보관 정책과 같은 실무적인 요소를 고려해야 하지만, 기본적인 구조 변경에는 큰 리스크가 없다고 판단이 된다. 그러므로 로그 모니터링을 위해 JSON 형식의 로깅을 보다 쉽게 지원하는 라이브러리가 있다면, 교체를 고려해도 될 것이다.
 
-3. 버퍼링과 배치 처리
-```java
-public class BufferedLogger extends ConfigurableLogger {
-    private final Queue<LogEntry> buffer = new ArrayBlockingQueue<>(1000);
+ SLF4J가 그럼 표준으로 쓰이느냐? 하는 궁금증도 있는데, 마치 자바의 스프링처럼 사실상의 표준으로 쓰이고 있는 것 같다. 스프링 또한 인터페이스를 통한 추상화와 구현체 분리로 원하는 부분을 직접 구현할 수 있도록 되어 있으니 그 점에서 SLF4J 다르지 않은 것 같다. 아래는 SLF4J가 제공하는 다양한 로깅 구현체들과 그 연동 구조를 표현한 도식이다. 이미 다양한 구현체들에 대한 연동 방식을 고민하고 있는 것 같다.
 
-    @Scheduled(fixedRate = 1000)  // 1초마다 버퍼 플러시
-    public void flushBuffer() {
-        List<LogEntry> entries = new ArrayList<>();
-        buffer.drainTo(entries);
-        if (!entries.isEmpty()) {
-            writeEntries(entries);
-        }
-    }
-}
-```
+![Facade Pattern in SLF4J](https://slf4j.org/images/concrete-bindings.png)
+*출처: SLF4J 공식 문서 <https://slf4j.org/manual.html>*
 
-이러한 최적화를 통해 로깅이 애플리케이션의 주요 로직에 미치는 영향을 최소화할 수 있다.
 
-## 배운 점과 앞으로의 과제
+## 마치며
+ 별 생각없이 로그를 사용하고 있었는데 로그 인터페이스의 세계에도 흥미로운 내용이 많았다. SPI라는 방식 자체도 네이밍은 굉장히 생소했고, 이 인터페이스를 가지고 시스템 콘솔 뿐 아니라 파일 입출력에 기타 등등 원하는 기능을 넣으려면 한 세월이 걸리겠다는 결론도 얻었다. 일단 잘 만들어진 친구들을 써보도록 하자.
 
-### 배운 점
+ 로그에서 또 하나 어려운 부분은 `어디서 어디까지 로그를 쌓을 것인가` 하는 것이다. 모 기업에서는 주 단위에 페타바이트 단위 이상의 로그가 쌓인다고 한다. 문제는 이 정도 트래픽을 가진 기업이라면 당연히 이를 받쳐주는 시스템도 있겠지만, 그렇지 않은 기업에서는 어떻게 해야할까? 디스크도 무한하지 않고, 무한정 늘리면 성능에 영향도 있다. 더욱이 로그에 대한 추적 문제도 있을 것이다. 서비스 운영하면서 '이런 로그 찍어둘껄' 하는 생각이 들었다면, 아직도 '적정 로그 적재 문제'에 봉착해 있다고 봐야할 것이다.
 
-이번 학습을 통해 얻은 것들:
+ 이번에 SLF4J에 대해 알아보며 로그 인터페이스에 대한 이해를 높였으니, 다음 번에는 좀 덜 기술적이면서 문제 해결의 관점에 가까운 '적정 로그 적재 문제'를 어떻게 나름대로 해결해보고 있는지 적어보고 싶다.
 
-1. **인터페이스의 가치**
-SLF4J가 단순한 로깅 라이브러리가 아닌, 잘 설계된 인터페이스라는 것[^40]을 알게 되었다. 이를 통해 왜 많은 자바 오픈소스들이 SLF4J를 선택했는지 이해할 수 있었다.
 
-2. **디자인 패턴의 실제 사례**
-Facade 패턴이 실제로 어떻게 사용[^41]되는지, 그리고 그것이 어떤 문제를 해결하는지 직접 경험했다. 특히 로깅이라는 구체적인 문제 영역에서 이 패턴이 주는 이점을 확실히 이해할 수 있었다.
+## 참고
 
-3. **Java SPI의 발견**
-처음 알게 된 Java SPI(Service Provider Interface) 메커니즘[^42]은 매우 흥미로웠다. 플러그인 방식으로 구현체를 바꿀 수 있다는 점이 인상적이었다.
-
-1. **성능 테스트 부족**
-실제 운영 환경에서 얼마나 성능이 나올지 테스트하지 못했다. 특히 비동기 처리나 버퍼링을 적용했을 때의 실제 성능 개선 정도를 측정해보지 못한 것이 아쉽다.[^43].
-
-2. **기능의 한계**
-Logback이 제공하는 많은 기능들 중 일부만 구현했다. 특히:
-- 로그 파일 롤링[^44].
-- 로그 레벨의 동적 변경[^45].
-- 조건부 로깅
-등의 기능은 아직 구현하지 못했다.
-
-### 앞으로의 과제
-
-1. **Kotlin 지원**
-현재는 Java만 고려했지만, Kotlin의 코루틴과 같은 비동기 프로그래밍 모델에서도 잘 동작하도록 개선이 필요하다.
-
-2. **Spring Boot Auto Configuration**
-Spring Boot에서 자동으로 설정될 수 있도록 auto-configuration을 제공하면 좋을 것 같다.
-
-3. **모니터링 도구 연동**
-ELK 스택이나 Datadog 같은 모니터링 도구와의 연동을 기본적으로 지원하면 좋을 것 같다.
-
-### 마치며
-이번 경험을 통해 단순히 라이브러리를 사용하는 것을 넘어서서, 왜 이렇게 설계되었는지 이해할 수 있었다. 특히 인터페이스 설계의 중요성과 그것이 주는 유연성을 직접 체감할 수 있었다. 앞으로도 자주 사용하는 라이브러리들의 내부를 이해하려 노력해야겠다는 생각이 든다.
-
-## 각주 목록:
-
-[^1]: “SLF4J Documentation - Overview,” https://www.slf4j.org
-[^2]: “Logback Project Overview,” https://logback.qos.ch
-[^3]: “Spring Boot Logging Configuration,” https://docs.spring.io/spring-boot/docs/current/reference/html/features.html#features.logging
-[^4]: “The Problem With Logging,” Martin Fowler’s Blog, 2003
-[^5]: “Enterprise Logging Requirements,” https://www.oreilly.com/library/view/java-enterprise-in-action/
-[^6]: “java.util.logging API,” Oracle Java Documentation, https://docs.oracle.com/javase/1.4.2/docs/guide/util/logging/index.html
-[^7]: “Log4j History and Overview,” Apache Logging Services, https://logging.apache.org/log4j/1.2/manual.html
-[^8]: “Commons Logging Introduction,” Apache Commons Documentation, https://commons.apache.org/proper/commons-logging/
-[^9]: “Log4j Project History,” https://logging.apache.org/log4j/2.x/manual/history.html
-[^10]: “Spring Logging with Commons Logging,” https://docs.spring.io/spring-framework/reference/core/logging.html
-[^11]: “Logback vs Log4j,” https://www.baeldung.com/logback-vs-log4j
-[^12]: “Log4j 2 Features and Benefits,” https://logging.apache.org/log4j/2.x/
-[^13]: “Why Not Log4j Directly?”, SLF4J FAQ, https://www.slf4j.org/faq.html#why_not_log4j
-[^14]: “Facade Design Pattern,” Gang of Four, “Design Patterns: Elements of Reusable Object-Oriented Software”
-[^15]: “SLF4J Architecture,” https://www.slf4j.org/architecture.html
-[^16]: “How SLF4J Works,” https://www.slf4j.org/manual.html
-[^17]: “Benefits of Using SLF4J,” https://www.slf4j.org/faq.html#benefits
-[^18]: “Switching Between Log Implementations,” https://www.slf4j.org/faq.html#switching
-[^19]: “Maintaining Logging Flexibility,” https://www.baeldung.com/java-logging-guide
-[^20]: “Spring Framework 5 Logging Changes,” https://docs.spring.io/spring-framework/docs/5.0.x/reference/html/logging.html
-[^21]: “SLF4J API Documentation,” https://www.slf4j.org/api/org/slf4j/Logger.html
-[^22]: “Logging Levels Explained,” https://www.slf4j.org/manual.html
-[^23]: “Efficient Logging in Java,” https://www.baeldung.com/slf4j-with-logback
-[^24]: “Performance Comparison of String Concatenation,” https://dzone.com/articles/java-string-concatenation-vs
-[^25]: “Avoiding Unnecessary String Operations,” Effective Java, Joshua Bloch
-[^26]: “Best Practices for Java Logging,” https://docs.oracle.com/javase/tutorial/essential/io/formatting.html
-[^27]: “Null Safety in SLF4J,” https://www.slf4j.org/manual.html#null
-[^28]: “SLF4J Markers,” https://www.slf4j.org/api/org/slf4j/Marker.html
-[^29]: “SLF4J Filtering with Markers,” https://logback.qos.ch/manual/filters.html
-[^30]: “SLF4J MDC,” https://www.slf4j.org/manual.html#mdc
-[^31]: “Common Pitfalls in Logback,” https://logback.qos.ch/manual/configuration.html
-[^32]: “XML vs Java Configuration in Logback,” https://logback.qos.ch/manual/configuration.html
-[^33]: “Spring Boot Logging Best Practices,” https://spring.io/guides/gs/logging/
-[^34]: “Logstash and JSON Logging,” https://www.baeldung.com/json-logging-logback
+### 각주
+[^1]: Service Provider Interface. 자바에서 제공하는 인터페이스로, 서비스 제공자가 구현해야 하는 인터페이스를 정의한다. 이를 통해 서비스 제공자는 서비스 사용자에게 서비스를 제공할 수 있다. 자바에서는 JDBC, JPA, JAX-RS 등 다양한 API에서 이를 사용한다.
