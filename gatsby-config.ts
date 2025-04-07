@@ -8,6 +8,8 @@ const config: GatsbyConfig = {
   siteMetadata: {
     siteTitle: `Polymorlog`,
     siteLanguage: `ko`,
+    siteUrl: `https://dahyeong-yun.github.io`,
+    siteDescription: `Dahyeong Yun's blog`,
   },
   trailingSlash: `always`,
   plugins: [
@@ -108,30 +110,32 @@ const config: GatsbyConfig = {
         feeds: [
           {
             serialize: ({
-                          query: { site, allPost },
+                          query: { site, allMdx },
                         }: {
-              query: { allPost: IAllPost; site: { siteMetadata: ISiteMetadata } }
+              query: { allMdx: { nodes: Array<any> }; site: { siteMetadata: any } }
             }) =>
-              allPost.nodes.map((post) => {
-                const url = site.siteMetadata.siteUrl + post.slug
-                const content = `<p>${post.excerpt}</p><div style="margin-top: 50px; font-style: italic;"><strong><a href="${url}">Keep reading</a>.</strong></div><br /> <br />`
+              allMdx.nodes.map((node) => {
+                const url = site.siteMetadata.siteUrl + node.frontmatter.slug
+                const content = `<p>${node.excerpt}</p><div style="margin-top: 50px; font-style: italic;"><strong><a href="${url}">Keep reading</a>.</strong></div><br /> <br />`
 
                 return {
-                  title: post.title,
-                  date: post.date,
-                  excerpt: post.excerpt,
+                  title: node.frontmatter.title,
+                  date: node.frontmatter.date,
+                  excerpt: node.excerpt,
                   url,
                   guid: url,
                   custom_elements: [{"content:encoded": content}],
                 }
               }),
             query: `{
-  allPost(sort: {date: DESC}) {
+  allMdx(sort: {frontmatter: {date: DESC}}) {
     nodes {
-      title
-      date(formatString: "MMMM D, YYYY")
+      frontmatter {
+        title
+        date
+        slug
+      }
       excerpt
-      slug
     }
   }
 }`,

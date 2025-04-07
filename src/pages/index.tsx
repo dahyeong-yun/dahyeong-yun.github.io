@@ -9,7 +9,7 @@ interface Post {
     date: string
     tags?: string[]
     slug: string
-    type: 'note' | 'post'
+    type?: 'note' | 'post'
     banner?: string
   }
   excerpt: string

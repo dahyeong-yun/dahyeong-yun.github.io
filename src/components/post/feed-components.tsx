@@ -12,7 +12,7 @@ interface PostFrontmatter {
   tags?: string[];
   slug: string;
   banner?: string;
-  type: 'note' | 'post';
+  type?: 'note' | 'post';
 }
 
 interface Post {

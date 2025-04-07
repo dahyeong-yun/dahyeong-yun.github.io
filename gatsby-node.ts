@@ -6,12 +6,12 @@ export const createSchemaCustomization: GatsbyNode["createSchemaCustomization"] 
 
   const typeDefs = `
     type MdxFrontmatter {
-      title: String! @defaultValue(value: "Untitled")
-      date: Date! @dateformat @defaultValue(value: "2024-01-01")
+      title: String!
+      date: Date! @dateformat
       slug: String!
-      tags: [String!] @defaultValue(value: [])
-      type: String! @defaultValue(value: "post")
-      banner: String @defaultValue(value: "/images/default-banner.jpg")
+      tags: [String!]
+      type: String
+      banner: String
     }
   `
   createTypes(typeDefs)
