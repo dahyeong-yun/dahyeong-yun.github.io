@@ -1,5 +1,7 @@
-// @ts-check
-import { defineConfig } from 'astro/config';
+import { defineConfig } from 'astro/config'
+import { blogTheme } from 'theme-astro'
+import config from './blog.config'
 
-// https://astro.build/config
-export default defineConfig({});
+export default defineConfig({
+  integrations: [blogTheme(config)],
+})
