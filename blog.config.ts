@@ -5,7 +5,7 @@ const config: BlogConfig = {
     title: 'Polymorlog',
     description: '개발, 성장, 회고를 기록합니다.',
     url: 'https://dahyeong-yun.github.io/',
-    author: '@polymorph1216',
+    author: 'polymorph',
     language: 'ko',
   },
   theme: {
@@ -21,6 +21,10 @@ const config: BlogConfig = {
     gtm: {
       id: 'GTM-PZRN9ZQC',
       includeInDevelopment: true,
+    },
+    ga: {
+      id: '', // Google Analytics 4 Measurement ID (e.g. 'G-XXXXXXXXXX')
+      includeInDevelopment: false,
     },
   },
   seo: {
