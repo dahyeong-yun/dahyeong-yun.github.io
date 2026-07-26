@@ -1,0 +1,22 @@
+---
+type: "post"
+date: 2026-07-26
+title: "Astro 블로그 이관 및 자동 배포 테스트"
+slug: "/hello-astro-migration"
+tags: ['Astro', 'GitHub Actions', '회고']
+---
+
+## Astro 블로그로의 이관을 축하합니다!
+
+기존 Gatsby 기반 블로그에서 Astro 기반 블로그로 성공적으로 엔진을 이관했습니다. 
+이번 이관을 통해 얻은 성과는 다음과 같습니다:
+
+1. **테마 분리 및 독립성 확보**: `theme-astro`를 GitHub 원격 저장소 의존성으로 분리하여 블로그 본체 프로젝트의 코드 복잡도를 줄였습니다.
+2. **GitHub Actions 자동 배포 도입**: `main` 브랜치에 푸시하면 자동으로 빌드와 배포가 수행되어 Pages 호스팅을 업데이트합니다.
+3. **LaTeX 수식 렌더링 지원**: `remark-math` 및 `rehype-katex` 플러그인을 결합하여 본문 내 수학 공식도 깔끔하게 표현됩니다.
+
+$$
+E = mc^2
+$$
+
+앞으로 이 새로운 Astro 블로그에서 더 멋진 글들을 많이 작성해 나가길 기대합니다!
