@@ -15,6 +15,7 @@
 
 ## 4. Working Agreements
 - 로컬 변경 내역은 최종 점검 후 본체 저장소에 갱신하여 푸시하며, 로컬에서 테마 핫 리로딩으로 디버깅할 때는 작업 흐름(로컬 의존성 설치 -> 디버깅 -> 원격 릴리즈 -> 원격 패키지 복구)을 철저히 준수합니다.
+- **태스크 기반 작업 및 커밋 프로세스**: 어떠한 작업이든 시작하기 전에 `.history/tasks/` 하위에 태스크 문서의 계획(Plan)을 먼저 작성하고, 작업 완료 후 커밋을 수행하기 직전에 실행(Execution) 결과를 작성 완료하여 소스코드와 태스크 문서를 반드시 함께 커밋합니다.
 
 ## 5. Relevant Files
 - [`theme-astro/src/theme/components/Footer.astro:L1-L26`](file:///Users/dahyeung/Repositories/polymorph/publish/theme-astro/src/theme/components/Footer.astro#L1-L26) — 가상 모듈을 통해 카피라이터명과 GitHub 링크를 동적으로 연동하도록 수정한 컴포넌트
