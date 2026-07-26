@@ -11,5 +11,6 @@
 | #5 | 자동 목차(TOC) 생성 기능 설계 | 🟢 Done | [5_toc_feature_design.md](./5_toc_feature_design.md) |
 | #6 | 내부 문서(.report/) 이동 및 Git 추적 제외 | 🟢 Done | [6_remove_docs_from_version_control.md](./6_remove_docs_from_version_control.md) |
 | #7 | 프로젝트 태스크 대시보드(README.md) 구축 | 🟢 Done | [7_project_task_dashboard_setup.md](./7_project_task_dashboard_setup.md) |
+| #8 | 자동 목차(TOC) 기능 실제 구현 및 레이아웃 적용 | ⚪ To Do | (작성 대기) |
 
 - **상태 범례**: ⚪ `To Do` (할 일) \| 🟡 `In Progress` (진행 중) \| 🟢 `Done` (완료)
