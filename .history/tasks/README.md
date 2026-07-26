@@ -13,5 +13,6 @@
 | #7 | 프로젝트 태스크 대시보드(README.md) 구축 | 🟢 Done | - | [7_project_task_dashboard_setup.md](./7_project_task_dashboard_setup.md) |
 | #8 | 자동 목차(TOC) 기능 실제 구현 및 레이아웃 적용 | 🟢 Done | #5 | [8_toc_implementation.md](./8_toc_implementation.md) |
 | #9 | 테스트용 포스트 제거 및 실서버 배포 갱신 | 🟢 Done | #3 | [9_remove_test_post.md](./9_remove_test_post.md) |
+| #10 | 블로그 상세 페이지 주소의 겹침 슬래시(//) 버그 수정 | 🟢 Done | - | [10_fix_double_slash_slug_bug.md](./10_fix_double_slash_slug_bug.md) |
 
 - **상태 범례**: ⚪ `To Do` (할 일) \| 🟡 `In Progress` (진행 중) \| 🟢 `Done` (완료)
