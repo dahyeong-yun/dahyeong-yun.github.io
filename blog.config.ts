@@ -23,8 +23,8 @@ const config: BlogConfig = {
       includeInDevelopment: true,
     },
     ga: {
-      id: '', // Google Analytics 4 Measurement ID (e.g. 'G-XXXXXXXXXX')
-      includeInDevelopment: false,
+      id: 'G-GZDF7K86DL', // Google Analytics 4 Measurement ID (e.g. 'G-XXXXXXXXXX')
+      includeInDevelopment: true,
     },
   },
   seo: {
