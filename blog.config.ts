@@ -19,7 +19,7 @@ const config: BlogConfig = {
   ],
   analytics: {
     gtm: {
-      id: 'GTM-PZRN9ZQC',
+      id: 'GTM-WTHZW3K9',
       includeInDevelopment: true,
     },
     ga: {
