@@ -15,6 +15,7 @@ const config: BlogConfig = {
   },
   navigation: [
     { title: 'Blog', href: '/blog' },
+    { title: 'Series', href: '/series' },
     { title: 'About', href: '/about' },
   ],
   analytics: {
