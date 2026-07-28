@@ -29,3 +29,6 @@ pnpm-debug.log*
 
 # Reports
 .report/
+
+# Handoff files
+HANDOFF.md
