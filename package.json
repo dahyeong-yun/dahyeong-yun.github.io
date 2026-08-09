@@ -16,6 +16,6 @@
     "astro": "^7.1.1",
     "rehype-katex": "^7.0.1",
     "remark-math": "^6.0.0",
-    "theme-astro": "github:dahyeong-yun/theme-astro"
+    "theme-astro": "github:dahyeong-yun/theme-astro#neob"
   }
 }
