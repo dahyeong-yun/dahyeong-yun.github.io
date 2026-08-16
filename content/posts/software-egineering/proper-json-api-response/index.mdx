@@ -1,0 +1,152 @@
+---
+type: "post"
+date: 2026-08-16
+title: "적절한 JSON 형식 API 응답이 되려면"
+slug: "/proper-json-api-response"
+tags: ['API']
+---
+
+## 들어가며
+
+실제로 일을 할 때는 API 서버를 바닥부터 만들 일이 그렇게 많지 않은데, 마침 스프링 스터디에서 처음부터 만들다 보니 응답 구조부터 고민이 들었다. HTTP API 응답은 JSON 형식을 쓰겠지만 그 필드나 응답의 상태코드, 헤더는 개발자마다 다를 수 있기 때문이다. 그러다 생각난 것이 예전부터도 이런 고민들이 간헐적으로 있었다는 것이다. JSON 응답을 사용하는 것까지는 알겠는데 꼭 응답 데이터를 객체로 감싸는 구조를 써야하는지, 어떤 필드를 넣을 것이며, 배열 형태의 데이터는 또 어떻게 넣을지 같은 것들이 주요 고민이었다. 돌이켜보면 이미 만들어져 있는 구조에 맞추어가는 일이 많았기 때문에 이런 고민들은 원래 구조에 대한 의문이었다고 봐야겠다. 이 글에서는 그 의문들 중 몇 가지에 대해 답해보려고 한다.
+
+## JSON 응답 형식의 요소와 이유들
+
+JSON을 쓴다고 가정했을 때 선택의 문제는 결국 상태 코드, 헤더, 그리고 바디 필드의 문제인 것 같다. 응답을 설계한다는 건 이 셋 중 어디에 정보를 담을지 결정하는 일이다. 데이터를 한 겹 감쌀지 말지, 코드 필드를 따로 둘지 말지, 페이지 정보를 어디에 실을지가 전부 이 결정에 속한다.
+
+### 코드와 메시지 필드를 바디에 넣는 이유
+
+먼저 상태 코드 외에 새로운 코드성 필드나 메시지 필드를 넣는 관례를 보자. HTTP의 상태 코드는 상세한 표현이 어렵다. 송금을 처리하는 API가 있다고 가정해보자. 이 송금이 실패한 이유가 잔액 부족이든, 한도 초과이든, 계좌 정지이든 전부 Bad Request(400) 하나로 처리된다. 클라이언트 입장에서는 사유에 따른 구체적인 처리를 하기가 어렵다. 그래서 자연스럽게 응답의 바디에 도메인 로직을 처리할 필드를 더 두게 된다.
+
+오픈뱅킹 API의 잔액 조회 응답이 이런 모양이다.[^kftc] 처리 결과가 `rsp_code`라는 별도 필드로 들어온다.
+
+```json
+{
+  "api_tran_id": "2418...",
+  "api_tran_dtm": "20260816143012",
+  "rsp_code": "A0000",
+  "rsp_message": "",
+  "balance_amt": "1000000"
+}
+```
+
+같은 필요를 표준 포맷으로 푼 것이 RFC 9457이다.[^rfc9457] Content-Type은 `application/json`이 아니라 `application/problem+json`으로 나간다.
+
+```json
+{
+  "type": "https://api.example.com/errors/insufficient-balance",
+  "title": "Insufficient Balance",
+  "status": 400,
+  "detail": "출금 가능 금액은 32,000원입니다.",
+  "instance": "/accounts/12345/withdrawals",
+  "code": "ACCOUNT_4001",
+  "availableBalance": 32000
+}
+```
+
+다만 이것이 HTTP Status Code를 대체할 수는 없다. 클라이언트 외에도 서버와 클라이언트 사이에 미들웨어들은 이 상태 코드를 기준으로 캐싱이나 재시도를 처리하는 경우도 있기 때문에 서버는 의미에 부합하는 HTTP Status Code를 반환해야 한다.
+
+### HTTP Status Code를 200으로 고정하는 이유
+
+바로 앞에서 '의미에 부합하는 HTTP Status Code를 사용해야 한다'라고 적었다. 그런데 간혹 그냥 상태 코드를 무조건 200으로 보내고, 그 응답의 필드를 통해서 에러 메시지나 에러 코드를 주는 경우가 있다. 이런 건 왜 그럴까?
+
+4xx를 받으면 에러 메시지를 못 꺼내는 클라이언트가 실제로 있었다. 자바의 `HttpURLConnection`이 그렇다.[^httpurlconnection] 응답이 400 이상이면 `getInputStream()`이 예외를 던진다. 바디는 `getErrorStream()`이라는 다른 메서드로 읽어야 하는데, 만약 이런 분기 처리가 되어 있지 않다면 "4xx면 바디를 못 읽는다"는 결론에 도달할 수도 있다.
+
+또 프론트엔드 정적 리소스를 서빙하는 웹 서버 자체적으로 HTTP Status Code에 따라 빌트인 에러 페이지를 보여주는 경우도 있다. 이런 부분도 커스텀의 여지를 제공하지만 그 대신 전부 200으로 내리고 에러 판단은 바디에서 처리하자는 결정을 내리는 경우가 있을 수 있다.
+
+근데 이렇게 하면 상태 코드를 보고 움직이도록 만들어진 것들이 이 응답을 전부 성공으로 읽게 된다.
+
+캐시가 그렇다. RFC 9110은 캐시가 알아서 재사용해도 되는 상태 코드를 따로 정해뒀는데, 200은 그 목록에 있고 500은 없다.[^rfc9110-cache] 서버가 터졌다는 응답은 곧 상황이 달라질 테니 재사용하지 말라는 뜻이다. 500을 200으로 내리는 순간 이 구분이 사라진다.
+
+재시도도 그렇다. nginx나 Istio에서 재시도할 조건을 적을 때 쓰는 값이 `http_500`이나 `5xx` 같은 상태 코드다.[^retry] 200으로 나가면 재시도 후보에 들어가지도 못한다. 서버 한 대가 맛이 갔을 때 그 요청이 멀쩡한 쪽으로 넘어가지 않는다는 뜻이다.
+
+게다가 애초에 이렇게 하게 된 이유들도 지금은 대부분 사라졌다. `fetch()`는 404나 500을 받아도 실패로 처리하지 않고, 바디는 그냥 읽힌다.[^mdn-fetch] axios는 실패로 처리하지만 `error.response.data`에 바디를 담아준다. 프록시가 에러 페이지로 바꿔치기하는 건 여전히 남아 있지만, 그건 고칠 곳이 API가 아니라 프록시 설정이다.
+
+### 목록만 감싸는 이유
+
+이외에 다건 응답을 처리하는 문제가 있을 수 있다. JSON에서 데이터를 담는 틀은 두 개뿐이다. 객체 `{}`와 배열 `[]`. 그런데 배열에는 필드를 붙일 자리가 없다. 항목 열 개를 내려주면서 "뒤에 1,204개가 더 있다"를 같이 말하고 싶어도 `[...]`에는 그 말을 적을 데가 없다. 그래서 이에 대한 해결책은 둘뿐이다. 객체로 한 겹 감싸서 옆자리를 만들거나, 아예 그 부분의 정보를 바디 밖으로 빼거나.
+
+단건은 리소스가 그대로 최상위에 온다. 감쌀 이유가 없다. (코드 예시 Stripe의 API 응답)[^stripe-charge]
+
+```json
+{
+  "id": "ch_3MmlLrLkdIwHu7ix0snN0B15",
+  "object": "charge",
+  "amount": 1099,
+  "currency": "usd",
+  "status": "succeeded"
+}
+```
+
+목록에서만 한 겹이 생긴다.[^stripe-list] `has_more`가 `data`와 같은 층에 있어야 의미적으로 부합하기 때문이다.
+
+```json
+{
+  "object": "list",
+  "url": "/v1/charges",
+  "has_more": true,
+  "data": [
+    { "id": "ch_3Mml...", "object": "charge", "amount": 1099 },
+    { "id": "ch_3Mmk...", "object": "charge", "amount": 2500 }
+  ]
+}
+```
+
+GitHub은 같은 문제를 다르게 풀었다.[^github-pagination] 응답 바디는 순수 배열로 두고 페이지 정보를 헤더로 뺐다.
+
+```http
+HTTP/1.1 200 OK
+Link: <https://api.github.com/repositories/1300192/issues?page=4>; rel="next",
+      <https://api.github.com/repositories/1300192/issues?page=515>; rel="last"
+
+[
+  { "id": 1, "title": "..." },
+  { "id": 2, "title": "..." }
+]
+```
+
+### 헤더로 빼는 이유
+
+여기까지 오는 동안 헤더가 두 번 지나갔다. 하나는 에러 응답의 `application/problem+json`이고, 다른 하나는 방금 본 GitHub의 `Link`다.
+
+둘의 공통점은 담긴 것이 데이터 자체가 아니라 **그 데이터를 어떻게 다뤄야 하는지에 대한 정보(메타데이터)**라는 점이다. `application/problem+json`은 이 바디가 정상 응답이 아니라 에러 형식이라는 것을 파싱하기 전에 알려준다. `Link`는 다음 페이지의 주소를 알려주는데, 이건 목록에 담긴 데이터가 아니라 목록을 어떻게 이어서 가져올지에 대한 정보다.
+
+바디를 열어보지 않고도 알 수 있어야 하는 정보라면 헤더가 올바른 위치다. 헤더는 이름과 의미가 표준으로 정해져 있어서, 바디와 달리 서비스마다 해석이 달라지지 않는다.
+
+## 적절성의 판단 기준
+
+여기까지 어떤 건 그럴 만하고 어떤 건 대가가 크다고 말해왔는데, 그 판단의 기준은 무엇일까? 내가 보기에는 그 정보를 필요로 하는 주체가 누구인지 생각해보는 것이 중요할 것 같다. HTTP Status Code는 오로지 클라이언트 개발자가 작성하는 코드만이 사용하는 것이 아니다. 서버에서 클라이언트에 도달하기까지의 HTTP가 흘러가는 과정에서 모두 프로토콜의 규칙에 따라 상태 값을 본다. 프로토콜은 말 그대로 규약이기 때문에, 이 규약에 알맞게 처리되기를 바란다면 미리 정해진 약속에 따라서 보내야 한다.
+
+응답 바디는 반대다. 필드 이름과 구조가 서비스마다 다르기 때문에 중간을 지나는 것들은 이걸 해석할 방법이 없다. 결국 바디를 열어서 판단하는 것은 그 API를 직접 호출한 클라이언트뿐이다. 도메인 사정에 따른 세부 사유를 여기에 담는 것은 그래서 자연스럽다.
+
+정리하면 어떤 정보를 어디에 담을지는 그 정보를 누가 읽어야 하는지에 따라 갈린다. 지나가는 길목의 모두가 알아야 하는 것은 상태 코드로, 바디를 열지 않고도 알아야 하는 것은 헤더로, 그 API를 호출한 쪽만 알면 되는 것은 바디로 보내면 된다. 200으로 고정하는 방식이 대가를 치르는 건 앞의 것을 뒤에만 적어 보내기 때문이다.
+
+
+## 남들은 어떻게 하고 있나
+
+공개된 API 문서들을 기준으로 더 살펴보자. 바디를 감싸느냐 마느냐는 제각각이었지만, 상태 코드를 제대로 쓰는지에 대해서는 대체로 한 방향을 지향하고 있었다.
+
+카카오는 에러 코드 표에 각 코드가 어떤 상태 코드와 함께 나가는지를 같이 적어뒀다.[^kakao] 네이버는 정상이면 200, 오류면 4xx나 5xx를 쓰고 바디에는 `errorCode`와 `errorMessage`만 담는다.[^naver] 포트원은 `{ code, message, response }` 형태로 한 겹 감싸는데, 토큰 없이 호출해보면 상태 코드는 401로 제대로 나온다.[^portone] 감싸는 것과 상태 코드를 쓰는 것은 양자택일이 아니라는 뜻이다.
+
+가장 눈에 띈 곳은 토스페이먼츠였다. 잔액 부족과 한도 초과를 403에 매핑해뒀다.[^toss] 이 글 앞부분에서 "잔액 부족이든 한도 초과든 전부 400 하나로 처리된다"고 적었는데, 꼭 그렇지만은 않다는 반례인 셈이다. 상태 코드로 큰 갈래를 잡고 `code`로 세부 사유를 나누면 둘 다 할 수 있다.
+
+## 마치며
+
+거의 모든 HTTP API의 형식으로 JSON이 쓰인다. JSON은 HTTP body에 들어가는 것이므로 body만을 통해서 처리하는 것은 HTTP라는 프로토콜의 온전한 사용이라 보기는 어렵다. HTTP Header나 Status Code라는 규약을 활용해야 하는데, 그러려면 서버 한쪽의 변경뿐만 아니라 클라이언트도 알맞게 변경되어야 한다.
+
+다만 레거시 또한 나름대로의 문제를 해결하려고 했을 것이라는 점을 기억하면 좋겠다. 응답의 구조 자체에서도 원래 어떠한 문제를 해결하기 위해 이런 구조를 택했는지 생각해보고, 그 문제가 더 이상 문제가 아니라면 개선을 해야 할 것이고 다른 식으로 풀 수 있다면 더 나은 해결책을 찾아야 할 것이다.
+
+## 참고
+[^kftc]: 금융결제원 오픈뱅킹 [잔액조회 API](https://developers.kftc.or.kr/dev/openapi/open-banking/balance). 필드 구성은 문서 기준이고 값은 예시로 채운 것이다.
+[^rfc9457]: [RFC 9457 — Problem Details for HTTP APIs](https://www.rfc-editor.org/rfc/rfc9457.html). RFC 7807을 대체했고, 등급은 Proposed Standard다. 예시는 스펙의 다섯 필드에 도메인 코드를 확장 필드로 얹은 형태.
+[^httpurlconnection]: [`HttpURLConnection` (Java SE API 문서)](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/net/HttpURLConnection.html). 오류 응답 본문은 `getErrorStream()`으로 읽는다.
+[^rfc9110-cache]: [RFC 9110 §15.1](https://www.rfc-editor.org/rfc/rfc9110.html#section-15.1). 원문은 "200, 203, 204, 206, 300, 301, 308, 404, 405, 410, 414, and 501"을 heuristically cacheable로 정하고 나머지는 아니라고 못 박는다. 응답에 `Cache-Control`로 유효 기간을 명시하지 않았을 때 캐시가 스스로 판단하는 경우에 해당한다. ([RFC 9111 §4.2.2](https://www.rfc-editor.org/rfc/rfc9111.html#section-4.2.2))
+[^retry]: [nginx `proxy_next_upstream`](https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_next_upstream)의 기본값은 `error timeout`이라 연결 실패와 타임아웃만 넘기고, `http_500` 같은 값을 붙여야 해당 상태 코드에서 다음 서버로 넘어간다. [Istio의 `retryOn`](https://istio.io/latest/docs/reference/config/networking/virtual-service/)도 `5xx`, `gateway-error`(502·503·504) 같은 상태 코드 기준이다.
+[^mdn-fetch]: [MDN — `fetch()`](https://developer.mozilla.org/ko/docs/Web/API/Window/fetch). 요청 자체가 실패했을 때만 promise가 reject되고, 404나 500 같은 상태 코드는 `response.ok`로 직접 확인해야 한다.
+[^stripe-charge]: [Stripe API — The Charge object](https://docs.stripe.com/api/charges/object).
+[^stripe-list]: [Stripe — How pagination works](https://docs.stripe.com/pagination). 목록 응답은 `data` 배열과 `has_more`를 같은 층에 둔다.
+[^github-pagination]: [GitHub REST API — Using pagination in the REST API](https://docs.github.com/en/rest/using-the-rest-api/using-pagination-in-the-rest-api). 페이지 정보는 `Link` 헤더로 나간다.
+[^kakao]: [Kakao Developers — REST API 에러 코드](https://developers.kakao.com/docs/ko/rest-api/error-code). 에러 코드마다 대응하는 상태 코드(400·401·403·503 등)가 표에 함께 적혀 있다.
+[^naver]: [네이버 오픈API 오류 코드 가이드](https://github.com/naver/naver-openapi-guide/blob/master/ko/errorcode.md).
+[^portone]: [PortOne(아임포트) V1 REST API](https://developers.portone.io/api/rest-v1). `curl -i https://api.iamport.kr/payments/imp_0000000000`으로 확인해보면 `HTTP/1.1 401`과 함께 `{"code":-1,"message":"Unauthorized","response":null}`이 돌아온다.
+[^toss]: [토스페이먼츠 — API 에러 코드](https://docs.tosspayments.com/reference/error-codes). 403에 잔액 부족과 한도 초과가 매핑돼 있다.
