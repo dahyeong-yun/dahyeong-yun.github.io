@@ -1,6 +1,6 @@
 import { defineCollection } from 'astro:content'
 import { glob } from 'astro/loaders'
-import { blogPostSchema, wikiPageSchema } from 'theme-astro'  // 스키마를 테마에서 가져옴
+import { blogPostSchema, wikiPageSchema, pageSchema } from 'theme-astro'  // 스키마를 테마에서 가져옴
 
 export const collections = {
   // 포스트: 나의 통찰·경험·생각이 담긴 글
@@ -12,5 +12,10 @@ export const collections = {
   wiki: defineCollection({
     loader: glob({ base: './content/wiki', pattern: '**/*.{md,mdx}' }),
     schema: wikiPageSchema,
+  }),
+  // About 처럼 날짜가 의미 없는 단독 페이지
+  pages: defineCollection({
+    loader: glob({ base: './content/pages', pattern: '**/*.{md,mdx}' }),
+    schema: pageSchema,
   }),
 }
