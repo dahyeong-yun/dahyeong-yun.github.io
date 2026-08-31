@@ -15,9 +15,14 @@ const config: BlogConfig = {
   },
   navigation: [
     { title: 'Blog', href: '/blog' },
+    { title: 'Wiki', href: '/wiki' },
     { title: 'Series', href: '/series' },
     { title: 'About', href: '/about' },
   ],
+  wiki: {
+    title: 'Wiki',
+    description: '정리해 둔 정보성 문서들. 계속 고쳐 씁니다.',
+  },
   analytics: {
     gtm: {
       id: 'GTM-WTHZW3K9',
