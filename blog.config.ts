@@ -35,6 +35,8 @@ const config: BlogConfig = {
   seo: {
     openGraph: true,
     twitterCard: 'summary_large_image',
+    // 공유 카드 기본 이미지. 글 frontmatter 의 ogImage / banner 가 있으면 그쪽이 우선한다.
+    defaultImage: '/og-default.png',
   },
 }
 
