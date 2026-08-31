@@ -15,5 +15,6 @@
 | #9 | 테스트용 포스트 제거 및 실서버 배포 갱신 | 🟢 Done | #3 | [9_remove_test_post.md](./9_remove_test_post.md) |
 | #10 | 블로그 상세 페이지 주소의 겹침 슬래시(//) 버그 수정 | 🟢 Done | - | [10_fix_double_slash_slug_bug.md](./10_fix_double_slash_slug_bug.md) |
 | #11 | 시리즈(Series) 타입 문서 지원 및 아카이브 페이지 구축 | 🟢 Done | - | [11_implement_series_feature.md](./11_implement_series_feature.md) |
+| #12 | 브랜드 방향 정립 (파비콘 · OG 이미지 · 비주얼 아이덴티티) | ⚪ To Do | - | [12_branding_direction.md](./12_branding_direction.md) |
 
 - **상태 범례**: ⚪ `To Do` (할 일) \| 🟡 `In Progress` (진행 중) \| 🟢 `Done` (완료)
