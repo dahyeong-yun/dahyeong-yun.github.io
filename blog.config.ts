@@ -7,6 +7,8 @@ const config: BlogConfig = {
     url: 'https://dahyeong-yun.github.io/',
     author: 'polymorph',
     language: 'ko',
+    // 빌드 머신(로컬 KST / GitHub Actions UTC)에 따라 날짜 표기가 달라지지 않도록 고정
+    timeZone: 'Asia/Seoul',
   },
   theme: {
     colorScheme: 'dark',
