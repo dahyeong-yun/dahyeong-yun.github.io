@@ -14,6 +14,7 @@ const config: BlogConfig = {
     colorScheme: 'dark',
     codeTheme: 'tokyo-night',
     fontFamily: 'Pretendard',
+    themeColor: '#0066cc',
   },
   navigation: [
     // description 은 그 페이지 제목 아래 한 줄 설명으로 들어간다.
