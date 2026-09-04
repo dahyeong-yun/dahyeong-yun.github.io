@@ -1,0 +1,364 @@
+<title>Polymorlog 격자 마크</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&family=IBM+Plex+Sans+KR:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+
+<style>
+:root {
+  --ground: #f4f5f7; --card: #ffffff; --card-2: #eceef2;
+  --ink: #14161a; --ink-2: #5f6672; --ink-3: #939aa6;
+  --rule: #dde0e6; --accent: #0066cc; --accent-soft: #eaf3ff;
+  --chrome: #e3e5ea;
+  --serif: "Newsreader","IBM Plex Sans KR",Georgia,serif;
+  --sans: "IBM Plex Sans KR",system-ui,-apple-system,sans-serif;
+  --mono: "IBM Plex Mono",ui-monospace,SFMono-Regular,monospace;
+  --site-sans: "SF Pro Display","SF Pro Text","Pretendard Variable",Pretendard,system-ui,-apple-system,sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --ground:#0b0d10; --card:#16191d; --card-2:#1f2329;
+    --ink:#e8eaee; --ink-2:#939aa6; --ink-3:#666d78;
+    --rule:#262a30; --accent:#0a84ff; --accent-soft:rgba(10,132,255,0.15);
+    --chrome:#23272d;
+  }
+}
+:root[data-theme="dark"] {
+  --ground:#0b0d10; --card:#16191d; --card-2:#1f2329;
+  --ink:#e8eaee; --ink-2:#939aa6; --ink-3:#666d78;
+  --rule:#262a30; --accent:#0a84ff; --accent-soft:rgba(10,132,255,0.15);
+  --chrome:#23272d;
+}
+* { box-sizing: border-box; }
+body { margin:0; background:var(--ground); color:var(--ink); font-family:var(--sans); line-height:1.6; -webkit-font-smoothing:antialiased; }
+.wrap { max-width:1000px; margin:0 auto; padding:clamp(2rem,5vw,4.5rem) clamp(1rem,4vw,2.5rem) 5rem; display:flex; flex-direction:column; gap:3.25rem; }
+.eyebrow { font-family:var(--mono); font-size:0.7rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--ink-3); }
+h1 { font-family:var(--serif); font-weight:600; font-size:clamp(2rem,5vw,2.9rem); line-height:1.15; letter-spacing:-0.02em; margin:0; text-wrap:balance; }
+.masthead { display:flex; flex-direction:column; gap:1rem; }
+.lede { margin:0; max-width:62ch; color:var(--ink-2); }
+.lede strong { color:var(--ink); font-weight:600; }
+h2.sec { font-family:var(--serif); font-size:1.6rem; font-weight:600; letter-spacing:-0.015em; margin:0; padding-top:1.6rem; border-top:1px solid var(--rule); }
+.section { display:flex; flex-direction:column; gap:1.1rem; }
+.section p { margin:0; max-width:66ch; font-size:0.92rem; color:var(--ink-2); }
+.section p strong { color:var(--ink); font-weight:600; }
+code { font-family:var(--mono); font-size:0.86em; background:var(--card-2); padding:0.08em 0.32em; border-radius:2px; color:var(--ink); }
+
+.warn { border-left:2px solid var(--accent); padding:0.15rem 0 0.15rem 0.9rem; }
+.warn p { color:var(--ink-2); }
+
+/* 마크 표시판 — 흑백 반전 쌍 */
+.pair { display:grid; grid-template-columns:1fr 1fr; gap:0; border:1px solid var(--rule); border-radius:3px; overflow:hidden; }
+.face { aspect-ratio:1; display:grid; place-items:center; padding:12%; }
+.face.on-white { background:#ffffff; color:#111111; --mark-bg:#ffffff; }
+.face.on-black { background:#000000; color:#ffffff; --mark-bg:#000000; }
+.face svg { width:100%; height:auto; display:block; }
+
+.cand { display:flex; flex-direction:column; gap:1.3rem; padding-top:1.6rem; border-top:1px solid var(--rule); }
+.cand-head { display:flex; flex-wrap:wrap; align-items:baseline; gap:0.75rem; }
+.cand-name { font-family:var(--serif); font-size:1.75rem; font-weight:600; letter-spacing:-0.015em; margin:0; }
+.cand-en { font-family:var(--mono); font-size:0.72rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--ink-3); }
+.cand-why { margin:0; max-width:64ch; font-size:0.95rem; color:var(--ink-2); }
+.cand-why strong { color:var(--ink); font-weight:600; }
+.split { display:grid; grid-template-columns:minmax(0,1.05fr) minmax(0,1fr); gap:1.25rem; align-items:start; }
+@media (max-width:760px) { .split { grid-template-columns:1fr; } .pair { grid-template-columns:1fr 1fr; } }
+
+.panel { background:var(--card); border:1px solid var(--rule); border-radius:3px; padding:0.9rem; display:flex; flex-direction:column; gap:0.7rem; }
+.panel-label { font-family:var(--mono); font-size:0.62rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--ink-3); }
+
+.tradeoff { display:flex; flex-direction:column; gap:0.35rem; font-size:0.87rem; }
+.tradeoff p { margin:0; display:flex; gap:0.55rem; max-width:64ch; }
+.tradeoff .mark { font-family:var(--mono); color:var(--ink-3); flex:none; width:1rem; }
+.tradeoff .plus .mark::before { content:"+"; }
+.tradeoff .minus .mark::before { content:"−"; }
+.tradeoff .plus > span:last-child { color:var(--ink); }
+.tradeoff .minus > span:last-child { color:var(--ink-2); }
+
+/* 16px 검증 */
+.truth { display:grid; grid-template-columns:repeat(auto-fit,minmax(132px,1fr)); gap:1.1rem; }
+.truth figure { margin:0; display:flex; flex-direction:column; gap:0.45rem; align-items:center; }
+.truth img { width:100%; max-width:150px; image-rendering:pixelated; border:1px solid var(--rule); border-radius:2px; display:block; }
+.truth figcaption { font-family:var(--mono); font-size:0.64rem; letter-spacing:0.05em; text-transform:uppercase; text-align:center; color:var(--ink-3); }
+.truth .ok { color:var(--accent); }
+.truth .bad { color:var(--ink-3); text-decoration:line-through; }
+
+.ladder { display:flex; align-items:flex-end; gap:1.1rem; flex-wrap:wrap; }
+.ladder figure { margin:0; display:flex; flex-direction:column; align-items:center; gap:0.35rem; }
+.ladder figcaption { font-family:var(--mono); font-size:0.6rem; color:var(--ink-3); font-variant-numeric:tabular-nums; }
+
+.tabstrip { background:var(--chrome); border-radius:6px 6px 0 0; padding:0.35rem 0.35rem 0; display:flex; gap:2px; overflow:hidden; }
+.tab { display:flex; align-items:center; gap:0.4rem; padding:0.4rem 0.6rem; border-radius:5px 5px 0 0; font-size:0.7rem; color:var(--ink-2); min-width:0; font-family:var(--site-sans); }
+.tab.active { background:var(--card); color:var(--ink); }
+.tab span.t { white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.tab .fav { width:16px; height:16px; flex:none; border-radius:3px; }
+.tab .fav.grey { background:var(--ink-3); opacity:0.45; }
+
+.mock404 { background:#fff; border:1px solid var(--rule); border-radius:3px; overflow:hidden; font-family:var(--site-sans); }
+.m-head { display:flex; align-items:center; gap:0.5rem; padding:0.45rem 0.7rem; border-bottom:1px solid #e0e0e0; font-size:0.68rem; color:#5a5a5f; }
+.m-head b { color:#1d1d1f; font-size:0.74rem; letter-spacing:-0.01em; }
+.m-head nav { display:flex; gap:0.45rem; }
+.m-404 { padding:1.5rem 1rem 1.8rem; display:flex; flex-direction:column; align-items:center; gap:0.5rem; text-align:center; color:#111; --mark-bg:#ffffff; }
+.m-404 .big { color:#1d1d1f; font-size:0.95rem; font-weight:700; letter-spacing:-0.02em; }
+.m-404 .sub { color:#7a7a7a; font-size:0.74rem; }
+.m-404 .back { color:#0066cc; font-size:0.74rem; text-decoration:underline; text-underline-offset:2px; }
+
+.ogcard { aspect-ratio:1200/630; background:#000; color:#fff; --mark-bg:#000000; border:1px solid var(--rule); border-radius:3px; padding:1rem 1.15rem; display:flex; flex-direction:column; justify-content:space-between; font-family:var(--site-sans); overflow:hidden; }
+.ogcard.inv { background:#fff; color:#111; --mark-bg:#ffffff; }
+.og-top { display:flex; align-items:center; gap:0.5rem; }
+.og-name { font-size:0.66rem; font-weight:600; letter-spacing:0.02em; opacity:0.6; }
+.og-t { font-size:1.02rem; font-weight:700; letter-spacing:-0.025em; line-height:1.3; text-wrap:balance; }
+.og-b { font-size:0.62rem; opacity:0.55; }
+
+pre.prompt { margin:0; background:var(--card); border:1px solid var(--rule); border-radius:3px; padding:0.95rem 1.05rem; overflow-x:auto; font-family:var(--mono); font-size:0.73rem; line-height:1.7; color:var(--ink-2); white-space:pre-wrap; }
+pre.prompt b { color:var(--ink); font-weight:500; }
+.prompt-head { display:flex; align-items:baseline; gap:0.6rem; }
+.prompt-head h3 { font-family:var(--serif); font-size:1.15rem; font-weight:600; margin:0; }
+.prompt-head span { font-family:var(--mono); font-size:0.65rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--ink-3); }
+@media (prefers-reduced-motion: reduce) { * { transition:none !important; } }
+</style>
+
+<div class="wrap">
+
+  <header class="masthead">
+    <div class="eyebrow">Polymorlog · 브랜드 결정 03</div>
+    <h1>격자 마크</h1>
+    <p class="lede">
+      보내주신 참조 이미지 방향 — <strong>각진 기하 형태, 점과 선, 흑백, 완전하지 않은 형태</strong>로
+      다시 그렸습니다. 다만 그 형태는 16px에서 그대로 쓸 수 없어서
+      <strong>큰 마크와 파비콘을 나눈 2단 체계</strong>로 짰습니다.
+    </p>
+    <div class="warn">
+      <p>
+        참조하신 와이어프레임은 선이 가늘고 조각이 20개가 넘습니다. 16px = 픽셀 256개이므로
+        선 하나가 0.25픽셀로 떨어져 전부 회색 얼룩이 됩니다. 12번 문서 §4가
+        겹친 두 원·반원+각진 면에서 기록한 실패와 같고, 지난 세션에서 큐브도 같은 이유로 탈락했습니다.
+        <strong>그래서 마크를 줄이는 대신, 마크의 바깥 테두리만 남긴 파비콘을 따로 둡니다.</strong>
+        Threads·X·넷플릭스도 큰 마크와 앱 아이콘의 디테일이 서로 다릅니다.
+      </p>
+    </div>
+  </header>
+
+  <!-- ===== A ===== -->
+  <section class="cand">
+    <div class="cand-head">
+      <h2 class="cand-name">A · 깨진 격자</h2>
+      <span class="cand-en">Broken Lattice</span>
+    </div>
+    <p class="cand-why">
+      정이십면체 와이어프레임에서 <strong>엣지 여섯 개를 덜어낸</strong> 형태입니다.
+      바깥 육각형의 한 변이 비어 있고, 안쪽 고리도 두 군데가 끊겨 있습니다.
+      위키의 <code>[[링크]]</code>와 백링크가 만드는 문서 그래프가 실제로 이렇게 생겼습니다 —
+      <strong>아직 잇지 않은 자리가 남아 있는 그래프.</strong>
+      바깥 실루엣이 육각형이라 파비콘으로 줄일 때 그 테두리를 그대로 쓸 수 있습니다.
+    </p>
+    <div class="split">
+      <div class="pair">
+        <div class="face on-white"><svg viewBox="0 0 100 100" aria-label="깨진 격자 마크, 흰 바탕"><path d="M50 8L86.37 29M86.37 29L86.37 71M86.37 71L50 92M13.63 71L13.63 29M13.63 29L50 8M59.5 33.55L69 50M69 50L59.5 66.45M59.5 66.45L40.5 66.45M31 50L40.5 33.55M50 8L40.5 33.55M50 8L59.5 33.55M86.37 29L59.5 33.55M86.37 29L69 50M86.37 71L69 50M86.37 71L59.5 66.45M50 92L59.5 66.45M50 92L40.5 66.45M13.63 71L40.5 66.45M13.63 71L31 50M13.63 29L31 50M13.63 29L40.5 33.55M50 50L59.5 33.55M50 50L59.5 66.45M50 50L31 50" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round"/><circle cx="50" cy="8" r="2.6" fill="var(--mark-bg)" stroke="currentColor" stroke-width="1.8"/><circle cx="86.37" cy="29" r="2.6" fill="var(--mark-bg)" stroke="currentColor" stroke-width="1.8"/><circle cx="86.37" cy="71" r="2.6" fill="var(--mark-bg)" stroke="currentColor" stroke-width="1.8"/><circle cx="50" cy="92" r="2.6" fill="var(--mark-bg)" stroke="currentColor" stroke-width="1.8"/><circle cx="13.63" cy="71" r="2.6" fill="var(--mark-bg)" stroke="currentColor" stroke-width="1.8"/><circle cx="13.63" cy="29" r="2.6" fill="var(--mark-bg)" stroke="currentColor" stroke-width="1.8"/><circle cx="59.5" cy="33.55" r="2.6" fill="var(--mark-bg)" stroke="currentColor" stroke-width="1.8"/><circle cx="69" cy="50" r="2.6" fill="var(--mark-bg)" stroke="currentColor" stroke-width="1.8"/><circle cx="59.5" cy="66.45" r="2.6" fill="var(--mark-bg)" stroke="currentColor" stroke-width="1.8"/><circle cx="40.5" cy="66.45" r="2.6" fill="var(--mark-bg)" stroke="currentColor" stroke-width="1.8"/><circle cx="31" cy="50" r="2.6" fill="var(--mark-bg)" stroke="currentColor" stroke-width="1.8"/><circle cx="40.5" cy="33.55" r="2.6" fill="var(--mark-bg)" stroke="currentColor" stroke-width="1.8"/><circle cx="50" cy="50" r="2.6" fill="var(--mark-bg)" stroke="currentColor" stroke-width="1.8"/></svg></div>
+        <div class="face on-black"><svg viewBox="0 0 100 100" aria-label="깨진 격자 마크, 검은 바탕"><path d="M50 8L86.37 29M86.37 29L86.37 71M86.37 71L50 92M13.63 71L13.63 29M13.63 29L50 8M59.5 33.55L69 50M69 50L59.5 66.45M59.5 66.45L40.5 66.45M31 50L40.5 33.55M50 8L40.5 33.55M50 8L59.5 33.55M86.37 29L59.5 33.55M86.37 29L69 50M86.37 71L69 50M86.37 71L59.5 66.45M50 92L59.5 66.45M50 92L40.5 66.45M13.63 71L40.5 66.45M13.63 71L31 50M13.63 29L31 50M13.63 29L40.5 33.55M50 50L59.5 33.55M50 50L59.5 66.45M50 50L31 50" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round"/><circle cx="50" cy="8" r="2.6" fill="var(--mark-bg)" stroke="currentColor" stroke-width="1.8"/><circle cx="86.37" cy="29" r="2.6" fill="var(--mark-bg)" stroke="currentColor" stroke-width="1.8"/><circle cx="86.37" cy="71" r="2.6" fill="var(--mark-bg)" stroke="currentColor" stroke-width="1.8"/><circle cx="50" cy="92" r="2.6" fill="var(--mark-bg)" stroke="currentColor" stroke-width="1.8"/><circle cx="13.63" cy="71" r="2.6" fill="var(--mark-bg)" stroke="currentColor" stroke-width="1.8"/><circle cx="13.63" cy="29" r="2.6" fill="var(--mark-bg)" stroke="currentColor" stroke-width="1.8"/><circle cx="59.5" cy="33.55" r="2.6" fill="var(--mark-bg)" stroke="currentColor" stroke-width="1.8"/><circle cx="69" cy="50" r="2.6" fill="var(--mark-bg)" stroke="currentColor" stroke-width="1.8"/><circle cx="59.5" cy="66.45" r="2.6" fill="var(--mark-bg)" stroke="currentColor" stroke-width="1.8"/><circle cx="40.5" cy="66.45" r="2.6" fill="var(--mark-bg)" stroke="currentColor" stroke-width="1.8"/><circle cx="31" cy="50" r="2.6" fill="var(--mark-bg)" stroke="currentColor" stroke-width="1.8"/><circle cx="40.5" cy="33.55" r="2.6" fill="var(--mark-bg)" stroke="currentColor" stroke-width="1.8"/><circle cx="50" cy="50" r="2.6" fill="var(--mark-bg)" stroke="currentColor" stroke-width="1.8"/></svg></div>
+      </div>
+      <div class="panel">
+        <span class="panel-label">404 페이지</span>
+        <div class="mock404">
+          <div class="m-head"><b>Polymorlog</b><nav><span>Blog</span><span>Wiki</span><span>Series</span><span>About</span></nav></div>
+          <div class="m-404">
+            <svg viewBox="0 0 100 100" width="88" height="88" aria-hidden="true"><path d="M50 8L86.37 29M86.37 29L86.37 71M86.37 71L50 92M13.63 71L13.63 29M13.63 29L50 8M59.5 33.55L69 50M69 50L59.5 66.45M59.5 66.45L40.5 66.45M31 50L40.5 33.55M50 8L40.5 33.55M50 8L59.5 33.55M86.37 29L59.5 33.55M86.37 29L69 50M86.37 71L69 50M86.37 71L59.5 66.45M50 92L59.5 66.45M50 92L40.5 66.45M13.63 71L40.5 66.45M13.63 71L31 50M13.63 29L31 50M13.63 29L40.5 33.55M50 50L59.5 33.55M50 50L59.5 66.45M50 50L31 50" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round"/><circle cx="50" cy="8" r="2.6" fill="var(--mark-bg)" stroke="currentColor" stroke-width="1.8"/><circle cx="86.37" cy="29" r="2.6" fill="var(--mark-bg)" stroke="currentColor" stroke-width="1.8"/><circle cx="86.37" cy="71" r="2.6" fill="var(--mark-bg)" stroke="currentColor" stroke-width="1.8"/><circle cx="50" cy="92" r="2.6" fill="var(--mark-bg)" stroke="currentColor" stroke-width="1.8"/><circle cx="13.63" cy="71" r="2.6" fill="var(--mark-bg)" stroke="currentColor" stroke-width="1.8"/><circle cx="13.63" cy="29" r="2.6" fill="var(--mark-bg)" stroke="currentColor" stroke-width="1.8"/><circle cx="59.5" cy="33.55" r="2.6" fill="var(--mark-bg)" stroke="currentColor" stroke-width="1.8"/><circle cx="69" cy="50" r="2.6" fill="var(--mark-bg)" stroke="currentColor" stroke-width="1.8"/><circle cx="59.5" cy="66.45" r="2.6" fill="var(--mark-bg)" stroke="currentColor" stroke-width="1.8"/><circle cx="40.5" cy="66.45" r="2.6" fill="var(--mark-bg)" stroke="currentColor" stroke-width="1.8"/><circle cx="31" cy="50" r="2.6" fill="var(--mark-bg)" stroke="currentColor" stroke-width="1.8"/><circle cx="40.5" cy="33.55" r="2.6" fill="var(--mark-bg)" stroke="currentColor" stroke-width="1.8"/><circle cx="50" cy="50" r="2.6" fill="var(--mark-bg)" stroke="currentColor" stroke-width="1.8"/></svg>
+            <div class="big">이 주소에는 아무것도 없습니다</div>
+            <div class="sub">주소가 바뀌었거나, 아직 쓰지 않은 글입니다.</div>
+            <div class="back">글 목록으로</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="tradeoff">
+      <p class="plus"><span class="mark"></span><span>실루엣이 육각형이라 파비콘·OG·404가 한 가족으로 묶입니다. 축약형이 억지스럽지 않습니다.</span></p>
+      <p class="plus"><span class="mark"></span><span>끊긴 자리가 의도로 읽힙니다. "완전하지 않은 형태" 요구에 정확히 맞습니다.</span></p>
+      <p class="minus"><span class="mark"></span><span>참조 이미지와 가장 닮았습니다. 익숙한 만큼 새롭진 않습니다.</span></p>
+    </div>
+  </section>
+
+  <!-- ===== B ===== -->
+  <section class="cand">
+    <div class="cand-head">
+      <h2 class="cand-name">B · 기울어진 결정</h2>
+      <span class="cand-en">Tilted Crystal</span>
+    </div>
+    <p class="cand-why">
+      정다각형을 버리고 <strong>일부러 흐트러뜨린</strong> 형태입니다. 꼭짓점 간격이 제각각이라
+      한 덩어리가 비스듬히 놓인 것처럼 보이고, 보는 사이 면이 앞으로 나왔다 뒤로 물러납니다 —
+      <strong>같은 도형이 여러 얼굴로 읽히는</strong> 다형성 쪽에 더 가깝습니다.
+      A보다 각이 날카롭고 덜 흔합니다.
+    </p>
+    <div class="split">
+      <div class="pair">
+        <div class="face on-white"><svg viewBox="0 0 100 100" aria-label="기울어진 결정 마크, 흰 바탕"><path d="M50 7L88 26M88 26L84 68M84 68L52 93M52 93L14 74M14 74L10 30M10 30L50 7M50 7L52 34M52 34L32 45M32 45L14 74M52 34L68 52M68 52L46 64M46 64L32 45M88 26L68 52M68 52L62 73M62 73L52 93M46 64L62 73M10 30L32 45M52 34L88 26" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round"/><circle cx="50" cy="7" r="2.6" fill="var(--mark-bg)" stroke="currentColor" stroke-width="1.8"/><circle cx="88" cy="26" r="2.6" fill="var(--mark-bg)" stroke="currentColor" stroke-width="1.8"/><circle cx="84" cy="68" r="2.6" fill="var(--mark-bg)" stroke="currentColor" stroke-width="1.8"/><circle cx="52" cy="93" r="2.6" fill="var(--mark-bg)" stroke="currentColor" stroke-width="1.8"/><circle cx="14" cy="74" r="2.6" fill="var(--mark-bg)" stroke="currentColor" stroke-width="1.8"/><circle cx="10" cy="30" r="2.6" fill="var(--mark-bg)" stroke="currentColor" stroke-width="1.8"/><circle cx="52" cy="34" r="2.6" fill="var(--mark-bg)" stroke="currentColor" stroke-width="1.8"/><circle cx="68" cy="52" r="2.6" fill="var(--mark-bg)" stroke="currentColor" stroke-width="1.8"/><circle cx="46" cy="64" r="2.6" fill="var(--mark-bg)" stroke="currentColor" stroke-width="1.8"/><circle cx="32" cy="45" r="2.6" fill="var(--mark-bg)" stroke="currentColor" stroke-width="1.8"/><circle cx="62" cy="73" r="2.6" fill="var(--mark-bg)" stroke="currentColor" stroke-width="1.8"/></svg></div>
+        <div class="face on-black"><svg viewBox="0 0 100 100" aria-label="기울어진 결정 마크, 검은 바탕"><path d="M50 7L88 26M88 26L84 68M84 68L52 93M52 93L14 74M14 74L10 30M10 30L50 7M50 7L52 34M52 34L32 45M32 45L14 74M52 34L68 52M68 52L46 64M46 64L32 45M88 26L68 52M68 52L62 73M62 73L52 93M46 64L62 73M10 30L32 45M52 34L88 26" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round"/><circle cx="50" cy="7" r="2.6" fill="var(--mark-bg)" stroke="currentColor" stroke-width="1.8"/><circle cx="88" cy="26" r="2.6" fill="var(--mark-bg)" stroke="currentColor" stroke-width="1.8"/><circle cx="84" cy="68" r="2.6" fill="var(--mark-bg)" stroke="currentColor" stroke-width="1.8"/><circle cx="52" cy="93" r="2.6" fill="var(--mark-bg)" stroke="currentColor" stroke-width="1.8"/><circle cx="14" cy="74" r="2.6" fill="var(--mark-bg)" stroke="currentColor" stroke-width="1.8"/><circle cx="10" cy="30" r="2.6" fill="var(--mark-bg)" stroke="currentColor" stroke-width="1.8"/><circle cx="52" cy="34" r="2.6" fill="var(--mark-bg)" stroke="currentColor" stroke-width="1.8"/><circle cx="68" cy="52" r="2.6" fill="var(--mark-bg)" stroke="currentColor" stroke-width="1.8"/><circle cx="46" cy="64" r="2.6" fill="var(--mark-bg)" stroke="currentColor" stroke-width="1.8"/><circle cx="32" cy="45" r="2.6" fill="var(--mark-bg)" stroke="currentColor" stroke-width="1.8"/><circle cx="62" cy="73" r="2.6" fill="var(--mark-bg)" stroke="currentColor" stroke-width="1.8"/></svg></div>
+      </div>
+      <div class="panel">
+        <span class="panel-label">공유 카드 — 흑백 반전 두 벌</span>
+        <div class="ogcard">
+          <div class="og-top">
+            <svg viewBox="0 0 100 100" width="24" height="24" aria-hidden="true"><path d="M50 7L88 26M88 26L84 68M84 68L52 93M52 93L14 74M14 74L10 30M10 30L50 7M50 7L52 34M52 34L32 45M32 45L14 74M52 34L68 52M68 52L46 64M46 64L32 45M88 26L68 52M68 52L62 73M62 73L52 93M46 64L62 73M10 30L32 45M52 34L88 26" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round"/><circle cx="50" cy="7" r="2.6" fill="var(--mark-bg)" stroke="currentColor" stroke-width="1.8"/><circle cx="88" cy="26" r="2.6" fill="var(--mark-bg)" stroke="currentColor" stroke-width="1.8"/><circle cx="84" cy="68" r="2.6" fill="var(--mark-bg)" stroke="currentColor" stroke-width="1.8"/><circle cx="52" cy="93" r="2.6" fill="var(--mark-bg)" stroke="currentColor" stroke-width="1.8"/><circle cx="14" cy="74" r="2.6" fill="var(--mark-bg)" stroke="currentColor" stroke-width="1.8"/><circle cx="10" cy="30" r="2.6" fill="var(--mark-bg)" stroke="currentColor" stroke-width="1.8"/><circle cx="52" cy="34" r="2.6" fill="var(--mark-bg)" stroke="currentColor" stroke-width="1.8"/><circle cx="68" cy="52" r="2.6" fill="var(--mark-bg)" stroke="currentColor" stroke-width="1.8"/><circle cx="46" cy="64" r="2.6" fill="var(--mark-bg)" stroke="currentColor" stroke-width="1.8"/><circle cx="32" cy="45" r="2.6" fill="var(--mark-bg)" stroke="currentColor" stroke-width="1.8"/><circle cx="62" cy="73" r="2.6" fill="var(--mark-bg)" stroke="currentColor" stroke-width="1.8"/></svg>
+            <span class="og-name">Polymorlog</span>
+          </div>
+          <div class="og-t">낙관적 락의 시작에는 락이 없었다</div>
+          <div class="og-b">dahyeong-yun.github.io</div>
+        </div>
+        <div class="ogcard inv">
+          <div class="og-top">
+            <svg viewBox="0 0 100 100" width="24" height="24" aria-hidden="true"><path d="M50 7L88 26M88 26L84 68M84 68L52 93M52 93L14 74M14 74L10 30M10 30L50 7M50 7L52 34M52 34L32 45M32 45L14 74M52 34L68 52M68 52L46 64M46 64L32 45M88 26L68 52M68 52L62 73M62 73L52 93M46 64L62 73M10 30L32 45M52 34L88 26" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round"/><circle cx="50" cy="7" r="2.6" fill="var(--mark-bg)" stroke="currentColor" stroke-width="1.8"/><circle cx="88" cy="26" r="2.6" fill="var(--mark-bg)" stroke="currentColor" stroke-width="1.8"/><circle cx="84" cy="68" r="2.6" fill="var(--mark-bg)" stroke="currentColor" stroke-width="1.8"/><circle cx="52" cy="93" r="2.6" fill="var(--mark-bg)" stroke="currentColor" stroke-width="1.8"/><circle cx="14" cy="74" r="2.6" fill="var(--mark-bg)" stroke="currentColor" stroke-width="1.8"/><circle cx="10" cy="30" r="2.6" fill="var(--mark-bg)" stroke="currentColor" stroke-width="1.8"/><circle cx="52" cy="34" r="2.6" fill="var(--mark-bg)" stroke="currentColor" stroke-width="1.8"/><circle cx="68" cy="52" r="2.6" fill="var(--mark-bg)" stroke="currentColor" stroke-width="1.8"/><circle cx="46" cy="64" r="2.6" fill="var(--mark-bg)" stroke="currentColor" stroke-width="1.8"/><circle cx="32" cy="45" r="2.6" fill="var(--mark-bg)" stroke="currentColor" stroke-width="1.8"/><circle cx="62" cy="73" r="2.6" fill="var(--mark-bg)" stroke="currentColor" stroke-width="1.8"/></svg>
+            <span class="og-name">Polymorlog</span>
+          </div>
+          <div class="og-t">낙관적 락의 시작에는 락이 없었다</div>
+          <div class="og-b">dahyeong-yun.github.io</div>
+        </div>
+      </div>
+    </div>
+    <div class="tradeoff">
+      <p class="plus"><span class="mark"></span><span>가장 로고처럼 보입니다. 대칭이 아니라 기억에 남습니다.</span></p>
+      <p class="plus"><span class="mark"></span><span>각이 날카롭고 면이 크게 잡혀 큰 자리에서 힘이 있습니다.</span></p>
+      <p class="minus"><span class="mark"></span><span><strong>실루엣이 불규칙해서 파비콘 축약이 자연스럽지 않습니다.</strong> 아래 축약형은 육각형 기반이라 A와 더 잘 맞습니다.</span></p>
+    </div>
+  </section>
+
+  <!-- ===== 16px ===== -->
+  <section class="section">
+    <h2 class="sec">파비콘 — 실제 16px</h2>
+    <p>
+      축약형 여섯을 실제 16px로 래스터한 뒤 픽셀 그대로 확대한 것입니다.
+      큰 마크를 줄인 게 아니라, <strong>바깥 테두리만 남기고 다시 그린</strong> 것입니다.
+    </p>
+    <div class="truth">
+      <figure><img src="data:image/png;base64,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" alt="열린 육각 링을 16픽셀로 렌더한 뒤 확대"><figcaption class="ok">열린 육각 · 통과</figcaption></figure>
+      <figure><img src="data:image/png;base64,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" alt="육각 링과 노드 셋을 16픽셀로 렌더한 뒤 확대"><figcaption class="ok">육각 + 노드 · 통과</figcaption></figure>
+      <figure><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALAAAACwCAYAAACvt+ReAAAACXBIWXMAAAsTAAALEwEAmpwYAAAEvklEQVR4nO3ZMU4cSxQF0MJIliUEMQEicWzJEiEB3oSTWQDrIHypt9XLIGALlpzUD/gLqAngzZ0+V7p5UX3m+XV7jDGmuoORewftB1B3MAGGYO70DtoPoO5gAgzB3OkdtB9A3cEEGIK50ztoP4C6gwkwBHOnd9B+AHUHE2AI5k7voP0Acf3+/fuHtPvvGpltP0BcAR7tzwBggOcJ4APYBB57b/sB4mqFGO3PAGCA5wngA9gEHntv+wHiaoUY7c8AYIDnCeAD2AQee2/7AeJqhRjtz2AXgK+urpb78vKy3L9//y73379/y/3z589yb25ultv9HAAGGOBhApvA4yzbfoAPqxXixgrRjRBgO/Awgb3EjfNt+wFMYF8hJsB24Okz2glMTTuw78DDCvH+Q/AV4sZXiOQCfAPwZ0C7uLhY7u/fv5f7+vq63LS8vb0t9/n5ebmXl5fL7R5Q/7f9AAADPAE2gacJbALHxAoxrBB24Gc7sB3YBB5e4nyFsEIMXyF8RnvzGc1ntIx4iRte4rzEPXuJ8xJnAo9zfIn7+fPncrdtW658bLYjnsUxzxhggD8lG8AmcHI2gAFOzgYwwMnZAAY4ORvAACdnAxjg5GwAA5ycDWCAk7MBDHByNoDfAVfVciUzdcQzjvuvZIDPPwWwCZycAhjg5BTAACenAAY4OQUwwMkpgAFOTgEMcHIKYICTUwADnJwCGODkFMAAJ6cABjg5BTDAySmAAU5OAQxwcgpggJNTAAOcnAIY4OQUwAAnpwAGODkFMMDJKYABTk4BDHByCmCAk1MAA5ycAhjg5BTAACenAAY4OQUwwMkpgAFOTgEMcHIKYICTUwADnJwCGODkFMAAJ6cABjg5AAMcnTKBTeDkFMAAJ6cABjg5BTDAySmAAU5OAQxwcgpggJNTAAOcnAIY4OQUwAAnpwAGODkFMMDJKYABTk4BDHByCmCAk1MAA5ycAhjg5BTAACenAAY4OQUwwMkpgAFOTgEMcHIKYICTUwADnJwCGODkFMAAJ6cABjg5dc6Af/z4sdzD4bDch4cH/cA7OBzxLI55xgAD/Ck/3APAJnDyvxIHgAHuRvgAsB24GxLAw0tcN4bEHqwQVohuhA8AWyG6IQE8rBDdGBJ7sEJYIboRPgBsheiGBPDoXSGO6cXFxXIfHx+Xe3d3t9zuOzi2t7e3y/3169dyv3z5stzuOwAY4AmwCWwCDxPYCmGFmFYIO/C0A3uJ634p8RI3vMT5CnHrK8SnTROf0Uzg4TOa78C3vgP37HMmsAk8TGAT+NYEPq9eXV0t95j/bv327dtyv379utynp6flXl9fL7f7OXxw2w8AMMATYBN4msBnVivEtRWiGyHAduBhB/YSN8637Qcwgb3ETYDtwNNL3AlMTTuw78DDCvH+Q/AV4tpXiOQCfA1wN8JT7P39/Ye0++8amW0/QFwBHu3PAGCA5wngA9gEHntv+wHiaoUY7c8AYIDnCeAD2AQee2/7AeJqhRjtzwBggOcJ4APYBB57b/sB4mqFGO3PAOD+i9cBMARj93ew+wvwIxjRd9B+AHUHE2AI5k7voP0A6g4mwBDMnd5B+wHUHUyAIZg7vYP2A6g7mABDMPd4B/8BHQRzWGfdP2UAAAAASUVORK5CYII=" alt="홈이 파인 육각형을 16픽셀로 렌더한 뒤 확대"><figcaption class="ok">홈 육각 · 통과</figcaption></figure>
+      <figure><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALAAAACwCAYAAACvt+ReAAAACXBIWXMAAAsTAAALEwEAmpwYAAAFeUlEQVR4nO2dMUpkWxRFN2UkGBmpsaCBGIiRoGMwdgSCgZFU6hQMnYCxYzATHIBRgamZQWEkp4P/B3DK7nr73HvXg5Wf3nfd3ee9omlJCiADtZuBfQAgg0BgJIhBM7APAGQQCIwEMWgG9gGADAKBkSAGzcA+AJBBIDASxKAZ2AcAMggERoIYNAP7AF2zu7ubxj2r2sQ+QNcgsBDYLSECqzL2AbqGBhYCuyVEYFXGPkDX0MBCYLeECKzK2AfoGhpYCOyWEIFVGfsAXUMDC4HdEiKwKmMfoGuen5/T3N7eppnNZmncGawZ+wBdg8BCYLeECKzK2AfoGhpYCOyWEIFVGfsAXUMDC4HdEiKwKmMfoGtoYCGwW0IEVmXsA3QNDSwEdkuIwKqMfYCuubu7S7PK8/LykmZ/fz+NO69fYB+gaxBYCOyWEIFVGfsAXUMDC4HdEiKwKmMfoGtoYCGwW0IEVmXsA3QNDSwEdkuIwKqMfYCuoYGFwG4JEViVsQ/QNUdHR2nW9SyXyzTz+TxNkX8Z7T/knkHgGQK7JUTgOQ3sFgmBl6wQbhlahBVixgrhlhCB56wQbpEQeMkK4ZahRVghZqwQbgkReM4K4RYJgZesEG4ZWoQVYsYKMQofHx9pKjzX19dp1pib/+AAgYXA7V8EGlg0sFtCBL5mhXCLhMC5hx24gDSVYIXQb3LzHxwgsH7vAQJVyYAGFgK7JUTga17i3CIhcO7hJa6ANJVghdBvcvMfHPyXwePjY5pVnu/v7zSr/H/NRc7NPgAgcCBwBxeBBhYN7JYQgTV1bv6DAxpYCNz+RWCFEA3slhCBNXVu/oMDGlgI3P5FYIUQDeyWEIE1dW7+gwMaWAjc/kW4vLxM8/7+nub4+DiNOwMa2B8oAguB7TIhsFrBPgD8nwErhBC45QuBwEJgt4QIrKlz8x8c0MBC4PYvAiuEaGC3hAisqXPzHxzQwELg9i8CK4Ro4JbZ3NxMs7W1lcb951oz9gEAgQOBO7gINLBoYLeECKypc/MfHNDACNzBRWCFEA3slhCBNXVu/oMDGlgI3P5FYIUQDeyWEIE1dW7+gwMaWAj8dxdhY2Mjzc3NTZrz8/M0XGTRwAis0S6CfYAS0MCynwECI3AUEAqBaWC7FNEQ9gFKwAoh+xkgMAJHAaEQmAa2SxENYR+gBKwQsp8BAiNwFBAKgWlguxTREPYB1sbp6Wma19fXNKs8X19faU5OTtK4s1Ud7AMgMAIHAtPA4S4MGvgfh8AKoRGwD7A2EFj2M0BgBOYlTjQwXyHULfYB1gYrhOxngMAIzAohGpgVQt1iH2BtsELIfgZDCLy9vZ3m4eEhzc/PT5oKz+fnZ5qDg4M07vNFYARGYNHANLDsbckKwQrBCiF2YHZg9YN9AF7ieIkLBOYrRPAVggbmM5r8fyOzQvAdOPgOzA7MDxmytysvcfwSd+AWrH+BDw8P01xdXaW5v79P8/T0lObt7S3NKv8qeZVnsVik2dvbS+N2AYEROBCYBqaBZW9WVghWiAUrBDswO7BqYx+Alzhe4gKB+QoRfIWggfmMJv/fyKwQfAcOvgOzA/NDhuztykscv8Qt+CWuwC0bgp2dnTQXFxdpzs7O0rgzaLKBAYGFwO1fBBpYNLBbQgTW1Ln5Dw5oYCFw+xeBFUI0sFtCBNbUufkPDmhgIXD7F4EVQjSwW0IE1tS5+Q8OaGAhMBdBY2ZgHwDIIBAYCWLQDOwDABkEAiNBDJqBfQAgg0BgJIhBM7APAGQQCIwEMWgG9gGADAKBkSAGzcA+AJBBIDASxKAZ2AcAMggERoIYNAP7AEAGgcBIEINmYB8AyCAQGAli0AzsAwAZBAIjQQyagX0AIIP4bQZ/ALN73vLaHmiAAAAAAElFTkSuQmCC" alt="삼각 파편 둘을 16픽셀로 렌더한 뒤 확대"><figcaption class="ok">파편 · 통과</figcaption></figure>
+      <figure><img src="data:image/png;base64,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" alt="Y자 음각 육각형을 16픽셀로 렌더한 뒤 확대"><figcaption class="bad">Y 음각 · 탈락</figcaption></figure>
+      <figure><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALAAAACwCAYAAACvt+ReAAAACXBIWXMAAAsTAAALEwEAmpwYAAAFiklEQVR4nO3dMU4rOxjF8S+hjJgaiQIhOqp0t6eCBbABimyChiqizSZYAOUsIQ1rgCJbQKLAt5jXPj37KYnHmd+RTu/Yh/89/qybREQktgfR7h5UXwDbgyTAQpAmugfVF8D2IAmwEKSJ7kH1BbA9SAIsBGmie1B9AWwPkgALQZroHlRfANuDJMBCkCa6B9UX0JwvLy8P4tqfK9p09QU0ZwGO6mcgwAKcRhA+AUbgmLqrL6A5qxBR/QwEWIDTCMInwAgcU3f1BTRnFSKqn4EAC3AaQfgEGIFj6q6+gOasQkT1M5hEgBeLRbZfXl6yfX9/n+2Hh4dsbzabbHddl+3a5yDAAizAgcAIHCfp6gs4mFWIToWoHUIB1oEDgV3i4nRdfQEIbAqRBFgHTsZoI6CmDmwOHCrE8IdgCtGZQrRsAe4E+BhBm81m2X58fMz219dXtktU8pRc4hLtdrtsr1arbJ+dnWW7NqD+cfUFCLAAJwFG4ITACKxCnKkQKoQOnHRglziXuHCJM4XYmUKYQhijJWM0YzRz4DAH9pDhISN5yPASl7zE/cc/B8vlMtvb7TbbY9AYnpIPpW3BWZSccXNPyQIswEsBRmAEDgTet1SIrQqhA+vAoQPXEQJvERiBETgQGIH3LWM0YzRz4KU5sIeMStp6yPCQ4SVu2f5L3Ovra7Zb0ylPIUpUcsYCPCIJ8CABRmAEDhXi6ELgQQiMwAgcCHx0IfAgBEZgBA4EProQeBACIzACBwIfXQg8CIERGIEDgY8uBB6EwAiMwIHARxcCD0JgBEbgQOCjC4EHITACI3Ag8NGFwIMQGIEROBD46ELgQQiMwAgcCHx0IfAgBB4Rgd/f37N9cXFxEJesYQx69b+SBViAw/dC7EMIXC4ERmAEDgTeixC4XAiMwAgcCLwXIXC5EBiBETgQeC9C4HIhMAIjcCDwXoTA5ULg/0Hgj4+PbN/d3WW7hAR//vw5iEvWUPLZPgr2TIAP/A3tAizA0fJPDAiwAIcAqxAfKgQC68B+5EWFcIlLk/qZLR1YBw4B1oE/dGAE1oFf/dChCuEhI3RgL3F3XuL2e4l7fn7O9tPTU7bn83m2r66usv329pbt39/fg7hkDSWfbV6wZyVnUXLGzf1WsgAL8LMAIzACBwKrEHMVQoXQgZ90YJc4l7hwiTOFMIUIUwhjtLkxmjGaOfCzObCHDA8Z4SHDS9yVl7j93RCvr6+zfX5+nu31ep3t7+/vbLemks+2LtizkrMoOePmnpIFWICvBRiBETgQWIVYqxAqxLikA4cO7BK3dolziUPga1MIYzQVIozRzIG/zYHNgduQS1y4xLnErV3i/o3Yt7e32e77Ptt0WPUFZ1Fyxs09JQtwm+oFWIBbVi/AAtyyegEW4JbVC7AAt6xegAW4ZfUCLMAtqxdgAW5ZvQALcMvqBViAW1YvwOWvdrPZLNuPj4/Z/vz8zHZr2u122V6tVtku+TLsAz4P139KFmABDgFGYAQOBFYhViqECjEu6cChA7vErVziXOIQOEwhjNFUiDBGMwfemQObA7chl7hwiXOJW7nEjdmLxSLbLy8v2S75Toafn59sbzabbHddl+3a53DyT8kCLMAhwAjcIfBpWYXoVIjaIRRgHTh0YJe4OF1XXwACu8QlAdaBk0vcCKipA5sDhwox/CGYQnSmEC1bgDsBrh3CMfrm5uYgrv25ok1XX0BzFuCofgYCLMBpBOETYASOqbv6ApqzChHVz0CABTiNIHwCjMAxdVdfQHNWIaL6GQiwAKcRhE+AETim7uoLaM4qRFQ/AwGuv/EcAiwEMfk9mPwG+COIpveg+gLYHiQBFoI00T2ovgC2B0mAhSBNdA+qL4DtQRJgIUgT3YPqC2B7kARYCNIU9+AvNpCofo0EXfgAAAAASUVORK5CYII=" alt="굵은 Y자 음각 육각형을 16픽셀로 렌더한 뒤 확대"><figcaption class="bad">굵은 Y · 탈락</figcaption></figure>
+    </div>
+    <p>
+      Y자로 면을 가른 둘은 또 자동차 엠블럼이 됐습니다. 지난 세션 큐브와 같은 실패라,
+      <strong>16px에서 도형을 안쪽에서 가르는 시도는 세 번 연속 실패했습니다.</strong>
+      이제 규칙으로 봐도 되겠습니다.
+    </p>
+  </section>
+
+  <!-- ===== 추천 조합 ===== -->
+  <section class="section">
+    <h2 class="sec">추천 조합</h2>
+    <p>
+      <strong>큰 마크는 A, 파비콘은 열린 육각.</strong> 파비콘이 A의 바깥 테두리 그 자체라
+      둘이 같은 물건으로 읽힙니다. 링의 트인 자리도 A의 빠진 변과 같은 위치입니다.
+      점과 선을 16px에서도 남기고 싶으시면 <em>육각 + 노드</em> 쪽이고, 대신 조금 복잡해집니다.
+    </p>
+    <div class="split">
+      <div class="panel">
+        <span class="panel-label">탭 줄에서 — 검은 바탕이라 유독 눈에 띈다</span>
+        <div class="tabstrip">
+          <div class="tab"><span class="fav grey"></span><span class="t">GitHub</span></div>
+          <div class="tab"><span class="fav grey"></span><span class="t">Stack Over…</span></div>
+          <div class="tab active">
+            <svg class="fav" viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" fill="#000000"/><path d="M50,10L84.6,30L84.6,70L50,90L15.4,70L15.4,30" stroke="#ffffff" stroke-width="9" fill="none" stroke-linejoin="round" stroke-linecap="round"/></svg>
+            <span class="t">Polymorlog</span>
+          </div>
+          <div class="tab"><span class="fav grey"></span><span class="t">Jira</span></div>
+        </div>
+        <span class="panel-label" style="margin-top:0.3rem">크기 사다리</span>
+        <div class="ladder">
+          <figure><svg width="16" height="16" viewBox="0 0 100 100"><rect width="100" height="100" fill="#000000"/><path d="M50,10L84.6,30L84.6,70L50,90L15.4,70L15.4,30" stroke="#ffffff" stroke-width="9" fill="none" stroke-linejoin="round" stroke-linecap="round"/></svg><figcaption>16</figcaption></figure>
+          <figure><svg width="32" height="32" viewBox="0 0 100 100"><rect width="100" height="100" fill="#000000"/><path d="M50,10L84.6,30L84.6,70L50,90L15.4,70L15.4,30" stroke="#ffffff" stroke-width="9" fill="none" stroke-linejoin="round" stroke-linecap="round"/></svg><figcaption>32</figcaption></figure>
+          <figure><svg width="64" height="64" viewBox="0 0 100 100"><rect width="100" height="100" fill="#000000"/><path d="M50,10L84.6,30L84.6,70L50,90L15.4,70L15.4,30" stroke="#ffffff" stroke-width="9" fill="none" stroke-linejoin="round" stroke-linecap="round"/></svg><figcaption>64</figcaption></figure>
+          <figure><svg width="90" height="90" viewBox="0 0 100 100"><rect width="100" height="100" fill="#000000"/><path d="M50,10L84.6,30L84.6,70L50,90L15.4,70L15.4,30" stroke="#ffffff" stroke-width="9" fill="none" stroke-linejoin="round" stroke-linecap="round"/></svg><figcaption>180 · iOS</figcaption></figure>
+        </div>
+      </div>
+      <div class="panel">
+        <span class="panel-label">같은 계열 — 육각 + 노드</span>
+        <div class="tabstrip">
+          <div class="tab"><span class="fav grey"></span><span class="t">GitHub</span></div>
+          <div class="tab"><span class="fav grey"></span><span class="t">Stack Over…</span></div>
+          <div class="tab active">
+            <svg class="fav" viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" fill="#000000"/><path d="M50,10L84.6,30L84.6,70L50,90L15.4,70L15.4,30Z" stroke="#ffffff" stroke-width="6" fill="none" stroke-linejoin="round"/><circle cx="50" cy="10" r="11" fill="#ffffff"/><circle cx="84.6" cy="70" r="11" fill="#ffffff"/><circle cx="15.4" cy="70" r="11" fill="#ffffff"/></svg>
+            <span class="t">Polymorlog</span>
+          </div>
+          <div class="tab"><span class="fav grey"></span><span class="t">Jira</span></div>
+        </div>
+        <span class="panel-label" style="margin-top:0.3rem">크기 사다리</span>
+        <div class="ladder">
+          <figure><svg width="16" height="16" viewBox="0 0 100 100"><rect width="100" height="100" fill="#000000"/><path d="M50,10L84.6,30L84.6,70L50,90L15.4,70L15.4,30Z" stroke="#ffffff" stroke-width="6" fill="none" stroke-linejoin="round"/><circle cx="50" cy="10" r="11" fill="#ffffff"/><circle cx="84.6" cy="70" r="11" fill="#ffffff"/><circle cx="15.4" cy="70" r="11" fill="#ffffff"/></svg><figcaption>16</figcaption></figure>
+          <figure><svg width="32" height="32" viewBox="0 0 100 100"><rect width="100" height="100" fill="#000000"/><path d="M50,10L84.6,30L84.6,70L50,90L15.4,70L15.4,30Z" stroke="#ffffff" stroke-width="6" fill="none" stroke-linejoin="round"/><circle cx="50" cy="10" r="11" fill="#ffffff"/><circle cx="84.6" cy="70" r="11" fill="#ffffff"/><circle cx="15.4" cy="70" r="11" fill="#ffffff"/></svg><figcaption>32</figcaption></figure>
+          <figure><svg width="64" height="64" viewBox="0 0 100 100"><rect width="100" height="100" fill="#000000"/><path d="M50,10L84.6,30L84.6,70L50,90L15.4,70L15.4,30Z" stroke="#ffffff" stroke-width="6" fill="none" stroke-linejoin="round"/><circle cx="50" cy="10" r="11" fill="#ffffff"/><circle cx="84.6" cy="70" r="11" fill="#ffffff"/><circle cx="15.4" cy="70" r="11" fill="#ffffff"/></svg><figcaption>64</figcaption></figure>
+          <figure><svg width="90" height="90" viewBox="0 0 100 100"><rect width="100" height="100" fill="#000000"/><path d="M50,10L84.6,30L84.6,70L50,90L15.4,70L15.4,30Z" stroke="#ffffff" stroke-width="6" fill="none" stroke-linejoin="round"/><circle cx="50" cy="10" r="11" fill="#ffffff"/><circle cx="84.6" cy="70" r="11" fill="#ffffff"/><circle cx="15.4" cy="70" r="11" fill="#ffffff"/></svg><figcaption>180 · iOS</figcaption></figure>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 색 ===== -->
+  <section class="section">
+    <h2 class="sec">그럼 파랑은 어떻게 되나</h2>
+    <p>
+      <strong>마크는 흑백, UI는 파랑</strong>으로 나누면 됩니다. 말씀하신 Threads·X·넷플릭스가
+      정확히 그 구조입니다 — 마크 자체는 무채색이고, 제품 화면의 강조색은 따로 놉니다.
+      그러니 앞서 확정한 <code>#0066cc</code> / <code>#0a84ff</code>는 그대로 링크·태그·헤더에 남고,
+      마크만 흑백으로 갑니다. 충돌하지 않습니다.
+    </p>
+    <p>
+      한 가지 이점이 더 있습니다. 이 사이트는 라이트/다크가 방문자 OS 설정을 따르는데,
+      흑백 마크는 <strong>배경만 뒤집으면 양쪽에서 다 성립합니다.</strong>
+      파비콘은 검은 바탕 한 벌로 고정하는 편이 낫습니다 — 브라우저 탭 줄이 대체로 밝은 회색이라
+      검은 사각형이 훨씬 잘 찾힙니다.
+    </p>
+  </section>
+
+  <!-- ===== 제미나이 ===== -->
+  <section class="section">
+    <h2 class="sec">제미나이로 더 뽑아 보실 프롬프트</h2>
+    <p>
+      위 SVG는 제가 좌표로 직접 그린 것이라 이대로 파비콘까지 갈 수 있습니다.
+      다만 형태를 더 넓게 탐색하고 싶으시면 아래 프롬프트를 쓰시면 됩니다.
+      <strong>생성된 이미지를 주시면 제가 SVG로 다시 그리겠습니다</strong> —
+      래스터는 16px에서 못 쓰고, 파비콘은 결국 벡터라야 합니다.
+    </p>
+    <p style="font-size:0.85rem;color:var(--ink-3)">
+      프롬프트에 "16px에서 읽히게" 같은 말은 넣지 않았습니다. 이미지 생성 모델은 그 제약을
+      지키지 못하고, 넣으면 오히려 형태만 밋밋해집니다. 큰 마크만 뽑고 축약은 따로 하는 게 맞습니다.
+    </p>
+
+    <div class="prompt-head"><h3>1. 탐색용 — 여러 안을 한 판에</h3><span>variation sheet</span></div>
+    <pre class="prompt">A contact sheet of <b>9 distinct logo marks</b> arranged in a 3x3 grid on a pure white background, generous even margins between each.
+
+Each mark is an <b>angular geometric wireframe</b>: straight line segments connecting small circular nodes, forming a faceted polyhedral structure. Sharp acute angles, no curves except the small node circles.
+
+Critical: each structure must be <b>deliberately incomplete</b> — some edges missing, one region of the outline left open, a few nodes connected by only one edge. It should read as an unfinished lattice, not a solid regular polyhedron.
+
+Style: flat 2D vector, pure black lines on pure white, uniform line weight, no gradients, no shading, no 3D rendering, no perspective shading, no text, no drop shadows. Crisp technical drawing quality, like a patent diagram.
+
+Vary the silhouettes across the 9: hexagonal, diamond, irregular pentagon, tilted asymmetric.</pre>
+
+    <div class="prompt-head" style="margin-top:0.6rem"><h3>2. A 방향 — 깨진 격자를 다듬을 때</h3><span>refine A</span></div>
+    <pre class="prompt">A single <b>logo mark</b>, centered on a pure white square canvas with wide margins.
+
+An <b>icosahedral wireframe</b> seen straight on, so its outer silhouette is a hexagon. Straight line segments connect small open circular nodes at every vertex. Inside the hexagon, triangular facets subdivide the space.
+
+Critical: the lattice is <b>broken</b>. One full edge of the outer hexagon is missing, leaving a visible gap in the silhouette. Two or three interior edges are also absent, so parts of the structure float unconnected. The asymmetry must look intentional, not like a rendering error.
+
+Style: flat 2D vector, pure black strokes on pure white, single uniform stroke weight, nodes drawn as small white-filled circles with black outlines. No gradients, no shadows, no fill, no 3D shading, no text. Precise, technical, minimal.</pre>
+
+    <div class="prompt-head" style="margin-top:0.6rem"><h3>3. B 방향 — 비대칭을 더 밀어붙일 때</h3><span>refine B</span></div>
+    <pre class="prompt">A single <b>logo mark</b>, centered on a pure black square canvas with wide margins.
+
+An <b>irregular angular crystal</b> drawn as a wireframe: straight white line segments connecting small circular nodes. The outer silhouette is an <b>uneven hexagon</b> — no two edges the same length, vertices deliberately off the regular positions, so the whole form reads as tilted in space.
+
+Interior facets are large triangles and quadrilaterals of clearly different sizes. Two or three edges are <b>missing</b>, leaving the structure open on one side.
+
+Style: flat 2D vector, pure white strokes on pure black, uniform stroke weight, nodes as small black-filled circles with white outlines. No gradients, no glow, no shadows, no 3D shading, no perspective, no text. Sharp and minimal, in the spirit of a monochrome brand mark.</pre>
+  </section>
+
+  <!-- ===== 다음 ===== -->
+  <section class="section">
+    <h2 class="sec">고르시면</h2>
+    <p>
+      A 또는 B 중 큰 마크를 정하고, 축약형을 열린 육각 / 육각+노드 중에 고르시면
+      <code>public/</code> 이미지 4장을 만들겠습니다. 제미나이로 먼저 뽑아 보시겠다면
+      결과 이미지를 주세요 — SVG로 옮겨 그린 뒤 같은 16px 검증을 거치겠습니다.
+    </p>
+  </section>
+
+</div>

@@ -1,0 +1,524 @@
+<title>Polymorlog 마크 세 안</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&family=IBM+Plex+Sans+KR:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+
+<style>
+/* 색이 확정됐으므로 이번 시트는 그 파랑을 입고 있다.
+   1번 시트가 무채색이었던 것은 후보를 편들지 않기 위해서였고, 이제는 그럴 이유가 없다. */
+:root {
+  --ground:  #f4f5f7;
+  --card:    #ffffff;
+  --card-2:  #eceef2;
+  --ink:     #14161a;
+  --ink-2:   #5f6672;
+  --ink-3:   #939aa6;
+  --rule:    #dde0e6;
+  --rule-2:  #eaecf0;
+  --accent:  #0066cc;
+  --accent-soft: #eaf3ff;
+  --chrome:  #e3e5ea;
+
+  --serif: "Newsreader", "IBM Plex Sans KR", Georgia, serif;
+  --sans:  "IBM Plex Sans KR", system-ui, -apple-system, sans-serif;
+  --mono:  "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace;
+  --site-sans: "SF Pro Display", "SF Pro Text", "Pretendard Variable", Pretendard, system-ui, -apple-system, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --ground: #0b0d10; --card: #16191d; --card-2: #1f2329;
+    --ink: #e8eaee; --ink-2: #939aa6; --ink-3: #666d78;
+    --rule: #262a30; --rule-2: #1e2126;
+    --accent: #0a84ff; --accent-soft: rgba(10,132,255,0.15);
+    --chrome: #23272d;
+  }
+}
+:root[data-theme="dark"] {
+  --ground: #0b0d10; --card: #16191d; --card-2: #1f2329;
+  --ink: #e8eaee; --ink-2: #939aa6; --ink-3: #666d78;
+  --rule: #262a30; --rule-2: #1e2126;
+  --accent: #0a84ff; --accent-soft: rgba(10,132,255,0.15);
+  --chrome: #23272d;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--ground); color: var(--ink);
+  font-family: var(--sans); line-height: 1.6; -webkit-font-smoothing: antialiased;
+}
+.wrap {
+  max-width: 1000px; margin: 0 auto;
+  padding: clamp(2rem,5vw,4.5rem) clamp(1rem,4vw,2.5rem) 5rem;
+  display: flex; flex-direction: column; gap: 3.25rem;
+}
+
+.eyebrow {
+  font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--ink-3);
+}
+h1 {
+  font-family: var(--serif); font-weight: 600;
+  font-size: clamp(2rem,5vw,2.9rem); line-height: 1.15;
+  letter-spacing: -0.02em; margin: 0; text-wrap: balance;
+}
+.masthead { display: flex; flex-direction: column; gap: 1rem; }
+.lede { margin: 0; max-width: 62ch; color: var(--ink-2); }
+.lede strong { color: var(--ink); font-weight: 600; }
+.settled {
+  display: flex; align-items: center; gap: 0.6rem;
+  font-size: 0.82rem; color: var(--ink-2);
+  background: var(--accent-soft); border-radius: 2px;
+  padding: 0.5rem 0.8rem; align-self: flex-start;
+  font-family: var(--mono);
+}
+.settled .dot { width: 0.75rem; height: 0.75rem; border-radius: 50%; background: var(--accent); flex: none; }
+
+h2.sec {
+  font-family: var(--serif); font-size: 1.6rem; font-weight: 600;
+  letter-spacing: -0.015em; margin: 0; padding-top: 1.6rem;
+  border-top: 1px solid var(--rule);
+}
+.section { display: flex; flex-direction: column; gap: 1.1rem; }
+.section p { margin: 0; max-width: 66ch; font-size: 0.92rem; color: var(--ink-2); }
+.section p strong { color: var(--ink); font-weight: 600; }
+code {
+  font-family: var(--mono); font-size: 0.86em;
+  background: var(--card-2); padding: 0.08em 0.32em; border-radius: 2px; color: var(--ink);
+}
+
+/* ---------- 16px 진실 스트립 ---------- */
+.truth { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1.25rem; }
+.truth figure { margin: 0; display: flex; flex-direction: column; gap: 0.5rem; align-items: center; }
+.truth img {
+  width: 100%; max-width: 160px; image-rendering: pixelated;
+  border: 1px solid var(--rule); border-radius: 2px; display: block;
+}
+.truth figcaption {
+  font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--ink-3); text-align: center;
+}
+.truth .verdict-ok   { color: var(--accent); }
+.truth .verdict-bad  { color: var(--ink-3); text-decoration: line-through; }
+
+/* ---------- 후보 ---------- */
+.cand {
+  display: flex; flex-direction: column; gap: 1.4rem;
+  padding-top: 1.6rem; border-top: 1px solid var(--rule);
+}
+.cand-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.75rem; }
+.cand-name {
+  font-family: var(--serif); font-size: 1.75rem; font-weight: 600;
+  letter-spacing: -0.015em; margin: 0;
+}
+.cand-en {
+  font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--ink-3);
+}
+.cand-why { margin: 0; max-width: 64ch; font-size: 0.95rem; color: var(--ink-2); }
+.cand-why strong { color: var(--ink); font-weight: 600; }
+
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+@media (max-width: 760px) { .grid2 { grid-template-columns: 1fr; } }
+
+.panel {
+  background: var(--card); border: 1px solid var(--rule);
+  border-radius: 3px; padding: 0.9rem; display: flex; flex-direction: column; gap: 0.7rem;
+}
+.panel-label {
+  font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--ink-3);
+}
+
+/* 탭 스트립 */
+.tabstrip {
+  background: var(--chrome); border-radius: 6px 6px 0 0;
+  padding: 0.35rem 0.35rem 0; display: flex; gap: 2px; overflow: hidden;
+}
+.tab {
+  display: flex; align-items: center; gap: 0.4rem;
+  padding: 0.4rem 0.6rem; border-radius: 5px 5px 0 0;
+  font-size: 0.7rem; color: var(--ink-2); min-width: 0;
+  font-family: var(--site-sans);
+}
+.tab.active { background: var(--card); color: var(--ink); }
+.tab span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tab .fav { width: 16px; height: 16px; flex: none; border-radius: 3px; }
+.tab .fav.grey { background: var(--ink-3); opacity: 0.45; }
+
+/* 크기 사다리 */
+.ladder { display: flex; align-items: flex-end; gap: 1.1rem; flex-wrap: wrap; }
+.ladder figure { margin: 0; display: flex; flex-direction: column; align-items: center; gap: 0.35rem; }
+.ladder figcaption {
+  font-family: var(--mono); font-size: 0.6rem; color: var(--ink-3);
+  font-variant-numeric: tabular-nums;
+}
+
+/* 404 목업 */
+.mock404 {
+  background: #ffffff; border: 1px solid var(--rule); border-radius: 3px;
+  overflow: hidden; font-family: var(--site-sans);
+}
+.m-head {
+  display: flex; align-items: center; gap: 0.5rem; padding: 0.45rem 0.7rem;
+  border-bottom: 1px solid #e0e0e0; font-size: 0.68rem; color: #5a5a5f;
+}
+.m-head b { color: #1d1d1f; font-size: 0.74rem; letter-spacing: -0.01em; }
+.m-head nav { display: flex; gap: 0.45rem; }
+.m-404 {
+  padding: 1.6rem 1rem 1.9rem; display: flex; flex-direction: column;
+  align-items: center; gap: 0.55rem; text-align: center;
+}
+.m-404 .big { color: #1d1d1f; font-size: 0.95rem; font-weight: 700; letter-spacing: -0.02em; }
+.m-404 .sub { color: #7a7a7a; font-size: 0.74rem; }
+.m-404 .back { color: #0066cc; font-size: 0.74rem; text-decoration: underline; text-underline-offset: 2px; }
+
+/* OG 목업 */
+.ogcard {
+  aspect-ratio: 1200/630; background: #ffffff;
+  border: 1px solid var(--rule); border-radius: 3px;
+  padding: 1rem 1.15rem; display: flex; flex-direction: column;
+  justify-content: space-between; font-family: var(--site-sans); overflow: hidden;
+}
+.og-top { display: flex; align-items: center; gap: 0.5rem; }
+.og-name { font-size: 0.66rem; font-weight: 600; color: #7a7a7a; letter-spacing: 0.02em; }
+.og-t {
+  font-size: 1.02rem; font-weight: 700; color: #1d1d1f;
+  letter-spacing: -0.025em; line-height: 1.3; text-wrap: balance;
+}
+.og-b { font-size: 0.62rem; color: #0066cc; }
+
+.tradeoff { display: flex; flex-direction: column; gap: 0.35rem; font-size: 0.87rem; }
+.tradeoff p { margin: 0; display: flex; gap: 0.55rem; max-width: 64ch; }
+.tradeoff .mark { font-family: var(--mono); color: var(--ink-3); flex: none; width: 1rem; }
+.tradeoff .plus .mark::before { content: "+"; }
+.tradeoff .minus .mark::before { content: "−"; }
+.tradeoff .plus > span:last-child { color: var(--ink); }
+.tradeoff .minus > span:last-child { color: var(--ink-2); }
+
+.rejected {
+  display: flex; gap: 1.25rem; align-items: center; flex-wrap: wrap;
+  background: var(--card); border: 1px solid var(--rule);
+  border-radius: 3px; padding: 1rem;
+}
+.rejected img {
+  width: 96px; image-rendering: pixelated; border-radius: 2px;
+  border: 1px solid var(--rule); display: block; flex: none;
+}
+.rejected div { flex: 1; min-width: 240px; }
+.rejected p { margin: 0; font-size: 0.88rem; color: var(--ink-2); }
+.rejected p + p { margin-top: 0.5rem; }
+
+pre.plan {
+  margin: 0; background: var(--card); border: 1px solid var(--rule);
+  border-radius: 3px; padding: 0.9rem 1rem; overflow-x: auto;
+  font-family: var(--mono); font-size: 0.74rem; line-height: 1.7; color: var(--ink-2);
+}
+pre.plan .path { color: var(--ink); font-weight: 500; }
+pre.plan .cm { color: var(--ink-3); }
+
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<div class="wrap">
+
+  <header class="masthead">
+    <div class="eyebrow">Polymorlog · 브랜드 결정 02</div>
+    <h1>마크 세 안</h1>
+    <div class="settled"><span class="dot"></span>색: #0066cc / #0a84ff — 확정. 고칠 파일 없음</div>
+    <p class="lede">
+      글자 <code>P</code> 대신 오브젝트를 쓰려면 넘어야 할 벽이 하나 있습니다. 파비콘은 결국
+      <strong>16×16 픽셀 256개</strong>로 끝납니다. 그래서 크게 그려 놓고 줄이는 대신,
+      <strong>16px에서 먼저 그려서 살아남는 것만 키웠습니다.</strong>
+      아래 확대 이미지는 벡터를 늘린 게 아니라 <em>실제로 16px로 래스터한 뒤 픽셀 그대로 확대한 것</em>이라,
+      탭 줄에서 실제로 보이는 뭉개짐이 그대로 나옵니다.
+    </p>
+  </header>
+
+  <!-- ============ 16px 진실 ============ -->
+  <section class="section">
+    <h2 class="sec">먼저 16px</h2>
+    <p>
+      후보를 넷 그려서 전부 16px로 내려 봤습니다. 하나는 여기서 죽었습니다.
+      셋만 다음 단계로 갑니다.
+    </p>
+    <div class="truth">
+      <figure>
+        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKAAAACgCAYAAACLz2ctAAAACXBIWXMAAAsTAAALEwEAmpwYAAAE+0lEQVR4nO2cTYoUQRBGc6PuRQSvIHgRlbGuIFldoAtFbdfiHZwDuFOYC4iIS5meGBjBH4ReiG5kENHGnx4cJ72Ai8Ap6suqeAFvKzkZr76IpMGUvHV1+7KLdmfhYrY4cNFZAfv/O/Des7dvnV1y0Xsh4Dg/hBkCkoAI2EORgPo060hAdkC1UB0jmEeIWqqOHZBX8FiY8QjhEYKAPRSPEH2adSQgjxC1UN3URrA32dQXCWVkd9C4QEB5o8pEQcAKmhCZhgTUNyEyDQLqmxCZBgH1TYhMg4D6JkSmQUB9EyLTIKC+CZFpEFDfhMg0PgHbxY4L/R80KCeu7faK+u9JQ9Mutl0gIAImBKzgiyUBCwlYEYxgYwQjoMk/RHZAErCMEh4hjOCEgBV8ieyAhQQcITxCjBGMgBZgB+R/qfrnBd58/MHFjUc+Agq4doGACJgQsIIvlgQsJGBFMIKNEYyAJv8Q2QFJwDJKeIQwghMCVvAlsgMWEnCE8AgxRjACWoAdUH3QgTl9a8/F5++/XXz5cejizO09F6mCOxoU+QEQsCBgIEhAk/eABGQEl2qQH4AELIzgQDCCTd4DEpARXKpBfgASsDCCA8EINnkPSEBGcKkG+QEGZvP5vou+68HzfRepgjtCQAQsYZAfYGBIQJP3AAEZwUUuHgnIDphqQH6AgWEEm7wHCMgILnLxSEBGcKoB+QEGhhFs8h4gICO4yMWbWgKev/fKxe8/Ry76rsM/Ry4u3H/tQn3fCIiAZRLID9ATJKDJe4CAjOAiF4oEZAdMY0J+gJ5gBJu8BwjICC5yoUhARnAaE/ID9AQj2OQ9QEBGcJELFTUBn7z+5qL2evZ25UJ93wiIgGUSyA/QEySgyXuAgIzgIheKBGQHTGNCfoCeYASbvAcIyAgucqFIQEZwGhPyA/QEI9jkPUBARnCRCzW1BLyyuXQRrTY2ly7U/UPAidYGApKACGgkICN4yQhmB2QEJ3bAWLXBDsgOiIDGDsgOuGQHZAdkBCd2wFi1wQ54vPl/8vqui3effrmIVsv9tYtT13ddhPslBAEREAFHXEsSkAREQGMEswOu2QHZARnBiUdIrFqyA7IDIqCxA7IDrtkB2QEZwWlsO+DdrY8uqOPVfOuji3C/hCDgMIWACCitOQlIAiKgMYKj1pwEJAER0EjAqDUnAUlABDQSMGrNSUASEAFtuAQ8e2fPxdefhy6o49Xq16GLc3dfuqj+lxAErKtWCEgCIqCRgFFrRQKSgAhoJGDUWpGAJCACGgkYtVYkIAmIgEYCRq1V9Qk4Wxy4cP6D+eF7F0/ffIM39dyBt29usdrF2gUC6pv/tAIQsIImRCaTgPomRCYjoL4JkckIqG9CZDIC6psQmYyA+iZEJiOgvgmRyQiob0JkskzAdrHjou+fYKBM+g7axbYLBKygWd0EQcAKmhCZlgTUNyEyLQLqmxCZFgH1TYhMi4D6JkSmRUB9EyLTIqC+CZFpEVDfhMi0XgE7u+RE/0dBGc0d5BcXXSBgBc3qJggCVtCEyGQSUN+EyGQE1DchMhkB9U2ITEZAfRMikxFQ34TIZATUNyEyGQH1TYhM9groLe8vJt6fYHr+X7nA/n0H3nv29q13sRBw2vLOEJAEREASUJ5EJOAxix1QL1PHCOYRohaqYwfkFTwmZjxCeIQgYA/FDqhPs44EZAdUC9VNawT/BdHo3rH8X+YqAAAAAElFTkSuQmCC" alt="프리즘 마크를 실제 16픽셀로 렌더한 뒤 확대한 것">
+        <figcaption class="verdict-ok">프리즘 · 통과</figcaption>
+      </figure>
+      <figure>
+        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKAAAACgCAYAAACLz2ctAAAACXBIWXMAAAsTAAALEwEAmpwYAAAEj0lEQVR4nO3csY4cVRCF4bsp2UqWeBxusCKwCfoVUM+0EwLL4jFWgmdxxhOgnb3COHBwHROQeZ3ZFjBEZEYuUO9Wz9yvpBPvTNfZOn9VS1NKtL69+Sak3e0hpP3hQ0hLO1L7/88g+pyjfVvak5BWLwY8zX+EPQOagAy4QpmA+dNsMQExYLahFhFsCck21YIBbcGnor0lxBLCgCuUJSR/mi0moCUk21DLuUVwdLJlP0g6ntgzmEJiwPRGHc9UDLiBJoysyQTMb8LImhgwvwkja2LA/CaMrIkB85swsiYGzG/CyJoYML8JI2tiwPwmjKwpZsDd4TakpC9y+exlSFc/vBlKl8HnkmbA3eEmJAbMN9MVA5qA2Ya6MgFFcLaprkQwBjwVXWJASwgDNkuILfilLdgZRgQXZ5h8LsOAzR0w2xiWkPYfD9Eb/5Wqet1DGq1q8Lkkvgl5HxIDnmZVBjQBGbCZgCK4i2AMKIILBhyrKgbEgAzYMCAG7BgQA4rgggHHqno2DJj1Ab0JOW8DRpX+AT4jr+I+XQzIgKlVTUATkAGbCHaG6RgQA4rgYgkZqyoGxIAM2DAgBuwYEAOK4IIBx6qKATEgAzYMiAE7BsSAIrhgwLGqYkAMyIANA2LAjgExoAguGHCsqhgQAzJgw4AYsGNADCiCCwYcqyoGxIAM2DAgBuwYEAOK4IIBx6qKATEgAzYMiAE7BsSAIrhgwLGqYkAMyIANA2LAjgExoAguGHCsqhgQAzJgw4AYsGNADCiCCwYcqyoGxIAM2DAgBuwYEAOK4IIBx6qKATEgAzYMiAE7BsSAIrhgwLGqYkAMyIANA2LAjgExoAguGHCsqhgQAzJgw4AYsGNADCiCCwYcqyoGxIAM2DAgBuwYEAOK4IIBx6qKATEgAzYMeF8M+Meff62qtauagOc9ARnwYfpbHuSPMODq/yDVBGRAEdxMQBHc3QFFsCWkYMB1yxLSLCG24H8vS4glxBKyWEIsIdeWkJNaQn5/9zGkr398E9JX1z2k395+DClaIvhEI5gBW/rLhaHfhDBgS+8pA4rgY7rxTEAMWLag9A/wGYngT5clhAFtwYsJaAm5dgcUwe6ARwwYLGeYtrElZH/4ENLGl5CfXr8L6cvvX4W09vd49PzXkF68ugtp80vI7vA+JAZkwMKAJuAjE1AEi+AmgjHgHQa0hFhCiiXEFvzCFuwM4wzTnGHcAe/cAR2iHaLLvRyid4fbkJIu6l9890tIF09bSGlvBoK6CH6P6HNJfBNyExID5puuMKAJmG28YgKK4C3oQgRjQAZsGPAfE1hCmiXEFiyCiy3YGebCGebhoVwENxEsgkVwubcIXtqToNJPFNRO5xnMPz8OiQE30KzlDMWAG2jCyJpNwPwmjKyZAfObMLJmBsxvwsiaGTC/CSNrZsD8JoysmQHzmzCyZgbMb8LImqMGjFb0jUn0FczGf5XrbLQPPudo31Y3FgPmm2RhQBMw2yiLCSiCs82yiGAMeG7aY0BLCAOuULbg/Gm2mIDOMNmGWkSwO2C2qRYM6BB9Ktpvewn5G2kuQpbJflw3AAAAAElFTkSuQmCC" alt="책갈피 마크를 실제 16픽셀로 렌더한 뒤 확대한 것">
+        <figcaption class="verdict-ok">책갈피 · 통과</figcaption>
+      </figure>
+      <figure>
+        <img src="data:image/png;base64,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" alt="나이테 마크를 실제 16픽셀로 렌더한 뒤 확대한 것">
+        <figcaption class="verdict-ok">나이테 · 통과</figcaption>
+      </figure>
+      <figure>
+        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKAAAACgCAYAAACLz2ctAAAACXBIWXMAAAsTAAALEwEAmpwYAAAFRUlEQVR4nO3dMWslZRgF4KmW/AUt0lj4EwSxtTFb+BfE3Cl2Cyt1EYTtxFgoqMU2LpamsNlKFITFsGTy7cJeRZcICrIsaoZAwMvmsrkZQbCT+MYZ5/tu7nPg1Ml8c+ac9z0TMlUVxSu7l0Pc3GtCnDTzEOvUYfrvZxA95+h9q9NGiIODAJfzQZgQIAckwAHAAfO7Wc0BzYC5BVWLYEtIblHVZkBb8LJwYgmxhBDgALCE5HezmgNaQnILqr5oERx1ttwHOTKfffu7QZn7eqrx+XKIBEiAFQFmf1o5YM0Bi6IITiKYAFP2B9EMyAG7JaUlRAQnAlxWmgETByTAlP1BFMEcsLvYM+Bmsxdi/gs6k0+/cT/EG7cPQvzkm3ZQbqfDENevTUPMfd7/ys1mN0QCJMCKADngNgcUwSI4iWAz4NQMaAmxhFSWEFvwui1YDaOGSWoYPeBUD5i92FREdxeziM70X6ouXbkb4muf/RLi0eOTEKO4udMOyihm80WI1289CnHt6r0Q/wcBHodIgAS4RoAc8G9wQBH8F0RwEsFmwIUZ0BJiCaksIbbgmS1YDaOGSWoYPeBCD6iIVkRXgxXRA0fri+/vh/jTwXGIuZCrhhka0XOO3rfB35gQ4D+DAPcJkAP2BwcUwSK4FsHnhgjeF8EiuD9EsAgWwbUIPjdE8L4IFsH9IYJFsAiuR4zg0t8MrFoERxG9juLfhKzaDVm1660IsKwbQoCJAxJgf3DAwsABWxFMgOOBAxYGDthyQAIcDxywMHDAlgMS4HjggIWBA7YckADHAwcsDByw5YAEOB44YGHggC0HJMDxwAELAwdsOSABjgcOWBg4YMsBCXA8cMDC8PHXvw/K0nHTn+SXBQJsRTABjgcOWBg4YMsBCXA8cMDCwAFbDkiA44EDFgYO2HJAAhwPHLAwcMCWA54Hh7OTEKNfYN/48McQL38UY/TnHgavY2hwwJ4gwH4gwJ4gwH4gwJ4gwH4gwJ4gwH4gwJ4gwH4gwJ4gwH4gwJ4gwH4gwJ4gwH4gwJ4gwH5YOQEuTrsQP73Thvj8uw9C3E6HIQ6NL78/CvGFrQchfvDVbyE+WZyGSIAE2BEgB+SAOyJYBG+JYDOgGbCzhFhCOkuILdgWvKOGUcNsqWH0gHrAThGtiO4U0WfMhW9+/jDEaOP/3he/hjh/chpi6ZgHryN6LtFzjt634h2QAAmQADlgxwFFsAiuRbAZcMsMaAmxhHSWEFtwZwtWw6hhajVM0ZjrAfWABPhweYvoZ976NsTm5z9ChH6InnP0vhEgnAsEyAGzouGAIpgAkxlwVdFwQA5IgIkDrioaDsgBCTBxwFVFwwE5IAGmMxxw0sxDHPiNyaUrd0OMfl/j6PFJiKVjNl+EeP3WoxDXrt4LcfA3HJvNcYgEWBZmBMgBCTBxQBG8EMFmQBFcmQEtITNLiC3YEpJswWqYhRpGD6iGqfSAiujrF6aI3mz2Qhz6FxyYT71+P8Qbtw9CjH7H5DTI6PdJ1q9NQ8x93gEB7oZIgARYESAH3OaAIlgEJxFsBpyaAS0hlpDKEmILXrcFq2HUMEkNowec6gGzF5uK6O5iFtF12giyWyU+984PgzL39VRj89U7L4VIgARYEWABTywH7DhgQRTBSQQTYMr+IJoBOWC3lLSEiOCKAAt4Es2AHQdcQlpCkggmwLQCM2AU0Tcm0Vcwmf4r18pxEjzn6H0bXFgEmF8kNQFywNxCqTmgCM4tlloEmwEvGidmQEsIAQ4AW3B+N6s5oBomt6BqEawHzC2q2gyoiF4WTspeQv4EYtoEYfrhg+UAAAAASUVORK5CYII=" alt="큐브 마크를 실제 16픽셀로 렌더한 뒤 확대한 것">
+        <figcaption class="verdict-bad">큐브 · 탈락</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ============ 1. 프리즘 ============ -->
+  <section class="cand">
+    <div class="cand-head">
+      <h2 class="cand-name">프리즘</h2>
+      <span class="cand-en">Prism</span>
+    </div>
+    <p class="cand-why">
+      들어갈 때는 빛 한 줄기, 나올 때는 여러 갈래. <strong>하나의 이름이 여러 얼굴을 갖는다</strong>는
+      다형성을 그림으로 옮긴 것입니다. 12번 문서에서 겹친 두 원과 반원+각진 면이 실패한 게
+      "두 도형으로 은유를 만들려 했기 때문"이었는데, 프리즘은 <strong>도형은 삼각형 하나</strong>이고
+      은유는 빛이 담당합니다. 그래서 16px에서는 삼각형만 남고, 커지면 분광이 드러납니다.
+    </p>
+    <div class="grid2">
+      <div class="panel">
+        <span class="panel-label">탭 줄에서</span>
+        <div class="tabstrip">
+          <div class="tab"><span class="fav grey"></span><span>GitHub</span></div>
+          <div class="tab"><span class="fav grey"></span><span>Stack Over…</span></div>
+          <div class="tab active">
+            <svg class="fav" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="14" fill="#0066cc"/><path d="M32 11 L55 51 L9 51 Z" fill="#fff"/></svg>
+            <span>Polymorlog</span>
+          </div>
+          <div class="tab"><span class="fav grey"></span><span>Jira</span></div>
+        </div>
+        <span class="panel-label" style="margin-top:0.3rem">실제 크기 사다리</span>
+        <div class="ladder">
+          <figure><svg width="16" height="16" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#0066cc"/><path d="M32 11 L55 51 L9 51 Z" fill="#fff"/></svg><figcaption>16</figcaption></figure>
+          <figure><svg width="32" height="32" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#0066cc"/><path d="M32 11 L55 51 L9 51 Z" fill="#fff"/></svg><figcaption>32</figcaption></figure>
+          <figure><svg width="64" height="64" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#0066cc"/><path d="M32 11 L55 51 L9 51 Z" fill="#fff"/></svg><figcaption>64</figcaption></figure>
+          <figure><svg width="90" height="90" viewBox="0 0 64 64"><rect width="64" height="64" rx="20" fill="#0066cc"/><path d="M32 11 L55 51 L9 51 Z" fill="#fff"/></svg><figcaption>180 · iOS</figcaption></figure>
+        </div>
+      </div>
+      <div class="panel">
+        <span class="panel-label">404 페이지 — 마크를 크게 쓰는 자리</span>
+        <div class="mock404">
+          <div class="m-head"><b>Polymorlog</b><nav><span>Blog</span><span>Wiki</span><span>Series</span><span>About</span></nav></div>
+          <div class="m-404">
+            <svg width="130" height="82" viewBox="0 0 124 100" aria-hidden="true">
+              <path d="M0 55 H34" stroke="#0066cc" stroke-width="3.5"/>
+              <path d="M62 18 L104 82 L20 82 Z" fill="#0066cc"/>
+              <path d="M92 64 L124 48" stroke="#0066cc" stroke-width="3.5"/>
+              <path d="M92 69 L124 67" stroke="#0066cc" stroke-width="3.5" opacity="0.62"/>
+              <path d="M92 74 L124 86" stroke="#0066cc" stroke-width="3.5" opacity="0.38"/>
+            </svg>
+            <div class="big">이 주소에는 아무것도 없습니다</div>
+            <div class="sub">주소가 바뀌었거나, 아직 쓰지 않은 글입니다.</div>
+            <div class="back">글 목록으로</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="tradeoff">
+      <p class="plus"><span class="mark"></span><span>16px에서 셋 중 가장 또렷합니다. 삼각형은 픽셀이 부족해도 형태가 안 무너집니다.</span></p>
+      <p class="plus"><span class="mark"></span><span>이름의 뜻(polymorph)과 직접 연결됩니다. About이나 소개 문구에서 한 문장으로 설명됩니다.</span></p>
+      <p class="minus"><span class="mark"></span><span>분광선이 없으면 그냥 삼각형입니다. 큰 자리에서만 뜻이 살아납니다.</span></p>
+    </div>
+  </section>
+
+  <!-- ============ 2. 책갈피 ============ -->
+  <section class="cand">
+    <div class="cand-head">
+      <h2 class="cand-name">책갈피</h2>
+      <span class="cand-en">Bookmark</span>
+    </div>
+    <p class="cand-why">
+      읽던 자리를 표시해 두는 물건. <strong>기록(log)이라는 행위 자체의 오브젝트</strong>이고,
+      "계속 고쳐 쓰는 위키 + 그때 생각을 남긴 포스트"라는 이 블로그의 두 갈래와도 맞습니다.
+      셋 중 가장 안전하고, 가장 평범합니다.
+    </p>
+    <div class="grid2">
+      <div class="panel">
+        <span class="panel-label">탭 줄에서</span>
+        <div class="tabstrip">
+          <div class="tab"><span class="fav grey"></span><span>GitHub</span></div>
+          <div class="tab"><span class="fav grey"></span><span>Stack Over…</span></div>
+          <div class="tab active">
+            <svg class="fav" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="14" fill="#0066cc"/><path d="M19 11 H45 V53 L32 43.5 L19 53 Z" fill="#fff"/></svg>
+            <span>Polymorlog</span>
+          </div>
+          <div class="tab"><span class="fav grey"></span><span>Jira</span></div>
+        </div>
+        <span class="panel-label" style="margin-top:0.3rem">실제 크기 사다리</span>
+        <div class="ladder">
+          <figure><svg width="16" height="16" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#0066cc"/><path d="M19 11 H45 V53 L32 43.5 L19 53 Z" fill="#fff"/></svg><figcaption>16</figcaption></figure>
+          <figure><svg width="32" height="32" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#0066cc"/><path d="M19 11 H45 V53 L32 43.5 L19 53 Z" fill="#fff"/></svg><figcaption>32</figcaption></figure>
+          <figure><svg width="64" height="64" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#0066cc"/><path d="M19 11 H45 V53 L32 43.5 L19 53 Z" fill="#fff"/></svg><figcaption>64</figcaption></figure>
+          <figure><svg width="90" height="90" viewBox="0 0 64 64"><rect width="64" height="64" rx="20" fill="#0066cc"/><path d="M19 11 H45 V53 L32 43.5 L19 53 Z" fill="#fff"/></svg><figcaption>180 · iOS</figcaption></figure>
+        </div>
+      </div>
+      <div class="panel">
+        <span class="panel-label">404 페이지 — 마크를 크게 쓰는 자리</span>
+        <div class="mock404">
+          <div class="m-head"><b>Polymorlog</b><nav><span>Blog</span><span>Wiki</span><span>Series</span><span>About</span></nav></div>
+          <div class="m-404">
+            <svg width="58" height="82" viewBox="0 0 70 100" aria-hidden="true">
+              <path d="M6 6 H64 V94 L35 76 L6 94 Z" fill="#0066cc"/>
+            </svg>
+            <div class="big">이 주소에는 아무것도 없습니다</div>
+            <div class="sub">주소가 바뀌었거나, 아직 쓰지 않은 글입니다.</div>
+            <div class="back">글 목록으로</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="tradeoff">
+      <p class="plus"><span class="mark"></span><span>16px에서 V홈까지 또렷하게 살아남습니다. 뜻이 크기와 무관하게 읽힙니다.</span></p>
+      <p class="plus"><span class="mark"></span><span>설명이 필요 없습니다. 보면 압니다.</span></p>
+      <p class="minus"><span class="mark"></span><span>블로그·읽기 서비스가 가장 많이 쓰는 도형입니다. 개성은 셋 중 가장 약합니다.</span></p>
+    </div>
+  </section>
+
+  <!-- ============ 3. 나이테 ============ -->
+  <section class="cand">
+    <div class="cand-head">
+      <h2 class="cand-name">나이테</h2>
+      <span class="cand-en">Growth Rings</span>
+    </div>
+    <p class="cand-why">
+      통나무를 자른 단면. <strong>log는 기록이면서 통나무</strong>이기도 합니다.
+      나이테는 시간이 쌓인 기록이고, 가운데로 갈수록 그 나무의 시작이 나옵니다 —
+      "낙관적 락의 시작에는 락이 없었다", "왜 T(n)이 아니고 O(n)인가"처럼
+      <strong>기원을 거슬러 올라가는 글</strong>과 결이 같습니다.
+      테마 브랜치 이름이 <code>garden</code>인 것과도 우연히 맞습니다.
+    </p>
+    <div class="grid2">
+      <div class="panel">
+        <span class="panel-label">탭 줄에서</span>
+        <div class="tabstrip">
+          <div class="tab"><span class="fav grey"></span><span>GitHub</span></div>
+          <div class="tab"><span class="fav grey"></span><span>Stack Over…</span></div>
+          <div class="tab active">
+            <svg class="fav" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="14" fill="#0066cc"/><g fill="none" stroke="#fff" stroke-width="5.5"><ellipse cx="37" cy="28" rx="4.5" ry="3.5" fill="#fff" stroke="none"/><ellipse cx="33" cy="31" rx="21" ry="18.5"/></g></svg>
+            <span>Polymorlog</span>
+          </div>
+          <div class="tab"><span class="fav grey"></span><span>Jira</span></div>
+        </div>
+        <span class="panel-label" style="margin-top:0.3rem">실제 크기 사다리 — 커질수록 테가 늘어난다</span>
+        <div class="ladder">
+          <figure><svg width="16" height="16" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#0066cc"/><g fill="none" stroke="#fff" stroke-width="5.5"><ellipse cx="37" cy="28" rx="4.5" ry="3.5" fill="#fff" stroke="none"/><ellipse cx="33" cy="31" rx="21" ry="18.5"/></g></svg><figcaption>16</figcaption></figure>
+          <figure><svg width="32" height="32" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#0066cc"/><g fill="none" stroke="#fff" stroke-width="4.6"><ellipse cx="36" cy="29" rx="3.6" ry="2.9" fill="#fff" stroke="none"/><ellipse cx="34" cy="30.5" rx="12" ry="10.4"/><ellipse cx="33" cy="31.5" rx="21.5" ry="19"/></g></svg><figcaption>32</figcaption></figure>
+          <figure><svg width="64" height="64" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#0066cc"/><g fill="none" stroke="#fff" stroke-width="3.4"><ellipse cx="36" cy="29" rx="2.8" ry="2.2" fill="#fff" stroke="none"/><ellipse cx="35" cy="29.8" rx="8" ry="6.9"/><ellipse cx="34" cy="30.6" rx="14" ry="12.2"/><ellipse cx="33.2" cy="31.4" rx="20" ry="17.5"/><ellipse cx="32.6" cy="32" rx="25.6" ry="22.4"/></g></svg><figcaption>64</figcaption></figure>
+          <figure><svg width="90" height="90" viewBox="0 0 64 64"><rect width="64" height="64" rx="20" fill="#0066cc"/><g fill="none" stroke="#fff" stroke-width="3"><ellipse cx="36" cy="29" rx="2.6" ry="2" fill="#fff" stroke="none"/><ellipse cx="35" cy="29.8" rx="7" ry="6"/><ellipse cx="34.2" cy="30.5" rx="12" ry="10.4"/><ellipse cx="33.5" cy="31.2" rx="17" ry="14.8"/><ellipse cx="33" cy="31.8" rx="22" ry="19.2"/><ellipse cx="32.5" cy="32.3" rx="26.8" ry="23.4"/></g></svg><figcaption>180 · iOS</figcaption></figure>
+        </div>
+      </div>
+      <div class="panel">
+        <span class="panel-label">404 페이지 — 마크를 크게 쓰는 자리</span>
+        <div class="mock404">
+          <div class="m-head"><b>Polymorlog</b><nav><span>Blog</span><span>Wiki</span><span>Series</span><span>About</span></nav></div>
+          <div class="m-404">
+            <svg width="92" height="82" viewBox="0 0 100 90" aria-hidden="true">
+              <g fill="none" stroke="#0066cc" stroke-width="3.2">
+                <ellipse cx="57" cy="38" rx="3" ry="2.4" fill="#0066cc" stroke="none"/>
+                <ellipse cx="55.5" cy="39" rx="9" ry="7.6"/>
+                <ellipse cx="53.5" cy="40.4" rx="16" ry="13.6"/>
+                <ellipse cx="51.8" cy="41.6" rx="23" ry="19.6"/>
+                <ellipse cx="50.4" cy="42.6" rx="30" ry="25.6"/>
+                <ellipse cx="49.2" cy="43.5" rx="37" ry="31.6"/>
+              </g>
+            </svg>
+            <div class="big">이 주소에는 아무것도 없습니다</div>
+            <div class="sub">주소가 바뀌었거나, 아직 쓰지 않은 글입니다.</div>
+            <div class="back">글 목록으로</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="tradeoff">
+      <p class="plus"><span class="mark"></span><span>크기마다 테 개수를 달리 그리면, 커질수록 정보가 늘어나는 마크가 됩니다. 셋 중 큰 자리에서 가장 아름답습니다.</span></p>
+      <p class="plus"><span class="mark"></span><span>log의 두 뜻을 한 그림이 다 담습니다. 이 블로그 글의 성격과도 맞습니다.</span></p>
+      <p class="minus"><span class="mark"></span><span><strong>16px에서는 과녁이나 도넛으로 읽힙니다.</strong> 편심을 크게 줘도 픽셀이 모자라 안 보입니다. 위 16px 확대본을 확인해 보세요 — 나이테라는 뜻은 32px부터 살아납니다.</span></p>
+    </div>
+  </section>
+
+  <!-- ============ 공유 카드 ============ -->
+  <section class="section">
+    <h2 class="sec">공유 카드에서는</h2>
+    <p>
+      어느 마크를 고르든 OG 카드 왼쪽 위에 작게 넣고 제목을 크게 놓는 구조가 됩니다.
+      지금은 모든 글이 같은 카드 한 장을 쓰지만, 다음 작업(글별 자동 생성)을 하면
+      아래처럼 제목이 들어갑니다.
+    </p>
+    <div class="grid2" style="grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+      <div class="ogcard">
+        <div class="og-top">
+          <svg width="26" height="26" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#0066cc"/><path d="M32 11 L55 51 L9 51 Z" fill="#fff"/></svg>
+          <span class="og-name">Polymorlog</span>
+        </div>
+        <div class="og-t">낙관적 락의 시작에는 락이 없었다</div>
+        <div class="og-b">dahyeong-yun.github.io</div>
+      </div>
+      <div class="ogcard">
+        <div class="og-top">
+          <svg width="26" height="26" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#0066cc"/><path d="M19 11 H45 V53 L32 43.5 L19 53 Z" fill="#fff"/></svg>
+          <span class="og-name">Polymorlog</span>
+        </div>
+        <div class="og-t">낙관적 락의 시작에는 락이 없었다</div>
+        <div class="og-b">dahyeong-yun.github.io</div>
+      </div>
+      <div class="ogcard">
+        <div class="og-top">
+          <svg width="26" height="26" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#0066cc"/><g fill="none" stroke="#fff" stroke-width="4.6"><ellipse cx="36" cy="29" rx="3.6" ry="2.9" fill="#fff" stroke="none"/><ellipse cx="34" cy="30.5" rx="12" ry="10.4"/><ellipse cx="33" cy="31.5" rx="21.5" ry="19"/></g></svg>
+          <span class="og-name">Polymorlog</span>
+        </div>
+        <div class="og-t">낙관적 락의 시작에는 락이 없었다</div>
+        <div class="og-b">dahyeong-yun.github.io</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 탈락 ============ -->
+  <section class="section">
+    <h2 class="sec">뺀 것 — 큐브</h2>
+    <div class="rejected">
+      <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKAAAACgCAYAAACLz2ctAAAACXBIWXMAAAsTAAALEwEAmpwYAAAFRUlEQVR4nO3dMWslZRgF4KmW/AUt0lj4EwSxtTFb+BfE3Cl2Cyt1EYTtxFgoqMU2LpamsNlKFITFsGTy7cJeRZcICrIsaoZAwMvmsrkZQbCT+MYZ5/tu7nPg1Ml8c+ac9z0TMlUVxSu7l0Pc3GtCnDTzEOvUYfrvZxA95+h9q9NGiIODAJfzQZgQIAckwAHAAfO7Wc0BzYC5BVWLYEtIblHVZkBb8LJwYgmxhBDgALCE5HezmgNaQnILqr5oERx1ttwHOTKfffu7QZn7eqrx+XKIBEiAFQFmf1o5YM0Bi6IITiKYAFP2B9EMyAG7JaUlRAQnAlxWmgETByTAlP1BFMEcsLvYM+Bmsxdi/gs6k0+/cT/EG7cPQvzkm3ZQbqfDENevTUPMfd7/ys1mN0QCJMCKADngNgcUwSI4iWAz4NQMaAmxhFSWEFvwui1YDaOGSWoYPeBUD5i92FREdxeziM70X6ouXbkb4muf/RLi0eOTEKO4udMOyihm80WI1289CnHt6r0Q/wcBHodIgAS4RoAc8G9wQBH8F0RwEsFmwIUZ0BJiCaksIbbgmS1YDaOGSWoYPeBCD6iIVkRXgxXRA0fri+/vh/jTwXGIuZCrhhka0XOO3rfB35gQ4D+DAPcJkAP2BwcUwSK4FsHnhgjeF8EiuD9EsAgWwbUIPjdE8L4IFsH9IYJFsAiuR4zg0t8MrFoERxG9juLfhKzaDVm1660IsKwbQoCJAxJgf3DAwsABWxFMgOOBAxYGDthyQAIcDxywMHDAlgMS4HjggIWBA7YckADHAwcsDByw5YAEOB44YGHggC0HJMDxwAELAwdsOSABjgcOWBg4YMsBCXA8cMDC8PHXvw/K0nHTn+SXBQJsRTABjgcOWBg4YMsBCXA8cMDCwAFbDkiA44EDFgYO2HJAAhwPHLAwcMCWA54Hh7OTEKNfYN/48McQL38UY/TnHgavY2hwwJ4gwH4gwJ4gwH4gwJ4gwH4gwJ4gwH4gwJ4gwH4gwJ4gwH4gwJ4gwH4gwJ4gwH4gwJ4gwH5YOQEuTrsQP73Thvj8uw9C3E6HIQ6NL78/CvGFrQchfvDVbyE+WZyGSIAE2BEgB+SAOyJYBG+JYDOgGbCzhFhCOkuILdgWvKOGUcNsqWH0gHrAThGtiO4U0WfMhW9+/jDEaOP/3he/hjh/chpi6ZgHryN6LtFzjt634h2QAAmQADlgxwFFsAiuRbAZcMsMaAmxhHSWEFtwZwtWw6hhajVM0ZjrAfWABPhweYvoZ976NsTm5z9ChH6InnP0vhEgnAsEyAGzouGAIpgAkxlwVdFwQA5IgIkDrioaDsgBCTBxwFVFwwE5IAGmMxxw0sxDHPiNyaUrd0OMfl/j6PFJiKVjNl+EeP3WoxDXrt4LcfA3HJvNcYgEWBZmBMgBCTBxQBG8EMFmQBFcmQEtITNLiC3YEpJswWqYhRpGD6iGqfSAiujrF6aI3mz2Qhz6FxyYT71+P8Qbtw9CjH7H5DTI6PdJ1q9NQ8x93gEB7oZIgARYESAH3OaAIlgEJxFsBpyaAS0hlpDKEmILXrcFq2HUMEkNowec6gGzF5uK6O5iFtF12giyWyU+984PgzL39VRj89U7L4VIgARYEWABTywH7DhgQRTBSQQTYMr+IJoBOWC3lLSEiOCKAAt4Es2AHQdcQlpCkggmwLQCM2AU0Tcm0Vcwmf4r18pxEjzn6H0bXFgEmF8kNQFywNxCqTmgCM4tlloEmwEvGidmQEsIAQ4AW3B+N6s5oBomt6BqEawHzC2q2gyoiF4WTspeQv4EYtoEYfrhg+UAAAAASUVORK5CYII=" alt="큐브 마크를 실제 16픽셀로 렌더한 뒤 확대한 것. 세 조각으로 갈라져 보인다">
+      <div>
+        <p>
+          아이소메트릭 정육면체 — 한 덩어리인데 보는 각도마다 다른 면이 보인다는 뜻으로,
+          다형성의 직역에 가장 가까웠습니다. 실루엣도 육각형이라 16px을 견딜 줄 알았습니다.
+        </p>
+        <p>
+          <strong>실패했습니다.</strong> 면을 가르는 파란 선이 16px에서 흰 육각형을 세 조각으로 잘라 버려서,
+          큐브가 아니라 자동차 엠블럼처럼 읽힙니다. 선을 5 → 3 → 2로 얇게 해봐도 같았습니다.
+          12번 문서 §4가 겹친 두 원과 반원+각진 면에서 이미 관찰한 것과 정확히 같은 실패입니다:
+          <strong>16px에 들어가는 건 도형 하나와 바탕 하나뿐입니다.</strong>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 추천 ============ -->
+  <section class="section">
+    <h2 class="sec">제 추천</h2>
+    <p>
+      <strong>프리즘.</strong> 파비콘은 읽는 게 아니라 찾는 것이라는 12번 문서 §4의 세 번째 규칙을
+      가장 잘 지키면서, 이름의 뜻까지 끌고 오는 유일한 안입니다. 삼각형은 16px에서 원이나 사각형과
+      섞이지 않는 몇 안 되는 실루엣이고, 큰 자리에서는 분광선을 붙여 404·OG·About을 하나로 묶을 수 있습니다.
+      <strong>작을 땐 표식, 클 땐 그림</strong>이 되는 게 이 안의 핵심입니다.
+    </p>
+    <p>
+      뜻보다 알아보기 쉬움이 우선이면 <strong>책갈피</strong>가 맞습니다. 실패할 일이 없는 대신 기억에 덜 남습니다.
+      <strong>나이테</strong>는 큰 자리에서 가장 예쁘지만 정작 파비콘에서 뜻이 사라지는 게 아깝습니다 —
+      마크를 큰 자리 위주로 쓸 생각이시라면 그때는 이쪽이 낫습니다.
+    </p>
+    <p>
+      셋 다 <code>P</code> 자리표시를 대체하는 데 필요한 작업량은 같습니다.
+    </p>
+    <pre class="plan"><span class="path">dahyeong-yun.github.io/public/</span>
+  favicon.svg          <span class="cm">← 마크 SVG 로 교체 (직접 작성)</span>
+  favicon.ico          <span class="cm">← 같은 SVG 를 16/32/48 로 래스터, sharp 사용</span>
+  apple-touch-icon.png <span class="cm">← 180×180, 모서리 반경을 조금 키움</span>
+  og-default.png       <span class="cm">← 1200×630, 마크 + 사이트명</span>
+
+<span class="cm">테마·설정은 건드리지 않습니다. BaseHead 가 이미 네 경로를 모두 연결해 두었고
+경로와 파일명이 그대로이므로 코드 변경은 없습니다.</span></pre>
+    <p style="font-size:0.85rem;color:var(--ink-3)">
+      참고 — 브라우저는 파비콘을 아주 오래 캐시합니다. 교체 후에는 하드 리로드가 아니라
+      시크릿 창에서 확인하세요.
+    </p>
+  </section>
+
+</div>

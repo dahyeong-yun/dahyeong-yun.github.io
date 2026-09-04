@@ -1,0 +1,1099 @@
+<title>Polymorlog 강조색 다섯 안</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&family=IBM+Plex+Sans+KR:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+
+<style>
+/* ============================================================
+   비교 시트의 자기 색은 없다.
+   후보 다섯이 유일한 채도이도록 페이지 크롬은 완전 무채색으로 둔다.
+   따뜻한 회색은 테라코타를, 찬 회색은 파랑을 편들기 때문에
+   R=G=B 인 회색만 쓴다.
+   ============================================================ */
+:root {
+  --ground:    #efefef;
+  --card:      #ffffff;
+  --card-2:    #f7f7f7;
+  --ink:       #191919;
+  --ink-2:     #6b6b6b;
+  --ink-3:     #9a9a9a;
+  --rule:      #dcdcdc;
+  --rule-soft: #e9e9e9;
+
+  --serif: "Newsreader", "IBM Plex Sans KR", Georgia, serif;
+  --sans:  "IBM Plex Sans KR", system-ui, -apple-system, sans-serif;
+  --mono:  "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace;
+
+  /* 목업 안에서만 쓰는 실제 사이트 서체 스택 */
+  --site-sans: "SF Pro Display", "SF Pro Text", "Pretendard Variable", Pretendard, system-ui, -apple-system, sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --ground:    #101010;
+    --card:      #1b1b1b;
+    --card-2:    #232323;
+    --ink:       #ebebeb;
+    --ink-2:     #949494;
+    --ink-3:     #6e6e6e;
+    --rule:      #2f2f2f;
+    --rule-soft: #262626;
+  }
+}
+:root[data-theme="dark"] {
+  --ground:    #101010;
+  --card:      #1b1b1b;
+  --card-2:    #232323;
+  --ink:       #ebebeb;
+  --ink-2:     #949494;
+  --ink-3:     #6e6e6e;
+  --rule:      #2f2f2f;
+  --rule-soft: #262626;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--ground);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-weight: 400;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+.wrap {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: clamp(2rem, 5vw, 4.5rem) clamp(1rem, 4vw, 2.5rem) 5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 3.5rem;
+}
+
+/* ---------- 머리말 ---------- */
+.masthead { display: flex; flex-direction: column; gap: 1.1rem; }
+
+.eyebrow {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+h1 {
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: clamp(2rem, 5vw, 2.9rem);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  margin: 0;
+  text-wrap: balance;
+}
+
+.lede {
+  margin: 0;
+  max-width: 62ch;
+  font-size: 1rem;
+  color: var(--ink-2);
+}
+.lede + .lede { margin-top: -0.4rem; }
+
+.note {
+  margin: 0;
+  max-width: 62ch;
+  font-size: 0.85rem;
+  color: var(--ink-3);
+  border-left: 2px solid var(--rule);
+  padding-left: 0.9rem;
+}
+
+/* ---------- 보기 전환 ---------- */
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.9rem;
+  padding-top: 0.4rem;
+}
+.controls-label {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+.segmented {
+  display: inline-flex;
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  overflow: hidden;
+  background: var(--card);
+}
+.segmented button {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  color: var(--ink-2);
+  font-family: var(--sans);
+  font-size: 0.82rem;
+  padding: 0.45rem 0.95rem;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+.segmented button + button { border-left: 1px solid var(--rule); }
+.segmented button:hover { background: var(--card-2); color: var(--ink); }
+.segmented button[aria-pressed="true"] { background: var(--ink); color: var(--card); }
+.segmented button:focus-visible { outline: 2px solid var(--ink); outline-offset: -2px; }
+
+/* ---------- 후보 한 줄 ---------- */
+.specimens { display: flex; flex-direction: column; gap: 2.75rem; }
+
+.specimen {
+  display: grid;
+  grid-template-columns: 15.5rem 1fr;
+  gap: 1.75rem;
+  align-items: start;
+  padding-top: 1.75rem;
+  border-top: 1px solid var(--rule);
+}
+@media (max-width: 860px) {
+  .specimen { grid-template-columns: 1fr; gap: 1.25rem; }
+}
+
+.rail { display: flex; flex-direction: column; gap: 0.85rem; }
+
+.rail-head { display: flex; align-items: baseline; gap: 0.6rem; }
+.rail-name {
+  font-family: var(--serif);
+  font-size: 1.45rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+.rail-chip {
+  width: 0.85rem;
+  height: 0.85rem;
+  border-radius: 50%;
+  flex: none;
+  align-self: center;
+  box-shadow: inset 0 0 0 1px rgba(128,128,128,0.28);
+}
+
+.rail-gist {
+  margin: 0;
+  font-size: 0.88rem;
+  color: var(--ink-2);
+  line-height: 1.55;
+}
+
+dl.readout {
+  margin: 0;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.2rem 0.75rem;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  font-variant-numeric: tabular-nums;
+}
+dl.readout dt { color: var(--ink-3); }
+dl.readout dd { margin: 0; color: var(--ink-2); }
+
+.verdict {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+.verdict p { margin: 0; display: flex; gap: 0.5rem; }
+.verdict .mark {
+  font-family: var(--mono);
+  flex: none;
+  color: var(--ink-3);
+  width: 1.1rem;
+}
+.verdict .plus .mark::before  { content: "+"; }
+.verdict .minus .mark::before { content: "−"; }
+.verdict .plus  span:last-child { color: var(--ink); }
+.verdict .minus span:last-child { color: var(--ink-2); }
+
+/* ---------- 목업 배치 ---------- */
+.mocks { display: grid; gap: 1rem; grid-template-columns: 1fr 1fr; }
+@media (max-width: 700px) { .mocks { grid-template-columns: 1fr; } }
+
+[data-mode="light"] .mocks { grid-template-columns: 1fr; }
+[data-mode="dark"]  .mocks { grid-template-columns: 1fr; }
+[data-mode="light"] .mock--dark  { display: none; }
+[data-mode="dark"]  .mock--light { display: none; }
+
+/* ============================================================
+   목업 — 뷰어의 테마와 무관하게 고정된 표본이다.
+   라이트 목업은 다크 모드에서도 라이트로 보여야 비교가 성립한다.
+   그래서 여기 색은 토큰이 아니라 실제 사이트 값을 직접 박는다.
+   ============================================================ */
+.mock {
+  --m-bg: #ffffff;
+  --m-header: rgba(255,255,255,0.86);
+  --m-text-primary: #1d1d1f;
+  --m-text-body: #333333;
+  --m-text-secondary: #7a7a7a;
+  --m-text-header: #5a5a5f;
+  --m-border: #e0e0e0;
+
+  font-family: var(--site-sans);
+  background: var(--m-bg);
+  color: var(--m-text-body);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  overflow: hidden;
+  min-width: 0;
+}
+.mock--dark {
+  --m-bg: #000000;
+  --m-header: rgba(12,12,14,0.86);
+  --m-text-primary: #f5f5f7;
+  --m-text-body: #d5d5da;
+  --m-text-secondary: #8e8e93;
+  --m-text-header: #98989e;
+  --m-border: #38383a;
+}
+
+.mock-tag {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  padding: 0 0 0.35rem 0.1rem;
+}
+
+.mock-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid var(--m-border);
+  background: var(--m-header);
+  font-size: 0.72rem;
+}
+.mock-wordmark {
+  font-weight: 700;
+  color: var(--m-text-primary);
+  letter-spacing: -0.01em;
+  margin-right: 0.3rem;
+  font-size: 0.78rem;
+}
+.mock-nav { display: flex; gap: 0.1rem; color: var(--m-text-header); }
+.mock-nav span { padding: 0.15rem 0.42rem; border-radius: 4px; white-space: nowrap; }
+.mock-nav .on {
+  background: var(--m-active-bg);
+  color: var(--m-accent);
+  font-weight: 500;
+}
+.mock-toggle {
+  margin-left: auto;
+  color: var(--m-text-secondary);
+  font-size: 0.75rem;
+  flex: none;
+}
+
+.mock-body { padding: 0.9rem 0.85rem 1rem; }
+
+.mock-h1 {
+  font-size: 1.06rem;
+  line-height: 1.35;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--m-text-primary);
+  margin: 0 0 0.4rem;
+  text-wrap: balance;
+}
+
+.mock-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.72rem;
+  color: var(--m-text-secondary);
+  margin-bottom: 0.75rem;
+  font-variant-numeric: tabular-nums;
+}
+.mock-badge {
+  background: var(--m-badge-bg);
+  color: var(--m-accent);
+  padding: 0.1rem 0.42rem;
+  border-radius: 20px;
+  font-size: 0.66rem;
+  font-weight: 500;
+}
+
+.mock-p {
+  font-size: 0.85rem;
+  line-height: 1.62;
+  margin: 0 0 0.7rem;
+  color: var(--m-text-body);
+}
+.mock-p a { color: var(--m-accent); text-decoration: none; }
+.mock-p a.link { text-decoration: underline; text-underline-offset: 2px; }
+.mock-p a.wikilink {
+  font-weight: 500;
+  border-bottom: 1px solid color-mix(in srgb, var(--m-accent) 35%, transparent);
+}
+.mock-p a.broken {
+  color: var(--m-error);
+  border-bottom: 1px dashed var(--m-error);
+  opacity: 0.85;
+  font-weight: 500;
+  cursor: help;
+}
+.mock--dark .mock-p a.broken { --m-error: #ff453a; }
+
+.mock-code {
+  background: #1a1b2e;
+  border-radius: 6px;
+  padding: 0.55rem 0.7rem;
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  line-height: 1.5;
+  color: #a9b1d6;
+  overflow-x: auto;
+  margin-bottom: 0.75rem;
+}
+.mock-code .kw { color: #bb9af7; }
+.mock-code .fn { color: #7aa2f7; }
+.mock-code .st { color: #9ece6a; }
+.mock-code .cm { color: #565f89; }
+
+.mock-btn {
+  display: inline-block;
+  background: var(--m-accent);
+  color: #ffffff;
+  font-size: 0.72rem;
+  font-weight: 500;
+  padding: 0.32rem 0.75rem;
+  border-radius: 6px;
+}
+.mock--dark .mock-btn { color: #000000; }
+
+/* ---------- 파비콘 · OG 스트립 ---------- */
+.applied {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 1.1rem;
+  margin-top: 0.9rem;
+  padding-top: 0.9rem;
+  border-top: 1px dashed var(--rule);
+}
+.applied-item { display: flex; flex-direction: column; gap: 0.3rem; }
+.applied-label {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+.icons { display: flex; align-items: flex-end; gap: 0.5rem; }
+
+.og-mini {
+  width: 190px;
+  aspect-ratio: 1200 / 630;
+  background: #ffffff;
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.og-bar { height: 7px; flex: none; background: var(--og-accent); }
+.og-inner {
+  flex: 1;
+  padding: 0.5rem 0.65rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.12rem;
+}
+.og-title {
+  font-family: var(--site-sans);
+  font-weight: 700;
+  font-size: 0.72rem;
+  color: #1d1d1f;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+}
+.og-sub { font-family: var(--site-sans); font-size: 0.55rem; color: #7a7a7a; }
+.og-dom {
+  font-family: var(--site-sans);
+  font-size: 0.53rem;
+  color: var(--og-accent);
+  margin-top: 0.2rem;
+}
+
+/* ---------- 아래 섹션 ---------- */
+.section { display: flex; flex-direction: column; gap: 1.1rem; }
+.section > h2 {
+  font-family: var(--serif);
+  font-size: 1.6rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  margin: 0;
+  padding-top: 1.75rem;
+  border-top: 1px solid var(--rule);
+}
+.section p { margin: 0; max-width: 66ch; font-size: 0.92rem; color: var(--ink-2); }
+.section p strong { color: var(--ink); font-weight: 600; }
+
+.tablewrap { overflow-x: auto; }
+table {
+  border-collapse: collapse;
+  width: 100%;
+  min-width: 520px;
+  font-size: 0.82rem;
+}
+th, td {
+  text-align: left;
+  padding: 0.55rem 0.7rem;
+  border-bottom: 1px solid var(--rule-soft);
+  vertical-align: top;
+}
+th {
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  font-weight: 400;
+  border-bottom: 1px solid var(--rule);
+}
+td.num { font-family: var(--mono); font-variant-numeric: tabular-nums; color: var(--ink-2); }
+td .swatchpair { display: inline-flex; gap: 0.25rem; vertical-align: -2px; margin-right: 0.4rem; }
+td .sw { width: 0.7rem; height: 0.7rem; border-radius: 2px; box-shadow: inset 0 0 0 1px rgba(128,128,128,0.28); }
+.flag { color: var(--ink); font-weight: 600; }
+
+pre.diff {
+  margin: 0;
+  background: var(--card);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  padding: 0.9rem 1rem;
+  overflow-x: auto;
+  font-family: var(--mono);
+  font-size: 0.74rem;
+  line-height: 1.65;
+  color: var(--ink-2);
+}
+pre.diff .path { color: var(--ink); font-weight: 500; }
+pre.diff .cm { color: var(--ink-3); }
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
+}
+</style>
+
+<div class="wrap" id="sheet" data-mode="both">
+
+  <header class="masthead">
+    <div class="eyebrow">Polymorlog · 브랜드 결정 01</div>
+    <h1>강조색 다섯 안</h1>
+    <p class="lede">
+      색은 파비콘·OG 카드·링크·태그·헤더에 전부 걸려 있어서, 가장 적은 손으로 가장 크게 인상을 바꾸는
+      레버입니다. 그래서 이걸 먼저 정합니다. 아래는 후보 다섯을 <strong>실제 글 페이지 축소판</strong>에
+      입힌 것입니다. 색동그라미만 보고 고르면 거의 틀립니다 — 링크로 읽히는지, 태그 배경이 탁하지 않은지,
+      다크에서 눈을 찌르지 않는지는 글 안에 놓아 봐야 압니다.
+    </p>
+    <p class="note">
+      이 시트 자체는 무채색만 씁니다. 따뜻한 회색은 테라코타를, 찬 회색은 파랑을 편들기 때문입니다.
+      화면에 채도가 있다면 그건 전부 후보의 것입니다.
+    </p>
+    <div class="controls">
+      <span class="controls-label">보기</span>
+      <div class="segmented" role="group" aria-label="목업 보기 방식">
+        <button type="button" data-mode-btn="both"  aria-pressed="true">라이트 + 다크</button>
+        <button type="button" data-mode-btn="light" aria-pressed="false">라이트만</button>
+        <button type="button" data-mode-btn="dark"  aria-pressed="false">다크만</button>
+      </div>
+      <span class="controls-label" style="text-transform:none;letter-spacing:0;font-family:var(--sans);font-size:0.78rem;">
+        한쪽만 켜면 같은 테마로 다섯을 넓게 훑습니다
+      </span>
+    </div>
+  </header>
+
+  <div class="specimens">
+
+    <!-- ============ 1. 현재 파랑 ============ -->
+    <section class="specimen"
+      style="--m-accent:#0066cc; --m-badge-bg:#eaf3ff; --m-active-bg:#eaf3ff; --m-error:#b3402f;">
+      <div class="rail">
+        <div class="rail-head">
+          <span class="rail-chip" style="background:#0066cc"></span>
+          <h2 class="rail-name">현재 파랑</h2>
+        </div>
+        <p class="rail-gist">iOS·macOS와 거의 모든 문서 사이트가 쓰는 시스템 파랑. 지금 사이트에 이미 적용돼 있습니다.</p>
+        <dl class="readout">
+          <dt>라이트</dt><dd>#0066cc · 5.57:1</dd>
+          <dt>다크</dt><dd>#0a84ff · 5.76:1</dd>
+          <dt>바꿀 곳</dt><dd>없음</dd>
+        </dl>
+        <div class="verdict">
+          <p class="plus"><span class="mark"></span><span>파랑이면 설명 없이 링크로 읽힙니다. 가장 안전합니다.</span></p>
+          <p class="minus"><span class="mark"></span><span>기억에 남지 않습니다. 다른 개발 블로그와 구분되는 지점이 하나도 없습니다.</span></p>
+        </div>
+      </div>
+      <div>
+        <div class="mocks">
+          <div>
+            <div class="mock-tag">Light</div>
+            <div class="mock mock--light">
+              <div class="mock-header">
+                <span class="mock-wordmark">Polymorlog</span>
+                <nav class="mock-nav"><span class="on">Blog</span><span>Wiki</span><span>Series</span><span>About</span></nav>
+                <span class="mock-toggle">◐</span>
+              </div>
+              <div class="mock-body">
+                <h3 class="mock-h1">낙관적 락의 시작에는 락이 없었다</h3>
+                <div class="mock-meta"><span>2026.08.30</span><span class="mock-badge">낙관적 락</span></div>
+                <p class="mock-p">
+                  1979년 논문을 따라가 보면, 지금 우리가 낙관적 락이라 부르는 것에는
+                  <a href="#" class="link">잠금이 아예 없었습니다</a>. 관련해서
+                  <a href="#" class="wikilink">트랜잭션 격리 수준</a>도 같이 보면 좋고,
+                  <a href="#" class="broken">MVCC</a>는 아직 안 썼습니다.
+                </p>
+                <div class="mock-code"><span class="cm">// 충돌은 커밋 시점에 확인한다</span><br><span class="kw">if</span> (<span class="fn">version</span> != expected) <span class="kw">throw</span> …</div>
+                <span class="mock-btn">다음 글 읽기</span>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="mock-tag">Dark</div>
+            <div class="mock mock--dark" style="--m-accent:#0a84ff; --m-badge-bg:rgba(10,132,255,0.15); --m-active-bg:rgba(10,132,255,0.16);">
+              <div class="mock-header">
+                <span class="mock-wordmark">Polymorlog</span>
+                <nav class="mock-nav"><span class="on">Blog</span><span>Wiki</span><span>Series</span><span>About</span></nav>
+                <span class="mock-toggle">◐</span>
+              </div>
+              <div class="mock-body">
+                <h3 class="mock-h1">낙관적 락의 시작에는 락이 없었다</h3>
+                <div class="mock-meta"><span>2026.08.30</span><span class="mock-badge">낙관적 락</span></div>
+                <p class="mock-p">
+                  1979년 논문을 따라가 보면, 지금 우리가 낙관적 락이라 부르는 것에는
+                  <a href="#" class="link">잠금이 아예 없었습니다</a>. 관련해서
+                  <a href="#" class="wikilink">트랜잭션 격리 수준</a>도 같이 보면 좋고,
+                  <a href="#" class="broken">MVCC</a>는 아직 안 썼습니다.
+                </p>
+                <div class="mock-code"><span class="cm">// 충돌은 커밋 시점에 확인한다</span><br><span class="kw">if</span> (<span class="fn">version</span> != expected) <span class="kw">throw</span> …</div>
+                <span class="mock-btn">다음 글 읽기</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="applied">
+          <div class="applied-item">
+            <span class="applied-label">파비콘 · 실제 크기</span>
+            <div class="icons">
+              <svg width="16" height="16" viewBox="0 0 64 64" aria-label="16픽셀 파비콘"><rect width="64" height="64" rx="14" fill="#0066cc"/><text x="32" y="46" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="44" font-weight="700" fill="#fff">P</text></svg>
+              <svg width="32" height="32" viewBox="0 0 64 64" aria-label="32픽셀 파비콘"><rect width="64" height="64" rx="14" fill="#0066cc"/><text x="32" y="46" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="44" font-weight="700" fill="#fff">P</text></svg>
+            </div>
+          </div>
+          <div class="applied-item">
+            <span class="applied-label">공유 카드</span>
+            <div class="og-mini" style="--og-accent:#0066cc;">
+              <div class="og-bar"></div>
+              <div class="og-inner">
+                <div class="og-title">낙관적 락의 시작에는 락이 없었다</div>
+                <div class="og-sub">Polymorlog</div>
+                <div class="og-dom">dahyeong-yun.github.io</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 2. 인디고 ============ -->
+    <section class="specimen"
+      style="--m-accent:#4f46e5; --m-badge-bg:#eeecff; --m-active-bg:#eeecff; --m-error:#b3402f;">
+      <div class="rail">
+        <div class="rail-head">
+          <span class="rail-chip" style="background:#4f46e5"></span>
+          <h2 class="rail-name">인디고</h2>
+        </div>
+        <p class="rail-gist">파랑에서 보라 쪽으로 한 칸. 파랑의 안전함은 남기고 개성만 얹는 가장 작은 이동입니다.</p>
+        <dl class="readout">
+          <dt>라이트</dt><dd>#4f46e5 · 6.29:1</dd>
+          <dt>다크</dt><dd>#7c74ff · 5.80:1</dd>
+          <dt>충돌</dt><dd>없음</dd>
+        </dl>
+        <div class="verdict">
+          <p class="plus"><span class="mark"></span><span>코드 블록(tokyo-night)의 배경 #1a1b2e 가 보랏빛 남색이라 톤이 맞아떨어집니다.</span></p>
+          <p class="plus"><span class="mark"></span><span>여전히 파랑 계열이라 링크 인식에 손해가 없습니다.</span></p>
+          <p class="minus"><span class="mark"></span><span>요즘 개발 도구·SaaS가 많이 씁니다. "지금 유행하는 색"으로 읽힐 수 있습니다.</span></p>
+        </div>
+      </div>
+      <div>
+        <div class="mocks">
+          <div>
+            <div class="mock-tag">Light</div>
+            <div class="mock mock--light">
+              <div class="mock-header">
+                <span class="mock-wordmark">Polymorlog</span>
+                <nav class="mock-nav"><span class="on">Blog</span><span>Wiki</span><span>Series</span><span>About</span></nav>
+                <span class="mock-toggle">◐</span>
+              </div>
+              <div class="mock-body">
+                <h3 class="mock-h1">낙관적 락의 시작에는 락이 없었다</h3>
+                <div class="mock-meta"><span>2026.08.30</span><span class="mock-badge">낙관적 락</span></div>
+                <p class="mock-p">
+                  1979년 논문을 따라가 보면, 지금 우리가 낙관적 락이라 부르는 것에는
+                  <a href="#" class="link">잠금이 아예 없었습니다</a>. 관련해서
+                  <a href="#" class="wikilink">트랜잭션 격리 수준</a>도 같이 보면 좋고,
+                  <a href="#" class="broken">MVCC</a>는 아직 안 썼습니다.
+                </p>
+                <div class="mock-code"><span class="cm">// 충돌은 커밋 시점에 확인한다</span><br><span class="kw">if</span> (<span class="fn">version</span> != expected) <span class="kw">throw</span> …</div>
+                <span class="mock-btn">다음 글 읽기</span>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="mock-tag">Dark</div>
+            <div class="mock mock--dark" style="--m-accent:#7c74ff; --m-badge-bg:rgba(124,116,255,0.16); --m-active-bg:rgba(124,116,255,0.16);">
+              <div class="mock-header">
+                <span class="mock-wordmark">Polymorlog</span>
+                <nav class="mock-nav"><span class="on">Blog</span><span>Wiki</span><span>Series</span><span>About</span></nav>
+                <span class="mock-toggle">◐</span>
+              </div>
+              <div class="mock-body">
+                <h3 class="mock-h1">낙관적 락의 시작에는 락이 없었다</h3>
+                <div class="mock-meta"><span>2026.08.30</span><span class="mock-badge">낙관적 락</span></div>
+                <p class="mock-p">
+                  1979년 논문을 따라가 보면, 지금 우리가 낙관적 락이라 부르는 것에는
+                  <a href="#" class="link">잠금이 아예 없었습니다</a>. 관련해서
+                  <a href="#" class="wikilink">트랜잭션 격리 수준</a>도 같이 보면 좋고,
+                  <a href="#" class="broken">MVCC</a>는 아직 안 썼습니다.
+                </p>
+                <div class="mock-code"><span class="cm">// 충돌은 커밋 시점에 확인한다</span><br><span class="kw">if</span> (<span class="fn">version</span> != expected) <span class="kw">throw</span> …</div>
+                <span class="mock-btn">다음 글 읽기</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="applied">
+          <div class="applied-item">
+            <span class="applied-label">파비콘 · 실제 크기</span>
+            <div class="icons">
+              <svg width="16" height="16" viewBox="0 0 64 64" aria-label="16픽셀 파비콘"><rect width="64" height="64" rx="14" fill="#4f46e5"/><text x="32" y="46" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="44" font-weight="700" fill="#fff">P</text></svg>
+              <svg width="32" height="32" viewBox="0 0 64 64" aria-label="32픽셀 파비콘"><rect width="64" height="64" rx="14" fill="#4f46e5"/><text x="32" y="46" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="44" font-weight="700" fill="#fff">P</text></svg>
+            </div>
+          </div>
+          <div class="applied-item">
+            <span class="applied-label">공유 카드</span>
+            <div class="og-mini" style="--og-accent:#4f46e5;">
+              <div class="og-bar"></div>
+              <div class="og-inner">
+                <div class="og-title">낙관적 락의 시작에는 락이 없었다</div>
+                <div class="og-sub">Polymorlog</div>
+                <div class="og-dom">dahyeong-yun.github.io</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 3. 딥 틸 ============ -->
+    <section class="specimen"
+      style="--m-accent:#0f766e; --m-badge-bg:#e2f4f2; --m-active-bg:#e2f4f2; --m-error:#b3402f;">
+      <div class="rail">
+        <div class="rail-head">
+          <span class="rail-chip" style="background:#0f766e"></span>
+          <h2 class="rail-name">딥 틸</h2>
+        </div>
+        <p class="rail-gist">파랑과 초록 사이의 짙은 청록. 인쇄물·도서관 표지 계열의 차분함이 있습니다.</p>
+        <dl class="readout">
+          <dt>라이트</dt><dd>#0f766e · 5.47:1</dd>
+          <dt>다크</dt><dd>#11a698 · 6.93:1</dd>
+          <dt>충돌</dt><dd>없음 (ΔE 34)</dd>
+        </dl>
+        <div class="verdict">
+          <p class="plus"><span class="mark"></span><span>파랑에서 확실히 벗어나면서도 튀지 않습니다. 긴 글을 오래 읽는 사이트에 맞습니다.</span></p>
+          <p class="minus"><span class="mark"></span><span>라이트 모드에서 꽤 어두워 링크가 얌전합니다. 활기를 원하면 아쉽습니다.</span></p>
+        </div>
+      </div>
+      <div>
+        <div class="mocks">
+          <div>
+            <div class="mock-tag">Light</div>
+            <div class="mock mock--light">
+              <div class="mock-header">
+                <span class="mock-wordmark">Polymorlog</span>
+                <nav class="mock-nav"><span class="on">Blog</span><span>Wiki</span><span>Series</span><span>About</span></nav>
+                <span class="mock-toggle">◐</span>
+              </div>
+              <div class="mock-body">
+                <h3 class="mock-h1">낙관적 락의 시작에는 락이 없었다</h3>
+                <div class="mock-meta"><span>2026.08.30</span><span class="mock-badge">낙관적 락</span></div>
+                <p class="mock-p">
+                  1979년 논문을 따라가 보면, 지금 우리가 낙관적 락이라 부르는 것에는
+                  <a href="#" class="link">잠금이 아예 없었습니다</a>. 관련해서
+                  <a href="#" class="wikilink">트랜잭션 격리 수준</a>도 같이 보면 좋고,
+                  <a href="#" class="broken">MVCC</a>는 아직 안 썼습니다.
+                </p>
+                <div class="mock-code"><span class="cm">// 충돌은 커밋 시점에 확인한다</span><br><span class="kw">if</span> (<span class="fn">version</span> != expected) <span class="kw">throw</span> …</div>
+                <span class="mock-btn">다음 글 읽기</span>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="mock-tag">Dark</div>
+            <div class="mock mock--dark" style="--m-accent:#11a698; --m-badge-bg:rgba(17,166,152,0.16); --m-active-bg:rgba(17,166,152,0.16);">
+              <div class="mock-header">
+                <span class="mock-wordmark">Polymorlog</span>
+                <nav class="mock-nav"><span class="on">Blog</span><span>Wiki</span><span>Series</span><span>About</span></nav>
+                <span class="mock-toggle">◐</span>
+              </div>
+              <div class="mock-body">
+                <h3 class="mock-h1">낙관적 락의 시작에는 락이 없었다</h3>
+                <div class="mock-meta"><span>2026.08.30</span><span class="mock-badge">낙관적 락</span></div>
+                <p class="mock-p">
+                  1979년 논문을 따라가 보면, 지금 우리가 낙관적 락이라 부르는 것에는
+                  <a href="#" class="link">잠금이 아예 없었습니다</a>. 관련해서
+                  <a href="#" class="wikilink">트랜잭션 격리 수준</a>도 같이 보면 좋고,
+                  <a href="#" class="broken">MVCC</a>는 아직 안 썼습니다.
+                </p>
+                <div class="mock-code"><span class="cm">// 충돌은 커밋 시점에 확인한다</span><br><span class="kw">if</span> (<span class="fn">version</span> != expected) <span class="kw">throw</span> …</div>
+                <span class="mock-btn">다음 글 읽기</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="applied">
+          <div class="applied-item">
+            <span class="applied-label">파비콘 · 실제 크기</span>
+            <div class="icons">
+              <svg width="16" height="16" viewBox="0 0 64 64" aria-label="16픽셀 파비콘"><rect width="64" height="64" rx="14" fill="#0f766e"/><text x="32" y="46" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="44" font-weight="700" fill="#fff">P</text></svg>
+              <svg width="32" height="32" viewBox="0 0 64 64" aria-label="32픽셀 파비콘"><rect width="64" height="64" rx="14" fill="#0f766e"/><text x="32" y="46" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="44" font-weight="700" fill="#fff">P</text></svg>
+            </div>
+          </div>
+          <div class="applied-item">
+            <span class="applied-label">공유 카드</span>
+            <div class="og-mini" style="--og-accent:#0f766e;">
+              <div class="og-bar"></div>
+              <div class="og-inner">
+                <div class="og-title">낙관적 락의 시작에는 락이 없었다</div>
+                <div class="og-sub">Polymorlog</div>
+                <div class="og-dom">dahyeong-yun.github.io</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 4. 테라코타 ============ -->
+    <section class="specimen"
+      style="--m-accent:#b03a1f; --m-badge-bg:#fbeae5; --m-active-bg:#fbeae5; --m-error:#b3402f;">
+      <div class="rail">
+        <div class="rail-head">
+          <span class="rail-chip" style="background:#b03a1f"></span>
+          <h2 class="rail-name">테라코타</h2>
+        </div>
+        <p class="rail-gist">벽돌·구운 흙. 다섯 중 유일한 따뜻한 색이고, 멀리서 가장 빨리 알아봅니다.</p>
+        <dl class="readout">
+          <dt>라이트</dt><dd>#b03a1f · 6.05:1</dd>
+          <dt>다크</dt><dd>#ff6b45 · 7.44:1</dd>
+          <dt>충돌</dt><dd class="flag">ΔE 7 · 심각</dd>
+        </dl>
+        <div class="verdict">
+          <p class="plus"><span class="mark"></span><span>개성이 가장 셉니다. 탭 줄에서 이 파비콘만 따뜻해서 즉시 찾힙니다.</span></p>
+          <p class="minus"><span class="mark"></span><span>테마의 <code>--color-error</code>(#b3402f)와 거의 같은 색입니다. 아래 목업에서 <em>MVCC</em>(깨진 위키링크)와 정상 링크가 구분되지 않는 걸 확인해 보세요.</span></p>
+        </div>
+      </div>
+      <div>
+        <div class="mocks">
+          <div>
+            <div class="mock-tag">Light</div>
+            <div class="mock mock--light">
+              <div class="mock-header">
+                <span class="mock-wordmark">Polymorlog</span>
+                <nav class="mock-nav"><span class="on">Blog</span><span>Wiki</span><span>Series</span><span>About</span></nav>
+                <span class="mock-toggle">◐</span>
+              </div>
+              <div class="mock-body">
+                <h3 class="mock-h1">낙관적 락의 시작에는 락이 없었다</h3>
+                <div class="mock-meta"><span>2026.08.30</span><span class="mock-badge">낙관적 락</span></div>
+                <p class="mock-p">
+                  1979년 논문을 따라가 보면, 지금 우리가 낙관적 락이라 부르는 것에는
+                  <a href="#" class="link">잠금이 아예 없었습니다</a>. 관련해서
+                  <a href="#" class="wikilink">트랜잭션 격리 수준</a>도 같이 보면 좋고,
+                  <a href="#" class="broken">MVCC</a>는 아직 안 썼습니다.
+                </p>
+                <div class="mock-code"><span class="cm">// 충돌은 커밋 시점에 확인한다</span><br><span class="kw">if</span> (<span class="fn">version</span> != expected) <span class="kw">throw</span> …</div>
+                <span class="mock-btn">다음 글 읽기</span>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="mock-tag">Dark</div>
+            <div class="mock mock--dark" style="--m-accent:#ff6b45; --m-badge-bg:rgba(255,107,69,0.16); --m-active-bg:rgba(255,107,69,0.16);">
+              <div class="mock-header">
+                <span class="mock-wordmark">Polymorlog</span>
+                <nav class="mock-nav"><span class="on">Blog</span><span>Wiki</span><span>Series</span><span>About</span></nav>
+                <span class="mock-toggle">◐</span>
+              </div>
+              <div class="mock-body">
+                <h3 class="mock-h1">낙관적 락의 시작에는 락이 없었다</h3>
+                <div class="mock-meta"><span>2026.08.30</span><span class="mock-badge">낙관적 락</span></div>
+                <p class="mock-p">
+                  1979년 논문을 따라가 보면, 지금 우리가 낙관적 락이라 부르는 것에는
+                  <a href="#" class="link">잠금이 아예 없었습니다</a>. 관련해서
+                  <a href="#" class="wikilink">트랜잭션 격리 수준</a>도 같이 보면 좋고,
+                  <a href="#" class="broken">MVCC</a>는 아직 안 썼습니다.
+                </p>
+                <div class="mock-code"><span class="cm">// 충돌은 커밋 시점에 확인한다</span><br><span class="kw">if</span> (<span class="fn">version</span> != expected) <span class="kw">throw</span> …</div>
+                <span class="mock-btn">다음 글 읽기</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="applied">
+          <div class="applied-item">
+            <span class="applied-label">파비콘 · 실제 크기</span>
+            <div class="icons">
+              <svg width="16" height="16" viewBox="0 0 64 64" aria-label="16픽셀 파비콘"><rect width="64" height="64" rx="14" fill="#b03a1f"/><text x="32" y="46" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="44" font-weight="700" fill="#fff">P</text></svg>
+              <svg width="32" height="32" viewBox="0 0 64 64" aria-label="32픽셀 파비콘"><rect width="64" height="64" rx="14" fill="#b03a1f"/><text x="32" y="46" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="44" font-weight="700" fill="#fff">P</text></svg>
+            </div>
+          </div>
+          <div class="applied-item">
+            <span class="applied-label">공유 카드</span>
+            <div class="og-mini" style="--og-accent:#b03a1f;">
+              <div class="og-bar"></div>
+              <div class="og-inner">
+                <div class="og-title">낙관적 락의 시작에는 락이 없었다</div>
+                <div class="og-sub">Polymorlog</div>
+                <div class="og-dom">dahyeong-yun.github.io</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 5. 포레스트 ============ -->
+    <section class="specimen"
+      style="--m-accent:#2c6e49; --m-badge-bg:#e4f1ea; --m-active-bg:#e4f1ea; --m-error:#b3402f;">
+      <div class="rail">
+        <div class="rail-head">
+          <span class="rail-chip" style="background:#2c6e49"></span>
+          <h2 class="rail-name">포레스트</h2>
+        </div>
+        <p class="rail-gist">짙은 숲 초록. 위키를 계속 고쳐 쓰는 "정원" 은유와 곧장 붙습니다 — 테마 브랜치 이름도 garden 입니다.</p>
+        <dl class="readout">
+          <dt>라이트</dt><dd>#2c6e49 · 6.12:1</dd>
+          <dt>다크</dt><dd>#35a95c · 6.98:1</dd>
+          <dt>충돌</dt><dd>ΔE 19 · 잠재</dd>
+        </dl>
+        <div class="verdict">
+          <p class="plus"><span class="mark"></span><span>포스트/위키 두 갈래 구조에 의미가 붙습니다. 우연이지만 이름값을 합니다.</span></p>
+          <p class="minus"><span class="mark"></span><span><code>--color-success</code>(#1a7a38)와 가깝습니다. 지금은 이 토큰을 쓰는 곳이 없어 당장 문제는 없지만, 나중에 성공 표시를 넣으면 겹칩니다.</span></p>
+        </div>
+      </div>
+      <div>
+        <div class="mocks">
+          <div>
+            <div class="mock-tag">Light</div>
+            <div class="mock mock--light">
+              <div class="mock-header">
+                <span class="mock-wordmark">Polymorlog</span>
+                <nav class="mock-nav"><span class="on">Blog</span><span>Wiki</span><span>Series</span><span>About</span></nav>
+                <span class="mock-toggle">◐</span>
+              </div>
+              <div class="mock-body">
+                <h3 class="mock-h1">낙관적 락의 시작에는 락이 없었다</h3>
+                <div class="mock-meta"><span>2026.08.30</span><span class="mock-badge">낙관적 락</span></div>
+                <p class="mock-p">
+                  1979년 논문을 따라가 보면, 지금 우리가 낙관적 락이라 부르는 것에는
+                  <a href="#" class="link">잠금이 아예 없었습니다</a>. 관련해서
+                  <a href="#" class="wikilink">트랜잭션 격리 수준</a>도 같이 보면 좋고,
+                  <a href="#" class="broken">MVCC</a>는 아직 안 썼습니다.
+                </p>
+                <div class="mock-code"><span class="cm">// 충돌은 커밋 시점에 확인한다</span><br><span class="kw">if</span> (<span class="fn">version</span> != expected) <span class="kw">throw</span> …</div>
+                <span class="mock-btn">다음 글 읽기</span>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="mock-tag">Dark</div>
+            <div class="mock mock--dark" style="--m-accent:#35a95c; --m-badge-bg:rgba(53,169,92,0.16); --m-active-bg:rgba(53,169,92,0.16);">
+              <div class="mock-header">
+                <span class="mock-wordmark">Polymorlog</span>
+                <nav class="mock-nav"><span class="on">Blog</span><span>Wiki</span><span>Series</span><span>About</span></nav>
+                <span class="mock-toggle">◐</span>
+              </div>
+              <div class="mock-body">
+                <h3 class="mock-h1">낙관적 락의 시작에는 락이 없었다</h3>
+                <div class="mock-meta"><span>2026.08.30</span><span class="mock-badge">낙관적 락</span></div>
+                <p class="mock-p">
+                  1979년 논문을 따라가 보면, 지금 우리가 낙관적 락이라 부르는 것에는
+                  <a href="#" class="link">잠금이 아예 없었습니다</a>. 관련해서
+                  <a href="#" class="wikilink">트랜잭션 격리 수준</a>도 같이 보면 좋고,
+                  <a href="#" class="broken">MVCC</a>는 아직 안 썼습니다.
+                </p>
+                <div class="mock-code"><span class="cm">// 충돌은 커밋 시점에 확인한다</span><br><span class="kw">if</span> (<span class="fn">version</span> != expected) <span class="kw">throw</span> …</div>
+                <span class="mock-btn">다음 글 읽기</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="applied">
+          <div class="applied-item">
+            <span class="applied-label">파비콘 · 실제 크기</span>
+            <div class="icons">
+              <svg width="16" height="16" viewBox="0 0 64 64" aria-label="16픽셀 파비콘"><rect width="64" height="64" rx="14" fill="#2c6e49"/><text x="32" y="46" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="44" font-weight="700" fill="#fff">P</text></svg>
+              <svg width="32" height="32" viewBox="0 0 64 64" aria-label="32픽셀 파비콘"><rect width="64" height="64" rx="14" fill="#2c6e49"/><text x="32" y="46" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="44" font-weight="700" fill="#fff">P</text></svg>
+            </div>
+          </div>
+          <div class="applied-item">
+            <span class="applied-label">공유 카드</span>
+            <div class="og-mini" style="--og-accent:#2c6e49;">
+              <div class="og-bar"></div>
+              <div class="og-inner">
+                <div class="og-title">낙관적 락의 시작에는 락이 없었다</div>
+                <div class="og-sub">Polymorlog</div>
+                <div class="og-dom">dahyeong-yun.github.io</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- ============ 충돌 검사 ============ -->
+  <section class="section">
+    <h2>왜 어떤 색은 못 쓰나</h2>
+    <p>
+      강조색은 혼자 있지 않습니다. 테마에는 이미 상태색이 정의돼 있고, 그중
+      <strong><code>--color-error</code>는 실제로 쓰이고 있습니다</strong> —
+      <code>global.css:241</code> 의 <code>.wikilink-broken</code>, 즉 <em>아직 안 쓴 문서를 가리키는 위키링크</em>가
+      이 색으로 칠해집니다. 정상 위키링크는 강조색이므로, 둘은 한 문단 안에 나란히 놓입니다.
+      강조색이 에러색과 가까우면 <strong>"쓴 글"과 "안 쓴 글"이 구분되지 않습니다.</strong>
+      아래는 CIE Lab 기준 색차입니다. ΔE 10 아래는 나란히 놓고도 헷갈리는 거리입니다.
+    </p>
+    <div class="tablewrap">
+      <table>
+        <thead>
+          <tr>
+            <th>후보</th>
+            <th>error #b3402f 와의 거리</th>
+            <th>success #1a7a38 와의 거리</th>
+            <th>판정</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="swatchpair"><span class="sw" style="background:#0066cc"></span><span class="sw" style="background:#0a84ff"></span></span>현재 파랑</td>
+            <td class="num">ΔE 99</td><td class="num">—</td><td>안전</td>
+          </tr>
+          <tr>
+            <td><span class="swatchpair"><span class="sw" style="background:#4f46e5"></span><span class="sw" style="background:#7c74ff"></span></span>인디고</td>
+            <td class="num">ΔE 114</td><td class="num">—</td><td>안전 · 가장 멂</td>
+          </tr>
+          <tr>
+            <td><span class="swatchpair"><span class="sw" style="background:#0f766e"></span><span class="sw" style="background:#11a698"></span></span>딥 틸</td>
+            <td class="num">—</td><td class="num">ΔE 34</td><td>안전</td>
+          </tr>
+          <tr>
+            <td><span class="swatchpair"><span class="sw" style="background:#b03a1f"></span><span class="sw" style="background:#ff6b45"></span></span>테라코타</td>
+            <td class="num flag">ΔE 7</td><td class="num">—</td><td class="flag">쓰려면 에러색을 먼저 옮겨야 함</td>
+          </tr>
+          <tr>
+            <td><span class="swatchpair"><span class="sw" style="background:#2c6e49"></span><span class="sw" style="background:#35a95c"></span></span>포레스트</td>
+            <td class="num">—</td><td class="num">ΔE 19</td><td>지금은 무해 (success 미사용)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p>
+      테라코타를 정말 원하신다면 못 쓸 건 아닙니다. <code>--color-error</code> 를 자주색이나
+      진한 회색 쪽으로 옮기면 됩니다. 다만 그건 <em>색 하나 바꾸기</em>가 아니라
+      <em>상태색 체계를 다시 짜기</em>가 되므로, 이번 결정에 묶어 넣지 않는 편이 낫습니다.
+    </p>
+  </section>
+
+  <!-- ============ 고르면 바뀌는 것 ============ -->
+  <section class="section">
+    <h2>고르면 손대는 곳</h2>
+    <p>
+      12번 문서는 <code>global.css</code> 두 곳이라고 했지만, 실제로는 파랑에서 파생된 토큰이
+      블록마다 네 개씩입니다. 다행히 <code>global.css</code> 밖에는 하드코딩된 파랑이 한 군데도 없습니다.
+      아래가 전부입니다.
+    </p>
+    <pre class="diff"><span class="path">theme-astro/src/theme/styles/global.css</span>  <span class="cm">— :root (라이트)</span>
+  --color-accent            <span class="cm">← 후보의 라이트값</span>
+  --color-accent-hover      <span class="cm">← 라이트값을 15% 어둡게</span>
+  --color-header-active-bg  <span class="cm">← 아주 옅은 틴트</span>
+  --color-badge-bg          <span class="cm">← 위와 같은 값</span>
+
+<span class="path">theme-astro/src/theme/styles/global.css</span>  <span class="cm">— :root[data-theme="dark"] · 그리고 @media 다크 블록에도 같은 값을 한 번 더</span>
+  --color-accent            <span class="cm">← 후보의 다크값</span>
+  --color-accent-hover      <span class="cm">← 다크값을 밝게</span>
+  --color-header-active-bg  <span class="cm">← 다크값 alpha 0.16</span>
+  --color-badge-bg          <span class="cm">← 다크값 alpha 0.15</span>
+
+<span class="path">dahyeong-yun.github.io/blog.config.ts</span>
+  theme.themeColor          <span class="cm">← 모바일 브라우저 주소창 색. 라이트값을 씀</span>
+
+<span class="path">dahyeong-yun.github.io/public/</span>
+  favicon.svg · favicon.ico · apple-touch-icon.png · og-default.png
+                            <span class="cm">← 네 파일 모두 #0066cc 가 박혀 있음. 재생성 필요</span></pre>
+    <p>
+      다크 블록이 두 번 나오는 이유는, 테마가
+      <code>:root[data-theme="dark"]</code> 와 <code>@media (prefers-color-scheme: dark)</code> 에
+      같은 값을 각각 적어 두었기 때문입니다. 한쪽만 고치면
+      <strong>토글로 다크를 켠 사람과 OS가 다크인 사람이 서로 다른 색을 보게 됩니다.</strong>
+    </p>
+  </section>
+
+  <!-- ============ 추천 ============ -->
+  <section class="section">
+    <h2>제 추천</h2>
+    <p>
+      <strong>인디고.</strong> 이유는 셋입니다.
+      첫째, 파랑에서 벗어나되 링크 인식을 잃지 않는 가장 작은 이동이라 실패 위험이 거의 없습니다.
+      둘째, 코드 블록 배경(<code>#1a1b2e</code>, tokyo-night)이 보랏빛 남색이어서 화면 안에서 톤이 맞습니다 —
+      다른 후보는 코드 블록만 다른 세계처럼 떠 보입니다.
+      셋째, 상태색과의 거리가 다섯 중 가장 멉니다.
+    </p>
+    <p>
+      개성을 더 원하시면 <strong>딥 틸</strong>이 차선입니다. 인디고보다 덜 흔하고 충돌도 없습니다.
+      대신 라이트 모드가 얌전해집니다.
+      <strong>테라코타</strong>는 인상이 가장 강하지만 값이 비쌉니다 — 상태색 체계를 같이 손봐야 합니다.
+    </p>
+    <p>
+      다만 이건 제 추천이지 정답이 아닙니다. 위 목업을 <em>라이트만</em> / <em>다크만</em>으로 놓고
+      다섯을 나란히 본 다음, 눈에 걸리는 걸 고르시면 됩니다. 색은 나중에 바꿔도
+      위 여덟 개 토큰과 이미지 네 장이면 끝입니다.
+    </p>
+  </section>
+
+</div>
+
+<script>
+(function () {
+  var sheet = document.getElementById('sheet');
+  var btns = document.querySelectorAll('[data-mode-btn]');
+  btns.forEach(function (b) {
+    b.addEventListener('click', function () {
+      var mode = b.getAttribute('data-mode-btn');
+      sheet.setAttribute('data-mode', mode);
+      btns.forEach(function (o) {
+        o.setAttribute('aria-pressed', String(o === b));
+      });
+    });
+  });
+})();
+</script>
