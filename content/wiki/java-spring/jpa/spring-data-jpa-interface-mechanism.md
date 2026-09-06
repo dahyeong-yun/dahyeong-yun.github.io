@@ -2,6 +2,7 @@
 title: Spring Data JPA 인터페이스 동작 원리
 description: JpaRepository 인터페이스만 정의해도 구현체 없이 CRUD와 쿼리 메서드가 동작하는 원리와 내부 메커니즘
 aliases: [Spring Data JPA 인터페이스 원리, JpaRepository 동작 원리, Spring Data JPA Proxy, 스프링 데이터 JPA 프록시]
+branches: [jpa]
 tags: [java, spring, jpa, spring-data-jpa]
 created: 2026-09-06
 updated: 2026-09-06

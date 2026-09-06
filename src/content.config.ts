@@ -1,6 +1,6 @@
 import { defineCollection } from 'astro:content'
 import { glob } from 'astro/loaders'
-import { blogPostSchema, wikiPageSchema, pageSchema } from 'theme-astro'  // 스키마를 테마에서 가져옴
+import { blogPostSchema, wikiPageSchema, pageSchema, branchSchema } from 'theme-astro'  // 스키마를 테마에서 가져옴
 
 export const collections = {
   // 포스트: 나의 통찰·경험·생각이 담긴 글
@@ -12,6 +12,11 @@ export const collections = {
   wiki: defineCollection({
     loader: glob({ base: './content/wiki', pattern: '**/*.{md,mdx}' }),
     schema: wikiPageSchema,
+  }),
+  // 갈래: 문서가 속한 자리. 상자이면서 그 자체로 한 편의 글이다.
+  branches: defineCollection({
+    loader: glob({ base: './content/branches', pattern: '**/*.{md,mdx}' }),
+    schema: branchSchema,
   }),
   // About 처럼 날짜가 의미 없는 단독 페이지
   pages: defineCollection({
