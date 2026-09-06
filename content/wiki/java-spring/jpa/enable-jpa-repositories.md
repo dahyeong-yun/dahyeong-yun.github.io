@@ -1,7 +1,7 @@
 ---
 title: EnableJpaRepositories
 description: Spring Data JPA 리포지토리 활성화 및 스캔 설정을 담당하는 어노테이션. 스프링 부트 자동 구성과의 관계 및 수동 선언 유스케이스
-aliases: [EnableJpaRepositories, @EnableJpaRepositories, JPA 리포지토리 활성화, JPA 레포지토리 설정]
+aliases: [EnableJpaRepositories, '@EnableJpaRepositories', JPA 리포지토리 활성화, JPA 레포지토리 설정]
 tags: [java, spring, jpa, spring-data-jpa, spring-boot]
 created: 2026-09-06
 updated: 2026-09-06
