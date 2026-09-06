@@ -23,6 +23,9 @@ pnpm-debug.log*
 # jetbrains setting folder
 .idea/
 
+# claude code setting folder
+.claude/
+
 # Local History
 .history/*
 !.history/tasks/
