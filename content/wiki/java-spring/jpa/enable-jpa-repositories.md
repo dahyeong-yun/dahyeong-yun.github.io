@@ -7,6 +7,7 @@ tags: [java, spring, jpa, spring-data-jpa, spring-boot]
 created: 2026-09-06
 updated: 2026-09-06
 status: seed
+draft: true
 ---
 
 `@EnableJpaRepositories`는 Spring Data JPA 리포지토리 인터페이스를 탐색(Scan)하고 프록시 빈을 생성하도록 지시하는 설정 어노테이션이다[^ref-enable-jpa-docs].
@@ -103,5 +104,5 @@ public class JpaConfig {
 ## 각주 및 출처 (References)
 
 [^ref-enable-jpa-docs]: [Spring Data JPA Reference Documentation - Annotation based configuration](https://docs.spring.io/spring-data/jpa/reference/jpa/getting-started.html#jpa.misc.spring-data-jpa-repo-config)
-[^ref-boot-autoconfig]: [Spring Boot GitHub - JpaRepositoriesAutoConfiguration.java](https://github.com/spring-projects/spring-boot/blob/main/spring-boot-project/spring-boot-autoconfigure/src/main/java/org/springframework/boot/autoconfigure/data/jpa/JpaRepositoriesAutoConfiguration.java)
+[^ref-boot-autoconfig]: [Spring Boot GitHub - JpaRepositoriesAutoConfiguration.java (v3.5.16)](https://github.com/spring-projects/spring-boot/blob/v3.5.16/spring-boot-project/spring-boot-autoconfigure/src/main/java/org/springframework/boot/autoconfigure/data/jpa/JpaRepositoriesAutoConfiguration.java)
 [^ref-boot-docs]: [Spring Boot Reference Documentation - Auto-configured Data JPA Repositories](https://docs.spring.io/spring-boot/docs/current/reference/html/data.html#data.sql.jpa-and-spring-data.repositories)
