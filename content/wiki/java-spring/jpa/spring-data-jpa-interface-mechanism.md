@@ -7,6 +7,7 @@ tags: [java, spring, jpa, spring-data-jpa]
 created: 2026-09-06
 updated: 2026-09-06
 status: seed
+draft: true
 ---
 Spring Data JPA를 사용하는 경우, 개발자가 `JpaRepository<T, ID>` 인터페이스만 선언하고 구현 클래스를 별도로 작성하지 않아도 스프링이 런타임에 구현체를 동적으로 생성하고 메서드를 실행해 준다[^ref-core-concepts].
 
@@ -129,6 +130,15 @@ sequenceDiagram
 | `SimpleJpaQuery` | `spring-data-jpa` | `@Query`에 선언된 JPQL을 파싱해 쿼리 객체를 생성 및 실행 | [GitHub](https://github.com/spring-projects/spring-data-jpa/blob/3.5.13/spring-data-jpa/src/main/java/org/springframework/data/jpa/repository/query/SimpleJpaQuery.java) |
 
 > Spring Boot 4.0부터 부트 쪽 두 클래스는 `DataJpaRepositoriesAutoConfiguration` / `DataJpaRepositoriesRegistrar`로 이름이 바뀌고 패키지도 `org.springframework.boot.data.jpa.autoconfigure`로 옮겨졌다.
+
+---
+
+## 관련 문서
+
+- [[jpa|JPA (Jakarta Persistence)]]
+- [[enable-jpa-repositories|@EnableJpaRepositories]]
+- [[jpql|JPQL (Java Persistence Query Language)]]
+- [[repository-factory-bean-lifecycle|RepositoryFactoryBean 라이프사이클]]
 
 ---
 

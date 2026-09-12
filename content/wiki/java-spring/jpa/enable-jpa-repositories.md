@@ -97,7 +97,9 @@ public class JpaConfig {
 
 ## 관련 문서
 
+- [[jpa|JPA (Jakarta Persistence)]]
 - [[spring-data-jpa-interface-mechanism|Spring Data JPA 인터페이스 동작 원리]]
+- [[repository-factory-bean-lifecycle|RepositoryFactoryBean 라이프사이클]]
 
 ---
 
