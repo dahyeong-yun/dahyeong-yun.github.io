@@ -1,0 +1,102 @@
+---
+date: 2026-09-09
+title: "대량 데이터 INSERT 최적화: MySQL IDENTITY에서 Batch Insert가 안 먹혔던 이유"
+slug: "/jpa-identity-vs-sequence-batch-insert"
+tags: ['java', 'spring', 'jpa', 'database', 'performance']
+draft: true
+---
+
+## 들어가며
+
+대량의 주문 내역이나 로그성 데이터를 일괄 적재해야 하는 배치(Batch) 성격의 기능을 개발할 때, Spring Data JPA의 `saveAll()` 메서드를 호출하는 것은 자연스러운 시작점이다.
+
+```java
+orderRepository.saveAll(newOrders);
+```
+
+기대했던 시나리오는 스프링과 하이버네이트가 이 데이터들을 적절히 묶어서 단 몇 번의 JDBC Batch Insert 쿼리로 빠르게 DB에 밀어 넣어주는 것이었다. 하지만 실제 APM 모니터링과 DB 쿼리 로그를 열어보았을 때, 수만 건의 데이터가 단 한 건의 배치도 없이 개별 `INSERT INTO order (...) VALUES (...)` 쿼리로 쪼개져 순차 실행되고 있었다.
+
+수 분이 지나도 끝나지 않던 적재 작업의 원인을 쫓아가며 마주했던 **`GenerationType.IDENTITY`와 영속성 컨텍스트의 태생적 충돌**, 그리고 이를 해결하기 위해 취했던 대안들을 정리해 본다.
+
+---
+
+## 1. IDENTITY 전략은 왜 쓰기 지연을 깨뜨리는가?
+
+JPA 영속성 컨텍스트의 핵심 설계 중 하나는 **쓰기 지연(Transactional Write-Behind)**이다. 트랜잭션 도중 발생하는 엔티티 등록 요청을 내부 '쓰기 지연 SQL 저장소'에 모아두었다가, 트랜잭션이 커밋되거나 `flush()`되는 순간 한꺼번에 DB로 전송하는 방식이다. 이 메커니즘이 유지되어야 JDBC 레벨의 `rewriteBatchedStatements` 옵션과 맞물려 강력한 배치 인서트 최적화가 동작한다.
+
+하지만 MySQL 환경에서 흔히 사용하는 `GenerationType.IDENTITY`는 이 쓰기 지연의 전제 조건을 정면으로 위반한다.
+
+### 영속성 컨텍스트 1차 캐시의 절대 원칙
+영속성 컨텍스트의 1차 캐시는 **`Map<Key, Entity>` 구조**로 엔티티를 보관하며, 이때 Key 값은 반드시 엔티티의 식별자(PK)여야 한다.
+
+* **SEQUENCE나 UUID 직접 할당**: DB에 실제 레코드를 넣지 않고도 시퀀스 번호(`nextval`)를 미리 채번하거나 애플리케이션에서 키를 생성할 수 있다. 따라서 ID 값을 알고 있는 상태로 1차 캐시에 엔티티를 등록하고, 실제 INSERT 쿼리는 나중으로 미룰 수 있다.
+* **IDENTITY**: 식별자 생성을 전적으로 DB의 `AUTO_INCREMENT` 엔진에 위임한다. 즉, **DB 테이블에 행이 실제로 삽입되기 전까지는 애플리케이션도, 하이버네이트도 식별자 값이 무엇인지 알 방법이 없다.**
+
+결국 하이버네이트는 엔티티를 영속성 컨텍스트에 담기 위해 **`em.persist()`(또는 `save()`)가 호출되는 즉시 DB로 INSERT 쿼리를 날려 생성된 PK 값을 즉각 회수**할 수밖에 없다.
+
+모아서 한 번에 보내야 하는 쓰기 지연 버퍼가 매 건마다 강제로 비워지므로, 하이버네이트는 스펙 차원에서 **IDENTITY 전략 사용 시 JDBC Batch Insert를 완전히 비활성화**하도록 설계되어 있다.
+
+---
+
+## 2. 해결 방안과 실무적 대안
+
+이 문제를 해결하기 위해 당시 고려했던 접근법은 크게 세 가지였다.
+
+### 대안 A: RDBMS 시퀀스(Sequence) 지원 DB 활용
+시퀀스 객체를 네이티브로 지원하는 PostgreSQL이나 Oracle 환경이라면 해결은 매우 간단하다.
+
+```java
+@Id
+@SequenceGenerator(name = "ORDER_SEQ_GEN", sequenceName = "SQ_TB_ORDER", allocationSize = 50)
+@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ORDER_SEQ_GEN")
+private Long id;
+```
+
+시퀀스는 DB 레코드 삽입과 무관하게 독립적으로 고유 번호를 발급하므로, INSERT 실행 전에 키를 확보하여 쓰기 지연과 배치 인서트를 100% 정상 작동시킬 수 있다. 실제로 수만 건 적재 시 10~20배 이상의 속도 향상을 보여준다.
+
+### 대안 B: Spring JDBC `JdbcTemplate.batchUpdate()` 우회
+만약 RDBMS가 MySQL로 고정되어 있고 `AUTO_INCREMENT` 키 구조를 바꿀 수 없는 상황이라면, 대량 적재 구간에 한해 JPA를 내려놓는 것이 가장 현실적인 해법이다.
+
+```java
+@Repository
+@RequiredArgsConstructor
+public class OrderBulkRepository {
+
+    private final JdbcTemplate jdbcTemplate;
+
+    public void bulkInsert(List<OrderDto> orders) {
+        String sql = "INSERT INTO orders (item_name, price, user_id) VALUES (?, ?, ?)";
+
+        jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
+            @Override
+            public void setValues(PreparedStatement ps, int i) throws SQLException {
+                OrderDto order = orders.get(i);
+                ps.setString(1, order.getItemName());
+                ps.setBigDecimal(2, order.getPrice());
+                ps.setLong(3, order.getUserId());
+            }
+
+            @Override
+            public int getBatchSize() {
+                return orders.size();
+            }
+        });
+    }
+}
+```
+
+JDBC URL에 `rewriteBatchedStatements=true` 파라미터를 활성화하고 위와 같이 단일 멀티 로우 INSERT 문으로 치환해 실행하면, JPA의 영속성 컨텍스트 오버헤드 없이 수만 건을 수 초 만에 밀어 넣을 수 있다.
+
+### 대안 C: UUID/비즈니스 키 직접 할당과 `Persistable`
+숫자 일련번호 대신 UUID나 자체 채번 규칙을 사용하고 엔티티에서 [[spring-data-jpa-persistable|Persistable]]을 구현하여 직접 키를 할당하는 방법도 있다. 키가 사전에 정해지므로 배치 인서트가 가능해지지만, B-Tree 인덱스 비대화 및 파편화 문제를 함께 고려해야 한다.
+
+---
+
+## 3. 정리하며
+
+JPA는 객체와 관계형 데이터베이스의 패러다임 불일치를 우아하게 감싸주지만, 식별자 생성 전략만큼은 **저변에 깔린 RDBMS 엔진의 아키텍처와 영속성 컨텍스트의 동작 원리**를 정확히 이해해야만 병목을 피할 수 있다.
+
+* 단일 트랜잭션 위주의 일반적인 웹 API에서는 `IDENTITY` 전략의 직관성이 장점이 된다.
+* 하지만 대량 데이터 처리, 배치 프로세싱, 초당 수천 건의 적재가 요구되는 환경에서는 `IDENTITY`가 성능의 발목을 잡는 주범이 될 수 있다.
+
+기술 스택을 선택할 때 "단순히 동작하는가"를 넘어, "이 선택이 하위 프레임워크의 핵심 최적화(쓰기 지연, JDBC 배칭)를 깨뜨리지 않는가"를 점검하는 것이 왜 중요한지 절감했던 경험이었다.

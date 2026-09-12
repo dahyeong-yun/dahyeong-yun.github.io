@@ -1,0 +1,113 @@
+---
+date: 2026-09-09
+title: "왜 나는 JPA를 쓰면서 @EnableJpaRepositories를 한 번도 안 썼을까?"
+slug: "/why-i-never-used-enable-jpa-repositories"
+tags: ['java', 'spring', 'jpa', 'spring-boot', 'spring-data-jpa']
+draft: true
+---
+
+## 들어가며
+
+스프링 부트로 백엔드 개발을 시작한 이래로, JPA를 다루는 패턴은 늘 한결같았다. 
+
+엔티티 클래스를 하나 정의하고, 이를 다룰 인터페이스를 만든 뒤 `JpaRepository<User, Long>`을 상속한다. 그리고 별다른 구현 클래스를 작성하지 않아도 서비스 계층에서 `@Autowired`나 생성자 주입을 받아 `userRepository.findById(id)`를 호출하면 마법처럼 쿼리가 나가고 데이터가 조회되었다.
+
+그러다 문득 스프링 공식 레퍼런스 문서와 예전 스프링 설정 예제들을 훑어보다가 묘한 의문이 들었다.
+
+> "스프링 데이터 JPA 설정 예제에는 늘 `@EnableJpaRepositories`가 붙어 있던데, 왜 나는 실무에서 프로젝트를 세팅하면서 이걸 단 한 번도 직접 선언해 본 적이 없을까?"
+
+분명 쓰라고 만들어 둔 어노테이션일 텐데, 내가 쓰지 않았는데도 어떻게 수많은 리포지토리 빈들이 한 번의 에러도 없이 컨테이너에 등록되었던 걸까?
+
+---
+
+## 범인은 스프링 부트의 자동 구성(Auto-Configuration)
+
+결론부터 말하자면, **내가 작성하지 않은 게 아니라 스프링 부트가 내 등 뒤에서 대신 작성해주고 있었기 때문**이었다.
+
+프로젝트의 `build.gradle`에 `spring-boot-starter-data-jpa` 의존성을 넣는 순간, 스프링 부트의 자동 구성 메커니즘이 발동한다. 부트 내부를 까보면 `JpaRepositoriesAutoConfiguration`이라는 클래스가 숨어 있다.
+
+```java
+@AutoConfiguration
+@ConditionalOnClass(EnableJpaRepositories.class)
+// 개발자가 직접 @EnableJpaRepositories 빈이나 설정을 하지 않았을 때만 동작!
+@ConditionalOnMissingBean({ JpaRepositoryFactoryBean.class, JpaRepositoryConfigExtension.class })
+@Import(JpaRepositoriesRegistrar.class)
+public class JpaRepositoriesAutoConfiguration {
+    // ...
+}
+```
+
+이 클래스의 핵심은 바로 `@ConditionalOnMissingBean`이다.
+
+스프링 부트는 *"개발자가 직접 `@EnableJpaRepositories`를 선언해서 팩토리 빈을 등록했는가?"*를 먼저 확인한다. 만약 개발자가 아무런 설정을 하지 않았다면, 부트는 이를 **'아, 기본 설정대로 알아서 해달라는 뜻이구나'**라고 해석하고 `JpaRepositoriesRegistrar`를 통해 자동 등록 절차를 밟는다.
+
+그렇다면 리포지토리 인터페이스들을 어디서 찾아낼까?
+
+스프링 부트 애플리케이션의 시작점인 `@SpringBootApplication`이 붙은 메인 클래스의 패키지가 **기본 스캔 경로(Base Package)**로 자동 지정된다. 메인 클래스와 같거나 그 하위에 위치한 모든 `JpaRepository` 인터페이스들을 부트가 알아서 긁어모아 프록시 빈으로 등록해 준 것이다.
+
+결국 **"내가 아무것도 하지 않았기 때문에"** 역설적으로 가장 완벽하게 동작하고 있었던 셈이다.
+
+---
+
+## 그렇다면 `@EnableJpaRepositories`를 직접 마주치는 날은 언제일까?
+
+내가 지금까지 이 어노테이션을 쓸 일이 없었던 이유는, 내 프로젝트 구조가 **"단일 모듈이면서 메인 클래스 하위에 모든 패키지가 모여 있는 전형적인 모놀리식 구조"**였기 때문이다.
+
+하지만 실무 환경이 조금만 복잡해지면 부트의 자동 구성만으로는 한계가 오고, 개발자가 직접 키를 쥐어야 하는 순간이 반드시 찾아온다.
+
+### 1. 멀티 모듈(Multi-Module) 프로젝트의 함정
+프로젝트가 커져 `core-domain` 모듈과 `api-app` 모듈로 분리되었다고 해보자.
+* `api-app`: `com.company.api.ApiApplication` (메인 실행 클래스)
+* `core-domain`: `com.company.domain.order.OrderRepository`
+
+메인 클래스가 위치한 패키지는 `com.company.api`다. 부트의 자동 스캔은 이 하위만 뒤지기 때문에, 옆 동네인 `com.company.domain`에 있는 리포지토리 인터페이스들은 완전히 무시된다. 
+
+이때 서버를 띄우면 `"NoSuchBeanDefinitionException: No qualifying bean of type 'OrderRepository'"` 에러를 뿜으며 기동이 실패한다. 바로 이 순간이 `@EnableJpaRepositories`를 직접 선언해야 하는 첫 번째 마주침이다:
+
+```java
+@Configuration
+@EnableJpaRepositories(basePackages = "com.company.domain")
+public class JpaConfig {
+}
+```
+
+### 2. 다중 데이터소스 (Multi DataSource) 분리
+단일 DB가 아니라, 읽기 전용 레플리카 DB를 따로 두거나 레거시 DB와 신규 DB 2개를 한 애플리케이션에서 동시에 붙여야 하는 상황이다.
+
+이때는 DB별로 `DataSource`, `EntityManagerFactory`, `PlatformTransactionManager`를 각각 만들어 빈으로 등록해야 한다. 그리고 특정 리포지토리가 어떤 DB 팩토리를 바라봐야 하는지 교통정리를 해줘야 한다.
+
+```java
+@Configuration
+@EnableJpaRepositories(
+    basePackages = "com.company.order.repository",
+    entityManagerFactoryRef = "orderEntityManagerFactory",
+    transactionManagerRef = "orderTransactionManager"
+)
+public class OrderJpaConfig {
+}
+```
+
+부트의 자동 구성은 `DataSource`가 2개 이상 감지되는 순간 모호성 때문에 자동으로 비활성화되므로, 개발자가 수동으로 각 리포지토리 그룹의 소유권을 지정해 주어야 한다.
+
+### 3. 공통 리포지토리 베이스 클래스(`repositoryBaseClass`) 확장
+모든 엔티티에 소프트 딜리트(Soft Delete) 기능을 강제하거나, 사내 공통 보안 감사(Audit) 로직을 모든 리포지토리의 기본 메서드 수준에서 가로채고 싶을 때가 있다.
+
+스프링 데이터 JPA는 기본적으로 `SimpleJpaRepository`를 구현체로 쓰지만, 이를 상속한 `CustomJpaRepositoryImpl`을 만들고 `@EnableJpaRepositories(repositoryBaseClass = CustomJpaRepositoryImpl.class)`로 지정하면 모든 리포지토리의 기본 뼈대를 통째로 갈아 끼울 수 있다.
+
+---
+
+## 마치며: 보이지 않는 추상화의 이면을 아는 것
+
+스프링 부트는 개발자가 비즈니스 로직에만 집중할 수 있도록 수많은 보일러플레이트 설정을 보이지 않는 곳으로 숨겨두었다. 덕분에 우리는 `@EnableJpaRepositories` 한 줄 쓰지 않고도 수년 동안 수십 개의 서비스를 띄울 수 있었다.
+
+하지만 프레임워크가 제공하는 '편리한 침묵'에 익숙해져 있을 때, 멀티 모듈을 구성하거나 다중 데이터소스를 붙이는 순간 원인 모를 빈 누락 에러 앞에서 며칠 밤을 새우게 된다.
+
+"그냥 돌아가니까 쓴다"와 "스프링 부트가 어떤 조건(`@ConditionalOnMissingBean`)에서 내 대신 무엇을 해주고 있는지 알고 쓴다"의 차이는, 결국 장애나 아키텍처 확장의 순간에 실력의 차이로 드러난다는 것을 다시 한번 되새기게 된다.
+
+---
+
+## 관련 위키 문서
+
+- [[spring-data-jpa-interface-mechanism|Spring Data JPA 인터페이스 동작 원리]]
+- [[enable-jpa-repositories|@EnableJpaRepositories]]
+- [[jpa|JPA (Jakarta Persistence)]]
