@@ -7,7 +7,7 @@ tags: [java, spring, jpa, spring-data-jpa]
 created: 2026-09-06
 updated: 2026-09-06
 status: seed
-draft: true
+draft: false
 ---
 Spring Data JPA를 사용하는 경우, 개발자가 `JpaRepository<T, ID>` 인터페이스만 선언하고 구현 클래스를 별도로 작성하지 않아도 스프링이 런타임에 구현체를 동적으로 생성하고 메서드를 실행해 준다[^ref-core-concepts].
 
