@@ -35,3 +35,9 @@ pnpm-debug.log*
 
 # Handoff files
 HANDOFF.md
+
+# Draft review dashboard (generated)
+.review/
+
+# Draft posts (unpublished)
+.draft/
